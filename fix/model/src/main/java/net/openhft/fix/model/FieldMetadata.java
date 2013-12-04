@@ -16,9 +16,24 @@
 
 package net.openhft.fix.model;
 
+import java.util.EnumSet;
+
 /**
  * @author Adam Rosenberger
  */
 public class FieldMetadata {
+    private final int fieldNumber;
+    private final FixField field;
+    private final int position;
+    private final int componentIndex;
+    private final EnumSet<FieldType> fieldTypes;
+
+    public FieldMetadata(int fieldNumber, FixField field, int position, int componentIndex) {
+        this.fieldNumber = fieldNumber;
+        this.field = field;
+        this.position = position;
+        this.componentIndex = componentIndex;
+        this.fieldTypes = EnumSet.noneOf(FieldType.class);
+    }
 }
 

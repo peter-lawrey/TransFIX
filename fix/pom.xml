@@ -36,6 +36,7 @@
         <module>schema</module>
         <module>compiler</module>
         <module>model</module>
+        <module>framework</module>
     </modules>
 
     <dependencies>
