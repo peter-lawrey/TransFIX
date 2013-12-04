@@ -20,20 +20,24 @@ package net.openhft.fix.model;
  * @author Adam Rosenberger
  */
 public enum FixField {
+    Int(DataType.Int),
     Length(DataType.Int),
     TagNum(DataType.Int),
     SeqNum(DataType.Int),
     NumInGroup(DataType.Int),
     DayOfMonth(DataType.Int),
 
+    Float(DataType.Float),
     Qty(DataType.Float),
     Price(DataType.Float),
     PriceOffset(DataType.Float),
     Amt(DataType.Float),
     Percentage(DataType.Float),
 
+    Char(DataType.Char),
     Boolean(DataType.Char),
 
+    String(DataType.String),
     MultipleCharValue(DataType.String),
     MultipleStringValue(DataType.String),
     Country(DataType.String),
