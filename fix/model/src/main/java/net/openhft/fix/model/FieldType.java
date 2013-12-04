@@ -20,64 +20,12 @@ package net.openhft.fix.model;
  * @author Adam Rosenberger
  */
 public enum FieldType {
-    Length(DataType.Int),
-    TagNum(DataType.Int),
-    SeqNum(DataType.Int),
-    NumInGroup(DataType.Int),
-    DayOfMonth(DataType.Int),
-
-    Qty(DataType.Float),
-    Price(DataType.Float),
-    PriceOffset(DataType.Float),
-    Amt(DataType.Float),
-    Percentage(DataType.Float),
-
-    Boolean(DataType.Char),
-
-    MultipleCharValue(DataType.String),
-    MultipleStringValue(DataType.String),
-    Country(DataType.String),
-    Currency(DataType.String),
-    Exchange(DataType.String),
-    MonthYear(DataType.String),
-    UTCTimestamp(DataType.String),
-    UTCTimeOnly(DataType.String),
-    UTCDateOnly(DataType.String),
-    LocalMktDate(DataType.String),
-    TZTimeOnly(DataType.String),
-    TZTimestamp(DataType.String),
-    Data(DataType.String),
-    XMLData(DataType.String),
-    Language(DataType.String),
-
-    Tenor(DataType.Pattern),
-    Reserved100Plus(DataType.Pattern),
-    Reserved1000Plus(DataType.Pattern),
-    Reserved4000Plus(DataType.Pattern);
-
-    private final DataType dataType;
-
-    private FieldType(DataType dataType) {
-        this.dataType = dataType;
-    }
-
-    public final boolean isInt() {
-        return dataType == DataType.Int;
-    }
-
-    public final boolean isFloat() {
-        return dataType == DataType.Float;
-    }
-
-    public final boolean isChar() {
-        return dataType == DataType.Char;
-    }
-
-    public final boolean isString() {
-        return dataType == DataType.String;
-    }
-
-    public final boolean isPattern() {
-        return dataType == DataType.Pattern;
-    }
+    Mandatory,
+    Present,
+    Position,
+    Group,
+    Component,
+    Suppress,
+    Automatic,
+    Count
 }

@@ -33,9 +33,10 @@
     </properties>
 
     <modules>
+        <module>framework</module>
+        <module>model</module>
         <module>schema</module>
         <module>compiler</module>
-        <module>model</module>
     </modules>
 
     <dependencies>
