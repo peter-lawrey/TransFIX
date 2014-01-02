@@ -27,7 +27,7 @@
 
     <parent>
         <groupId>net.openhft</groupId>
-        <artifactId>fix</artifactId>
+        <artifactId>fix-sandbox</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>

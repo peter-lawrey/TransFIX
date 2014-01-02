@@ -37,6 +37,7 @@
         <module>model</module>
         <module>schema</module>
         <module>compiler</module>
+        <module>transport</module>
     </modules>
 
     <dependencies>
