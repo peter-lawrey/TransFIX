@@ -22,7 +22,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.openhft</groupId>
-    <artifactId>model</artifactId>
+    <artifactId>transport</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <parent>
@@ -31,5 +31,14 @@
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.0.14.Final</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 </project>
