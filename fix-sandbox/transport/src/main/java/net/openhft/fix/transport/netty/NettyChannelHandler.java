@@ -13,37 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.openhft.fix.transport.codec;
+package net.openhft.fix.transport.netty;
 
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToMessageEncoder;
-
-import java.util.List;
+import io.netty.channel.SimpleChannelInboundHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author lburgazzoli
  */
-public final class NettyFrameEncoder extends MessageToMessageEncoder<byte[]> {
+public class NettyChannelHandler extends SimpleChannelInboundHandler<byte[]> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(NettyChannelHandler.class);
 
     /**
      * c-tor
      */
-    public NettyFrameEncoder() {
+    public NettyChannelHandler() {
     }
 
-    /**
-     *
-     * @param ctx
-     * @param msg
-     * @param out
-     * @return
-     * @throws Exception
-     */
     @Override
-    protected void encode(ChannelHandlerContext ctx, byte[] msg, List<Object> out) throws Exception {
-        if (msg.length != 0) {
-            out.add(Unpooled.copiedBuffer(msg));
-        }
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, byte[] bytes) throws Exception {
+        //TODO
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        LOGGER.warn("Unexpected exception from downstream.", cause);
+        ctx.close();
     }
 }

@@ -17,7 +17,7 @@ package net.openhft.fix.transport.test;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.openhft.fix.transport.codec.NettyFrameHelper;
+import net.openhft.fix.transport.netty.codec.NettyFrameHelper;
 
 /**
  *
