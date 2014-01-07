@@ -17,6 +17,8 @@ package net.openhft.fix.transport.test;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.embedded.EmbeddedChannel;
+import net.openhft.fix.transport.netty.codec.NettyFrameDecoder;
 import net.openhft.fix.transport.netty.codec.NettyFrameHelper;
 
 /**
@@ -31,7 +33,7 @@ public class NettyTestSupport {
     /**
      *
      */
-    public static class MessageBuilder {
+    protected static class MessageBuilder {
         private ByteBuf m_buffer;
 
         /**
@@ -72,7 +74,15 @@ public class NettyTestSupport {
      *
      * @return
      */
-    public static ByteBuf newLogonMessage() {
+    protected static EmbeddedChannel newEmbeddedChannelWithDecoder() {
+        return new EmbeddedChannel(new NettyFrameDecoder());
+    }
+
+    /**
+     *
+     * @return
+     */
+    protected static ByteBuf newLogonMessage() {
         return new MessageBuilder()
             .add("8", "FIX.4.2")
             .add("9", "69")

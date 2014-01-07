@@ -34,7 +34,7 @@ public class NettyChannelHandler extends SimpleChannelInboundHandler<byte[]> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, byte[] bytes) throws Exception {
-        //TODO
+        LOGGER.debug("Received: {}",new String(bytes));
     }
 
     @Override

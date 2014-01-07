@@ -36,6 +36,6 @@ public class NettyChannelInitializer extends ChannelInitializer {
     protected void initChannel(Channel channel) throws Exception {
         channel.pipeline().addLast("decoder",new NettyFrameDecoder());
         channel.pipeline().addLast("encoder",new NettyFrameEncoder());
-        //ch.pipeline().addLast("handler",new NettyChannelHandler());
+        channel.pipeline().addLast("handler",new NettyChannelHandler());
     }
 }

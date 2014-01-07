@@ -34,7 +34,7 @@ public class NettyFrameDecoderTest extends NettyTestSupport {
     public void testDecode() {
         ByteBuf         message = newLogonMessage();
         ByteBuf         msgcopy = message.copy();
-        EmbeddedChannel channel = new EmbeddedChannel(new NettyFrameDecoder());
+        EmbeddedChannel channel = newEmbeddedChannelWithDecoder();
 
         // raw write write
         Assert.assertTrue(channel.writeInbound(message));
@@ -51,7 +51,7 @@ public class NettyFrameDecoderTest extends NettyTestSupport {
 
     @Test
     public void testDecodeMultiple() {
-        EmbeddedChannel channel = new EmbeddedChannel(new NettyFrameDecoder());
+        EmbeddedChannel channel = newEmbeddedChannelWithDecoder();
 
         // raw write write
         Assert.assertTrue(channel.writeInbound(newLogonMessage().writeBytes(newLogonMessage())));
@@ -67,32 +67,39 @@ public class NettyFrameDecoderTest extends NettyTestSupport {
     public void testDecodeMultipleWithPartialMessages() {
 
         ByteBuf pmessage  = newLogonMessage();
+        ByteBuf pmessager = pmessage.copy();
         ByteBuf pmessage1 = pmessage.readBytes(10);
         ByteBuf pmessage2 = pmessage.readBytes(pmessage.readableBytes());
 
-        EmbeddedChannel channel  = new EmbeddedChannel(new NettyFrameDecoder());
+        EmbeddedChannel channel  = newEmbeddedChannelWithDecoder();
 
         // raw write:
-        // - 1 complete message
-        // - 1 partial message
+        // - 1 complete message (A)
+        // - 1 partial message  (B)
         Assert.assertTrue(channel.writeInbound(newLogonMessage().writeBytes(pmessage1)));
 
         // read
-        Assert.assertNotNull(channel.readInbound());
+        Assert.assertNotNull(channel.readInbound()); // A
         Assert.assertNull(channel.readInbound());
 
         // raw write:
-        // - 1 partial message
-        // - 1 compete message
+        // - 1 partial message  (B)
+        // - 1 complete message (C)
         Assert.assertTrue(channel.writeInbound(pmessage2.writeBytes(newLogonMessage())));
         Assert.assertTrue(channel.finish());
 
         // read
-        byte[] result1 = (byte[])channel.readInbound();
+        byte[] result1 = (byte[])channel.readInbound(); // B
         Assert.assertNotNull(result1);
+        if(pmessager.hasArray()) {
+            Assert.assertArrayEquals(pmessager.array(),result1);
+        }
 
-        byte[] result2 = (byte[])channel.readInbound();
+        byte[] result2 = (byte[])channel.readInbound(); //C
         Assert.assertNotNull(result2);
+        if(pmessager.hasArray()) {
+            Assert.assertArrayEquals(pmessager.array(),result2);
+        }
 
         Assert.assertNull(channel.readInbound());
     }
