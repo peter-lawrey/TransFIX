@@ -15,6 +15,7 @@
  */
 package net.openhft.fix.transport.netty;
 
+import net.openhft.fix.transport.Connection;
 import net.openhft.fix.transport.Session;
 import net.openhft.fix.transport.SessionSettings;
 
@@ -22,7 +23,9 @@ import net.openhft.fix.transport.SessionSettings;
  * @author lburgazzoli
  */
 public class NettySession implements Session {
+
     private final SessionSettings settings;
+    private Connection connection;
 
     /**
      * c-tor
@@ -30,22 +33,37 @@ public class NettySession implements Session {
      * @param settings
      */
     public NettySession(final SessionSettings settings) {
+        this.connection = null;
         this.settings = settings;
     }
 
     @Override
     public void start() throws Exception {
+        if(this.connection == null) {
+            this.connection = createConenction();
+            this.connection.start();
+        }
     }
 
     @Override
     public void stop() throws Exception {
+        if(this.connection != null) {
+            this.connection.stop();
+            this.connection = null;
+        }
     }
 
     /**
-     *
      * @return
      */
     protected SessionSettings getSettings() {
         return this.settings;
+    }
+
+    /**
+     * @return
+     */
+    protected Connection createConenction() {
+        return null;
     }
 }

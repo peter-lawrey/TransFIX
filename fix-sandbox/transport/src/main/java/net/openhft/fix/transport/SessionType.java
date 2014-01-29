@@ -15,26 +15,10 @@
  */
 package net.openhft.fix.transport;
 
-import java.net.InetSocketAddress;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * @author lburgazzoli
  */
-public class SessionSettings {
-
-    /**
-     * @return the session type
-     */
-    public SessionType getSession() {
-        return SessionType.INITIATOR;
-    }
-
-    /**
-     * @return the addresses
-     */
-    public List<InetSocketAddress> getAddresses() {
-        return new LinkedList<InetSocketAddress>();
-    }
+public enum SessionType {
+    ACCEPTOR,
+    INITIATOR
 }
