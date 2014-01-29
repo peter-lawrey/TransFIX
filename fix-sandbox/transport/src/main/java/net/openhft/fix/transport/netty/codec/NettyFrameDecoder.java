@@ -37,23 +37,8 @@ public class NettyFrameDecoder extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        while(doDecode(ctx,in,out)) {
-            // EMPTY
-        }
-    }
-
-    /**
-     *
-     * @param ctx
-     * @param in
-     * @param out
-     * @return
-     */
-    private boolean doDecode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
-        boolean hasMoreData = false;
-
         if(m_msgLength == -1) {
-            if(canDecode(in)) {
+            if(in.readableBytes() >= NettyFrameHelper.MSG_MIN_BYTES) {
                 int ridx  = in.readerIndex();
                 int bssohidx = in.indexOf(ridx     ,ridx + 12,NettyFrameHelper.BYTE_SOH);
                 int blsohidx = in.indexOf(ridx + 12,ridx + 20,NettyFrameHelper.BYTE_SOH);
@@ -74,7 +59,7 @@ public class NettyFrameDecoder extends ByteToMessageDecoder {
 
                     m_msgLength = 1 + bodyLength + (blsohidx - ridx) + NettyFrameHelper.MSG_CSUM_LEN;
                 } else {
-                    //TODO: add some useful information to the exeption
+                    //TODO: add some useful information to the exception
                     throw new Error("Unexpected state (header)");
                 }
             }
@@ -89,22 +74,10 @@ public class NettyFrameDecoder extends ByteToMessageDecoder {
                 out.add(rv);
 
                 m_msgLength = -1;
-                hasMoreData = canDecode(in);
             } else {
-                //TODO: add some useful information to the exeption
+                //TODO: add some useful information to the exception
                 throw new Error("Unexpected state (body)");
             }
         }
-
-        return hasMoreData;
-    }
-
-    /**
-     *
-     * @param in
-     * @return
-     */
-    private boolean canDecode(final ByteBuf in) {
-        return in.readableBytes() >= NettyFrameHelper.MSG_MIN_BYTES;
     }
 }

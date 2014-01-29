@@ -17,7 +17,6 @@ package net.openhft.fix.transport.test;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.embedded.EmbeddedChannel;
-import net.openhft.fix.transport.netty.codec.NettyFrameDecoder;
 import org.junit.Assert;
 import org.junit.Test;
 
