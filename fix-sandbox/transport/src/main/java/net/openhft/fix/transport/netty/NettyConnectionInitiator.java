@@ -21,6 +21,8 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,39 +42,6 @@ public class NettyConnectionInitiator extends NettyConnection {
     // *************************************************************************
 
     /**
-     *
-     */
-    private final ChannelFutureListener connectionListener = new ChannelFutureListener() {
-        public void operationComplete(ChannelFuture future) {
-            if (future.isDone() && future.isSuccess()) {
-                cpnnectionAttempt.set(0);
-                LOGGER.debug("Connected : {}",future.channel());
-            } else if (!future.isSuccess() && !future.isCancelled()) {
-                LOGGER.warn("Error", future.cause());
-                doReconnect();
-            }
-        }
-    };
-
-    /**
-     *
-     */
-    private final ChannelFutureListener disconnectionListener = new ChannelFutureListener() {
-        public void operationComplete(ChannelFuture future) {
-            if (future.isDone() && future.isSuccess()) {
-                NettyConnectionInitiator.this.boot = null;
-                LOGGER.debug("Disconnected");
-            } else if (!future.isSuccess() && !future.isCancelled()) {
-                LOGGER.warn("Error", future.cause());
-            }
-        }
-    };
-
-    // *************************************************************************
-    //
-    // *************************************************************************
-
-    /**
      * The Netty's Bootstrap.
      */
     private Bootstrap boot;
@@ -80,14 +49,14 @@ public class NettyConnectionInitiator extends NettyConnection {
     /**
      *
      */
-    private AtomicInteger cpnnectionAttempt;
+    private AtomicInteger connectionAttempt;
 
     /**
      * c-tor
      */
     public NettyConnectionInitiator() {
         this.boot = null;
-        this.cpnnectionAttempt = new AtomicInteger(0);
+        this.connectionAttempt = new AtomicInteger(0);
     }
 
     // *************************************************************************
@@ -113,9 +82,18 @@ public class NettyConnectionInitiator extends NettyConnection {
 
     @Override
     public void stop() throws Exception {
-        if(this.boot != null) {
-            this.boot.group().shutdownGracefully().addListener(this.disconnectionListener);
-        }
+        Future<?> future = this.boot.group().shutdownGracefully();
+        future.addListener(new GenericFutureListener<Future<Object>>() {
+            @Override
+            public void operationComplete(Future<Object> future) throws Exception {
+                if (future.isDone() && future.isSuccess()) {
+                    NettyConnectionInitiator.this.boot = null;
+                    LOGGER.debug("Disconnected");
+                } else if (!future.isSuccess() && !future.isCancelled()) {
+                    LOGGER.warn("Error", future.cause());
+                }
+            }
+        });
     }
 
     // *************************************************************************
@@ -129,7 +107,17 @@ public class NettyConnectionInitiator extends NettyConnection {
         if(this.boot != null) {
             //TODO: retrieve from settings
             InetSocketAddress addr = new InetSocketAddress("127.0.0.1",9876);
-            this.boot.connect(addr).addListener(this.connectionListener);
+            this.boot.connect(addr).addListener(new ChannelFutureListener() {
+                public void operationComplete(ChannelFuture future) {
+                    if (future.isDone() && future.isSuccess()) {
+                        connectionAttempt.set(0);
+                        LOGGER.debug("Connected : {}",future.channel());
+                    } else if (!future.isSuccess() && !future.isCancelled()) {
+                        LOGGER.warn("Error", future.cause());
+                        doReconnect();
+                    }
+                }
+            });
         }
     }
 
@@ -138,7 +126,7 @@ public class NettyConnectionInitiator extends NettyConnection {
      */
     private void doReconnect() {
         if(this.boot != null) {
-            if(cpnnectionAttempt.incrementAndGet() < 10) {
+            if(connectionAttempt.incrementAndGet() < 10) {
                 final Runnable task = new Runnable() {
                     public void run() {
                         doConnect();

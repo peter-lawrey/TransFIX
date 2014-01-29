@@ -22,7 +22,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 /**
  * @author lburgazzoli
  */
-public final class NettyFrameEncoder extends MessageToByteEncoder<byte[]> {
+public final class NettyFrameEncoder extends MessageToByteEncoder<ByteBuf> {
 
     /**
      * c-tor
@@ -33,15 +33,17 @@ public final class NettyFrameEncoder extends MessageToByteEncoder<byte[]> {
     /**
      *
      * @param ctx
-     * @param msg
+     * @param data
      * @param out
      * @return
      * @throws Exception
      */
     @Override
-    protected void encode(ChannelHandlerContext ctx, byte[] msg, ByteBuf out) throws Exception {
-        if (msg.length != 0) {
-            out.writeBytes(msg);
+    protected void encode(ChannelHandlerContext ctx, ByteBuf data, ByteBuf out) throws Exception {
+        try {
+            out.writeBytes(data);
+        } finally {
+            data.release();
         }
     }
 }

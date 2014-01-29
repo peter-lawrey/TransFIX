@@ -41,12 +41,10 @@ public class NettyFrameDecoderTest extends NettyTestSupport {
         Assert.assertTrue(channel.finish());
 
         // read
-        byte[] result = (byte[])channel.readInbound();
+        ByteBuf result = (ByteBuf)channel.readInbound();
         Assert.assertNotNull(result);
 
-        if(msgcopy.hasArray()) {
-            Assert.assertArrayEquals(msgcopy.array(),result);
-        }
+        Assert.assertEquals(msgcopy,result);
     }
 
     @Test
@@ -65,7 +63,6 @@ public class NettyFrameDecoderTest extends NettyTestSupport {
 
     @Test
     public void testDecodeMultipleWithPartialMessages() {
-
         ByteBuf pmessage  = newLogonMessage();
         ByteBuf pmessager = pmessage.copy();
         ByteBuf pmessage1 = pmessage.readBytes(10);
@@ -89,17 +86,13 @@ public class NettyFrameDecoderTest extends NettyTestSupport {
         Assert.assertTrue(channel.finish());
 
         // read
-        byte[] result1 = (byte[])channel.readInbound(); // B
+        ByteBuf result1 = (ByteBuf)channel.readInbound(); // B
         Assert.assertNotNull(result1);
-        if(pmessager.hasArray()) {
-            Assert.assertArrayEquals(pmessager.array(),result1);
-        }
+        Assert.assertEquals(pmessager,result1);
 
-        byte[] result2 = (byte[])channel.readInbound(); //C
+        ByteBuf result2 = (ByteBuf)channel.readInbound(); //C
         Assert.assertNotNull(result2);
-        if(pmessager.hasArray()) {
-            Assert.assertArrayEquals(pmessager.array(),result2);
-        }
+        Assert.assertEquals(pmessager,result2);
 
         Assert.assertNull(channel.readInbound());
     }

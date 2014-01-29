@@ -24,6 +24,7 @@
     <groupId>net.openhft</groupId>
     <artifactId>transport</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <name>OpenHFT/TransFIX/transport</name>
 
     <parent>
         <groupId>net.openhft</groupId>
@@ -36,7 +37,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.0.14.Final</version>
+            <version>4.0.15.Final</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

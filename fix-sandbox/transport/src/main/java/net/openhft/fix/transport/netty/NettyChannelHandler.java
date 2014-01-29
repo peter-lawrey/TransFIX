@@ -15,6 +15,7 @@
  */
 package net.openhft.fix.transport.netty;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author lburgazzoli
  */
-public class NettyChannelHandler extends SimpleChannelInboundHandler<byte[]> {
+public class NettyChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
     private static final Logger LOGGER = LoggerFactory.getLogger(NettyChannelHandler.class);
 
     /**
@@ -33,8 +34,12 @@ public class NettyChannelHandler extends SimpleChannelInboundHandler<byte[]> {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, byte[] bytes) throws Exception {
-        LOGGER.debug("Received: {}",new String(bytes));
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, ByteBuf data) throws Exception {
+        try {
+            LOGGER.debug("Received: {}",data.toString());
+        } finally {
+            data.release();
+        }
     }
 
     @Override
