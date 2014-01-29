@@ -16,6 +16,7 @@
 package net.openhft.fix.transport.netty;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelOption;
@@ -72,6 +73,8 @@ public class NettyConnectionInitiator extends NettyConnection {
             this.boot.channel(NioSocketChannel.class);
             this.boot.option(ChannelOption.SO_KEEPALIVE, true);
             this.boot.option(ChannelOption.TCP_NODELAY, true);
+            //TODO
+            this.boot.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
             this.boot.handler(new NettyChannelInitializer());
 
             doConnect();

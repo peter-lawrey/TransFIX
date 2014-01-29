@@ -24,6 +24,7 @@
     <groupId>net.openhft</groupId>
     <artifactId>framework</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <name>OpenHFT/TransFIX/framework</name>
 
     <parent>
         <groupId>net.openhft</groupId>
