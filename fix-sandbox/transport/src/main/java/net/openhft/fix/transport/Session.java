@@ -19,4 +19,16 @@ package net.openhft.fix.transport;
  * @author lburgazzoli
  */
 public interface Session {
+
+    /**
+     *
+     * @throws Exception
+     */
+    public void start() throws Exception;
+
+    /**
+     *
+     * @throws Exception
+     */
+    public void stop() throws Exception;
 }

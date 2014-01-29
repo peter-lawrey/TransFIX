@@ -16,9 +16,36 @@
 package net.openhft.fix.transport.netty;
 
 import net.openhft.fix.transport.Session;
+import net.openhft.fix.transport.SessionSettings;
 
 /**
  * @author lburgazzoli
  */
 public class NettySession implements Session {
+    private final SessionSettings settings;
+
+    /**
+     * c-tor
+     *
+     * @param settings
+     */
+    public NettySession(final SessionSettings settings) {
+        this.settings = settings;
+    }
+
+    @Override
+    public void start() throws Exception {
+    }
+
+    @Override
+    public void stop() throws Exception {
+    }
+
+    /**
+     *
+     * @return
+     */
+    protected SessionSettings getSettings() {
+        return this.settings;
+    }
 }
