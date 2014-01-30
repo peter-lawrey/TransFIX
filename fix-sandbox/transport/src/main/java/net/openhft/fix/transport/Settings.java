@@ -15,8 +15,12 @@
  */
 package net.openhft.fix.transport;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.InetSocketAddress;
-import java.util.*;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @author lburgazzoli
@@ -24,90 +28,51 @@ import java.util.*;
  * TODO: re-enginering
  */
 public class Settings {
-    public static final Setting<SessionType> SESSION_TYPE =
-        new Setting<SessionType>("session.type",SessionType.UNKNOWN)
-            .add("initiator",SessionType.INITIATOR)
-            .add("acceptor" ,SessionType.ACCEPTOR);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Settings.class);
 
-    private Properties data;
+    // *************************************************************************
+    //
+    // *************************************************************************
+
+    public static final SettingsHelper.Setting<SessionType> SESSION_TYPE =
+        new SettingsHelper.Setting<SessionType>(
+            "session.type",
+            new SettingsHelper.MapConverter<SessionType>()
+                .def(SessionType.UNKNOWN)
+                .put("initiator",SessionType.INITIATOR)
+                .put("acceptor" ,SessionType.ACCEPTOR)
+    );
+
+    public static final SettingsHelper.Setting<List<InetSocketAddress>> SESSION_ADDRESSES =
+        new SettingsHelper.Setting<List<InetSocketAddress>>(
+            "session.addresses",
+            new SettingsHelper.AddressesConverter()
+    );
+
+    // *************************************************************************
+    //
+    // *************************************************************************
+
+    private Properties properties;
 
     /**
      * c-tor
      */
     public Settings() {
-        data = new Properties();
+        properties = new Properties();
     }
 
     /**
      * @return the session type
      */
     public SessionType getSessionType() {
-        return SESSION_TYPE.get(data);
+        return SESSION_TYPE.get(properties);
     }
 
     /**
      * @return the addresses
      */
     public List<InetSocketAddress> getAddresses() {
-        return new LinkedList<InetSocketAddress>();
-    }
-
-    // *************************************************************************
-    //
-    // *************************************************************************
-
-    private static final class Setting<T> {
-        private final String settingKey;
-        private final T defval;
-        private Map<String,T> dataMap;
-
-        /**
-         * c-tor
-         *
-         * @param settingKey
-         */
-        public Setting(String settingKey) {
-           this(settingKey,null);
-        }
-
-        /**
-         * c-tor
-         *
-         * @param settingKey
-         * @param defval
-         */
-        public Setting(String settingKey,T defval) {
-            this.dataMap = new HashMap<String,T>();
-            this.settingKey = settingKey;
-            this.defval = defval;
-        }
-
-        /**
-         *
-         * @param key
-         * @param value
-         * @return
-         */
-        public Setting<T> add(String key,T value) {
-            dataMap.put(key,value);
-            return this;
-        }
-
-        /**
-         *
-         * @param props
-         * @return
-         */
-        public T get(Properties props) {
-            T retval = defval;
-            String val = props.getProperty(this.settingKey);
-            if(val != null) {
-                if(dataMap.containsKey(val)) {
-                    retval = dataMap.get(val);
-                }
-            }
-
-            return retval;
-        }
+        return SESSION_ADDRESSES.get(properties);
     }
 }
