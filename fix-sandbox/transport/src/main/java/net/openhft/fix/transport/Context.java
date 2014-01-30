@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Peter Lawrey
+ * Copyright 2013 Peter Lawrey
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,26 +15,24 @@
  */
 package net.openhft.fix.transport;
 
-import java.net.InetSocketAddress;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * @author lburgazzoli
  */
-public class SessionSettings {
+public class Context {
+    private Settings settings;
 
     /**
-     * @return the session type
+     * c-tor
      */
-    public SessionType getSession() {
-        return SessionType.INITIATOR;
+    public Context() {
+        this.settings = null;
     }
 
     /**
-     * @return the addresses
+     *
+     * @return
      */
-    public List<InetSocketAddress> getAddresses() {
-        return new LinkedList<InetSocketAddress>();
+    public Settings getSettings() {
+        return this.settings;
     }
 }
