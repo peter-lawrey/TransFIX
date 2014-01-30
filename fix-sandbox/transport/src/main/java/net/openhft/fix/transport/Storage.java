@@ -15,8 +15,10 @@
  */
 package net.openhft.fix.transport;
 
+import java.io.Closeable;
+
 /**
  * @author lburgazzoli
  */
-public interface Storage {
+public interface Storage extends Closeable {
 }

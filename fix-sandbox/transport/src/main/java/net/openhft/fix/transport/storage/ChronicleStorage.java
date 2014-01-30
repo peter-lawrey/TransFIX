@@ -15,14 +15,19 @@
  */
 package net.openhft.fix.transport.storage;
 
+import net.openhft.chronicle.IndexedChronicle;
+import net.openhft.chronicle.tools.ChronicleTools;
 import net.openhft.fix.transport.Context;
 import net.openhft.fix.transport.Storage;
+
+import java.io.IOException;
 
 /**
  * @author lburgazzoli
  */
 public class ChronicleStorage implements Storage {
     private final Context context;
+    private IndexedChronicle chronicle;
 
     /**
      * c-tor
@@ -31,5 +36,15 @@ public class ChronicleStorage implements Storage {
      */
     public ChronicleStorage(final Context context) {
         this.context = context;
+        this.chronicle = null;
+
+        ChronicleTools.warmup();
+    }
+
+    @Override
+    public void close() throws IOException {
+        if(this.chronicle != null) {
+            this.chronicle.close();
+        }
     }
 }

@@ -19,6 +19,7 @@ package net.openhft.fix.transport;
  * @author lburgazzoli
  */
 public enum SessionType {
+    UNKNOWN,
     ACCEPTOR,
     INITIATOR
 }
