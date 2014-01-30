@@ -27,9 +27,40 @@ import java.util.*;
 /**
  * @author lburgazzoli
  */
-public class SettingsHelper {
+public final class SettingsHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SettingsHelper.class);
+
+    // *************************************************************************
+    //
+    // *************************************************************************
+
+    public static final SettingsTypeConverter<SessionType> CONVERTER_SESSION_TYPE =
+        new MapConverter<SessionType>()
+            .def(SessionType.UNKNOWN)
+            .put("initiator", SessionType.INITIATOR)
+            .put("acceptor", SessionType.ACCEPTOR);
+
+    public static final SettingsTypeConverter<List<InetSocketAddress>> CONVERTER_ADDRESSES =
+        new AddressesConverter();
+
+    public static final SettingsTypeConverter<Integer> CONVERTER_INTEGER =
+        new IntegerConverter();
+
+    public static final SettingsTypeConverter<Double> CONVERTER_DOUBLE =
+        new DoubleConverter();
+
+    public static final SettingsTypeConverter<Boolean> CONVERTER_BOOLEAN =
+        new MapConverter<Boolean>()
+            .def(Boolean.FALSE)
+            .put("true", Boolean.TRUE)
+            .put("yes", Boolean.TRUE)
+            .put("y", Boolean.TRUE)
+            .put("1", Boolean.TRUE)
+            .put("false", Boolean.FALSE)
+            .put("no", Boolean.FALSE)
+            .put("n", Boolean.FALSE)
+            .put("0", Boolean.FALSE);
 
     // *************************************************************************
     //
@@ -39,20 +70,12 @@ public class SettingsHelper {
      *
      * @param <T>
      */
-    public static interface Converter<T> {
-        public T convert(final String data);
-    }
-
-    /**
-     *
-     * @param <T>
-     */
-    public static final class MapConverter<T> implements Converter<T> {
+    public static class MapConverter<T> implements SettingsTypeConverter<T> {
         private T defval;
-        private final Map<String,T> maps;
+        private final Map<Object,T> maps;
 
         public MapConverter() {
-            this.maps = new HashMap<String,T>();
+            this.maps = new HashMap<Object,T>();
             this.defval = null;
         }
 
@@ -67,15 +90,15 @@ public class SettingsHelper {
         }
 
         @Override
-        public T convert(final String data) {
-            return maps.containsKey(data) ? maps.get(data) : defval;
+        public T convertTo(String value) {
+            return maps.containsKey(value) ? maps.get(value) : defval;
         }
     }
 
     /**
      *
      */
-    public static final class DateConverter implements Converter<Date> {
+    public static final class DateConverter implements SettingsTypeConverter<Date> {
         private final DateFormat formatter;
 
         /**
@@ -88,7 +111,7 @@ public class SettingsHelper {
         }
 
         @Override
-        public Date convert(final String data) {
+        public Date convertTo(final String data) {
             try {
                 return this.formatter.parse(data);
             } catch (ParseException e) {
@@ -102,9 +125,9 @@ public class SettingsHelper {
     /**
      *
      */
-    public static final class StringConverter implements Converter<String> {
+    public static final class StringConverter implements SettingsTypeConverter<String> {
         @Override
-        public String convert(final String data) {
+        public String convertTo(final String data) {
             return data;
         }
     }
@@ -112,9 +135,9 @@ public class SettingsHelper {
     /**
      *
      */
-    public static final class IntegerConverter implements Converter<Integer> {
+    public static final class IntegerConverter implements SettingsTypeConverter<Integer> {
         @Override
-        public Integer convert(final String data) {
+        public Integer convertTo(final String data) {
             return Integer.parseInt(data);
         }
     }
@@ -122,9 +145,9 @@ public class SettingsHelper {
     /**
      *
      */
-    public static final class DoubleConverter implements Converter<Double> {
+    public static final class DoubleConverter implements SettingsTypeConverter<Double> {
         @Override
-        public Double convert(final String data) {
+        public Double convertTo(final String data) {
             return Double.parseDouble(data);
         }
     }
@@ -132,9 +155,9 @@ public class SettingsHelper {
     /**
 
      */
-    public static final class AddressesConverter implements Converter<List<InetSocketAddress>> {
+    public static final class AddressesConverter implements SettingsTypeConverter<List<InetSocketAddress>> {
         @Override
-        public List<InetSocketAddress> convert(final String data) {
+        public List<InetSocketAddress> convertTo(final String data) {
             List<InetSocketAddress> addresses = new LinkedList<InetSocketAddress>();
             for(String address : data.split(",")) {
                 String[] hp =  address.split(":",2);
@@ -142,45 +165,6 @@ public class SettingsHelper {
             }
 
             return addresses;
-        }
-    }
-
-    // *************************************************************************
-    //
-    // *************************************************************************
-
-    /**
-     *
-     * @param <T>
-     */
-    public static final class Setting<T> {
-        private final String settingKey;
-        private final Converter<T> converter;
-
-        /**
-         * c-tor
-         *
-         * @param settingKey
-         * @param converter
-         */
-        public Setting(final String settingKey,final Converter<T> converter) {
-            this.settingKey = settingKey;
-            this.converter = converter;
-        }
-
-        /**
-         *
-         * @param props
-         * @return
-         */
-        public T get(Properties props) {
-            T retval = null;
-            String propval = props.getProperty(this.settingKey);
-            if(propval != null && this.converter != null) {
-                retval = this.converter.convert(propval);
-            }
-
-            return retval;
         }
     }
 }

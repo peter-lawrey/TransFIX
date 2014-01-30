@@ -30,26 +30,10 @@ import java.util.Properties;
 public class Settings {
     private static final Logger LOGGER = LoggerFactory.getLogger(Settings.class);
 
-    // *************************************************************************
-    //
-    // *************************************************************************
+    public static final String SESSION_TYPE      = "session.type";
+    public static final String SESSION_ADDRESSES = "session.addresses";
 
-    public static final SettingsHelper.Setting<SessionType> SESSION_TYPE =
-        new SettingsHelper.Setting<SessionType>(
-            "session.type",
-            new SettingsHelper.MapConverter<SessionType>()
-                .def(SessionType.UNKNOWN)
-                .put("initiator",SessionType.INITIATOR)
-                .put("acceptor" ,SessionType.ACCEPTOR)
-    );
-
-    public static final SettingsHelper.Setting<List<InetSocketAddress>> SESSION_ADDRESSES =
-        new SettingsHelper.Setting<List<InetSocketAddress>>(
-            "session.addresses",
-            new SettingsHelper.AddressesConverter()
-    );
-
-    // *************************************************************************
+    // **********************************************************************
     //
     // *************************************************************************
 
@@ -63,16 +47,33 @@ public class Settings {
     }
 
     /**
+     *
+     * @param key
+     * @param converter
+     * @param <T>
+     * @return
+     */
+    public <T> T get(String key,SettingsTypeConverter<T> converter) {
+        T retval = null;
+        String propval = properties.getProperty(key);
+        if(propval != null && converter != null) {
+            retval = converter.convertTo(propval);
+        }
+
+        return retval;
+    }
+
+    /**
      * @return the session type
      */
     public SessionType getSessionType() {
-        return SESSION_TYPE.get(properties);
+        return get(SESSION_TYPE,SettingsHelper.CONVERTER_SESSION_TYPE);
     }
 
     /**
      * @return the addresses
      */
     public List<InetSocketAddress> getAddresses() {
-        return SESSION_ADDRESSES.get(properties);
+        return get(SESSION_ADDRESSES,SettingsHelper.CONVERTER_ADDRESSES);
     }
 }
