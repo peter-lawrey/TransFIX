@@ -15,11 +15,10 @@
  */
 package net.openhft.fix.transport;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.InetSocketAddress;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -49,31 +48,25 @@ public class Settings {
     /**
      *
      * @param key
+     * @return
+     */
+    public String get(String key) {
+        return properties.getProperty(key);
+    }
+
+    /**
+     *
+     * @param key
      * @param converter
      * @param <T>
      * @return
      */
     public <T> T get(String key,SettingsTypeConverter<T> converter) {
-        T retval = null;
         String propval = properties.getProperty(key);
-        if(propval != null && converter != null) {
-            retval = converter.convertTo(propval);
+        if(StringUtils.isNoneBlank(propval) && converter != null) {
+            return converter.convertTo(propval);
         }
 
-        return retval;
-    }
-
-    /**
-     * @return the session type
-     */
-    public SessionType getSessionType() {
-        return get(SESSION_TYPE,SettingsHelper.CONVERTER_SESSION_TYPE);
-    }
-
-    /**
-     * @return the addresses
-     */
-    public List<InetSocketAddress> getAddresses() {
-        return get(SESSION_ADDRESSES,SettingsHelper.CONVERTER_ADDRESSES);
+        return null;
     }
 }

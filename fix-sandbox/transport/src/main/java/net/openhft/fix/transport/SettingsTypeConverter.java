@@ -17,6 +17,8 @@ package net.openhft.fix.transport;
 
 /**
  * @author lburgazzoli
+ *
+ * TODO: implement a generic type-converter
  */
 public interface SettingsTypeConverter<T> {
     /**
