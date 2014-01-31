@@ -110,7 +110,7 @@ public class NettyConnectionInitiator extends NettyConnection {
                 }
             }
 
-            this.boot.handler(new NettyChannelInitializer());
+            this.boot.handler(new NettyChannelInitializer(this.settings));
 
             doConnect();
         } else {

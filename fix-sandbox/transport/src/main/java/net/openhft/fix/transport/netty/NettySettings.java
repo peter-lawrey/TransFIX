@@ -15,7 +15,6 @@
  */
 package net.openhft.fix.transport.netty;
 
-import net.openhft.fix.transport.Session;
 import net.openhft.fix.transport.Settings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +25,7 @@ import org.slf4j.LoggerFactory;
 public class NettySettings {
     private static final Logger LOGGER = LoggerFactory.getLogger(NettySettings.class);
 
+    public static final String KEY_NETTY_TRACE                  = "session.netty.trace";
     public static final String KEY_NETTY_ALLOCATOR_POOLED       = "session.netty.allocator.pooled";
     public static final String KEY_NETTY_ALLOCATOR_DIRECT       = "session.netty.allocator.direct";
     public static final String KEY_NETTY_ALLOCATOR_NHEAPARENA   = "session.netty.allocator.nHeapArena";
@@ -51,6 +51,14 @@ public class NettySettings {
     // *************************************************************************
     //
     // *************************************************************************
+
+    /**
+     *
+     * @return
+     */
+    public boolean trace() {
+        return this.settings.getBoolean(KEY_NETTY_TRACE,Boolean.FALSE);
+    }
 
     /**
      *

@@ -17,6 +17,8 @@ package net.openhft.fix.transport.netty;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 import net.openhft.fix.transport.netty.codec.NettyFrameDecoder;
 import net.openhft.fix.transport.netty.codec.NettyFrameEncoder;
 
@@ -26,16 +28,27 @@ import net.openhft.fix.transport.netty.codec.NettyFrameEncoder;
  */
 public class NettyChannelInitializer extends ChannelInitializer {
 
+    private final NettySettings settings;
+
     /**
      * c-tor
+     *
+     * @param settings
      */
-    public NettyChannelInitializer() {
+    public NettyChannelInitializer(final NettySettings settings) {
+        this.settings = settings;
     }
 
     @Override
     protected void initChannel(Channel channel) throws Exception {
-        channel.pipeline().addLast("decoder",new NettyFrameDecoder());
-        channel.pipeline().addLast("encoder",new NettyFrameEncoder());
-        channel.pipeline().addLast("handler",new NettyChannelHandler());
+        if(settings.trace()) {
+            channel.pipeline().addLast("tracer",new LoggingHandler(LogLevel.DEBUG));
+        }
+
+        channel.pipeline().addLast("decoder"     ,new NettyFrameDecoder());
+        channel.pipeline().addLast("storage-in"  ,new NettyStorageHandler.Inboud(null));
+        channel.pipeline().addLast("encoder"     ,new NettyFrameEncoder());
+        channel.pipeline().addLast("storage-out" ,new NettyStorageHandler.Outbound(null));
+        channel.pipeline().addLast("handler"     ,new NettyChannelHandler());
     }
 }
