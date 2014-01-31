@@ -15,14 +15,35 @@
  */
 package net.openhft.fix.transport.examples;
 
+import net.openhft.fix.transport.Settings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Properties;
 
 /**
  * @author lburgazzoli
  */
 public class SimpleClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleClient.class);
+
+    // *************************************************************************
+    //
+    // *************************************************************************
+
+    /**
+     *
+     * @return
+     */
+    private static Settings getSettings() {
+        Properties properties = new Properties();
+
+        return new Settings(properties);
+    }
+
+    // *************************************************************************
+    //
+    // *************************************************************************
 
     public static void main(String[] args) {
         try {

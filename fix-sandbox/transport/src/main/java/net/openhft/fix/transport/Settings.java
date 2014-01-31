@@ -29,20 +29,32 @@ import java.util.Properties;
 public class Settings {
     private static final Logger LOGGER = LoggerFactory.getLogger(Settings.class);
 
-    public static final String SESSION_TYPE      = "session.type";
-    public static final String SESSION_ADDRESSES = "session.addresses";
+    public static final String KEY_SESSION_TYPE                  = "session.type";
+    public static final String KEY_SESSION_ADDRESSES             = "session.addresses";
+    public static final String KEY_SESSION_RECONNECT_DELAY       = "session.reconenct.delay";
+    public static final String KEY_SESSION_RECONNECT_MAX_ATTEMPT = "session.reconenct.maxAttempt";
+    public static final String KEY_TCP_NODELAY                   = "session.tcp.noDelay";
+    public static final String KEY_TCP_KEEPALIVE                 = "session.tcp.keepAlive";
 
     // **********************************************************************
     //
     // *************************************************************************
 
-    private Properties properties;
+    private final Properties properties;
 
     /**
      * c-tor
      */
     public Settings() {
-        properties = new Properties();
+        this.properties = new Properties();
+    }
+
+    /**
+     * c-tor
+     */
+    public Settings(final Properties properties) {
+        this.properties = new Properties();
+        this.properties.putAll(properties);
     }
 
     /**
@@ -57,16 +69,81 @@ public class Settings {
     /**
      *
      * @param key
-     * @param converter
-     * @param <T>
      * @return
      */
-    public <T> T get(String key,SettingsTypeConverter<T> converter) {
-        String propval = properties.getProperty(key);
-        if(StringUtils.isNoneBlank(propval) && converter != null) {
-            return converter.convertTo(propval);
+    public Boolean getBoolean(String key) {
+        return getBoolean(key, Boolean.FALSE);
+    }
+
+    /**
+
+     * @param key
+     * @param defval
+     * @return
+     */
+    public Boolean getBoolean(String key, Boolean defval) {
+        String val = get(key);
+
+        if( StringUtils.equalsIgnoreCase("true",val) ||
+            StringUtils.equalsIgnoreCase("yes" ,val) ||
+            StringUtils.equalsIgnoreCase("0"   ,val) ) {
+            return Boolean.TRUE;
         }
 
-        return null;
+        if( StringUtils.equalsIgnoreCase("false",val) ||
+            StringUtils.equalsIgnoreCase("no"   ,val) ||
+            StringUtils.equalsIgnoreCase("0"    ,val) ) {
+            return Boolean.FALSE;
+        }
+
+        return defval;
+    }
+
+    /**
+     *
+     * @param key
+     * @return
+     */
+    public Integer getInteger(String key) {
+        return getInteger(key,-1);
+    }
+
+    /**
+     *
+     * @param key
+     * @param defval
+     * @return
+     */
+    public Integer getInteger(String key,Integer defval) {
+        String val = get(key);
+        if(StringUtils.isNotBlank(val)) {
+            return Integer.parseInt(val);
+        }
+
+        return defval;
+    }
+
+    /**
+     *
+     * @param key
+     * @return
+     */
+    public Double getDouble(String key) {
+        return getDouble(key, 0.0);
+    }
+
+    /**
+     *
+     * @param key
+     * @param defval
+     * @return
+     */
+    public Double getDouble(String key,Double defval) {
+        String val = get(key);
+        if(StringUtils.isNotBlank(val)) {
+            return Double.parseDouble(val);
+        }
+
+        return defval;
     }
 }

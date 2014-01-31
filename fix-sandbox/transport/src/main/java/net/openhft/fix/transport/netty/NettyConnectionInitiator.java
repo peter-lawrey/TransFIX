@@ -24,6 +24,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import net.openhft.fix.transport.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +44,11 @@ public class NettyConnectionInitiator extends NettyConnection {
     // *************************************************************************
 
     /**
+     * The TransFIX's context.
+     */
+    private final Context context;
+
+    /**
      * The Netty's Bootstrap.
      */
     private Bootstrap boot;
@@ -50,14 +56,23 @@ public class NettyConnectionInitiator extends NettyConnection {
     /**
      *
      */
-    private AtomicInteger connectionAttempt;
+    private final AtomicInteger connectionAttempt;
+
+    /**
+     *
+     */
+    private final NettySettings settings;
 
     /**
      * c-tor
+     *
+     * @param context
      */
-    public NettyConnectionInitiator() {
+    public NettyConnectionInitiator(final Context context) {
+        this.context = context;
         this.boot = null;
         this.connectionAttempt = new AtomicInteger(0);
+        this.settings = new NettySettings(context.getSettings());
     }
 
     // *************************************************************************
@@ -67,14 +82,34 @@ public class NettyConnectionInitiator extends NettyConnection {
     @Override
     public void start() throws Exception {
         if(this.boot == null) {
-            //TODO: retrieve from settings
             this.boot = new Bootstrap();
             this.boot.group(new NioEventLoopGroup());
             this.boot.channel(NioSocketChannel.class);
-            this.boot.option(ChannelOption.SO_KEEPALIVE, true);
-            this.boot.option(ChannelOption.TCP_NODELAY, true);
-            //TODO
-            this.boot.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
+            this.boot.option(ChannelOption.SO_KEEPALIVE, settings.keepAlive());
+            this.boot.option(ChannelOption.TCP_NODELAY, settings.tcpNodelay());
+
+            if(settings.pooledAllocator()) {
+                int nHeapArena = settings.nHeapArena();
+                int nDirectArena = settings.nHeapArena();
+                int pageSize = settings.pageSize();
+                int maxOrder = settings.maxOrder();
+
+                if(nHeapArena != -1 && nDirectArena != -1 && pageSize != -1 && maxOrder != -1) {
+                    this.boot.option(
+                        ChannelOption.ALLOCATOR,
+                        new PooledByteBufAllocator(
+                            settings.diretAllocator(),
+                            nHeapArena,
+                            nDirectArena,
+                            pageSize,
+                            maxOrder));
+                } else {
+                    this.boot.option(
+                        ChannelOption.ALLOCATOR,
+                        new PooledByteBufAllocator(settings.diretAllocator()));
+                }
+            }
+
             this.boot.handler(new NettyChannelInitializer());
 
             doConnect();
@@ -129,15 +164,14 @@ public class NettyConnectionInitiator extends NettyConnection {
      */
     private void doReconnect() {
         if(this.boot != null) {
-            if(connectionAttempt.incrementAndGet() < 10) {
+            if(connectionAttempt.incrementAndGet() < this.settings.getMaxReconnectAttempt()) {
                 final Runnable task = new Runnable() {
                     public void run() {
                         doConnect();
                     }
                 };
 
-                //TODO: timeout
-                this.boot.group().schedule(task,5, TimeUnit.SECONDS);
+                this.boot.group().schedule(task,this.settings.getReconnectDelay(), TimeUnit.SECONDS);
             } else {
                 LOGGER.warn("doReconnect");
             }
