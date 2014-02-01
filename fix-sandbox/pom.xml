@@ -38,11 +38,13 @@
     </properties>
 
     <modules>
+        <module>common</module>
         <module>framework</module>
         <module>model</module>
         <module>schema</module>
         <module>compiler</module>
         <module>transport</module>
+        <module>storage</module>
     </modules>
 
     <dependencies>

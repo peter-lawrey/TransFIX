@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.openhft.fix.transport.storage;
+package net.openhft.fix.storage;
 
 import net.openhft.chronicle.IndexedChronicle;
 import net.openhft.chronicle.tools.ChronicleTools;
-import net.openhft.fix.transport.Context;
-import net.openhft.fix.transport.Storage;
+import net.openhft.fix.storage.Storage;
 
 import java.io.IOException;
 
@@ -26,16 +25,12 @@ import java.io.IOException;
  * @author lburgazzoli
  */
 public class ChronicleStorage implements Storage {
-    private final Context context;
     private IndexedChronicle chronicle;
 
     /**
      * c-tor
-     *
-     * @param context
      */
-    public ChronicleStorage(final Context context) {
-        this.context = context;
+    public ChronicleStorage() {
         this.chronicle = null;
 
         ChronicleTools.warmup();

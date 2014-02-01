@@ -15,7 +15,7 @@
  */
 package net.openhft.fix.transport.netty;
 
-import net.openhft.fix.transport.Settings;
+import net.openhft.fix.Settings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

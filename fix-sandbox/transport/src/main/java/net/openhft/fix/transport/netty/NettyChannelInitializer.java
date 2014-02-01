@@ -45,10 +45,8 @@ public class NettyChannelInitializer extends ChannelInitializer {
             channel.pipeline().addLast("tracer",new LoggingHandler(LogLevel.DEBUG));
         }
 
-        channel.pipeline().addLast("decoder"     ,new NettyFrameDecoder());
-        channel.pipeline().addLast("storage-in"  ,new NettyStorageHandler.Inboud(null));
-        channel.pipeline().addLast("encoder"     ,new NettyFrameEncoder());
-        channel.pipeline().addLast("storage-out" ,new NettyStorageHandler.Outbound(null));
-        channel.pipeline().addLast("handler"     ,new NettyChannelHandler());
+        channel.pipeline().addLast("decoder",new NettyFrameDecoder());
+        channel.pipeline().addLast("encoder",new NettyFrameEncoder());
+        channel.pipeline().addLast("handler",new NettyChannelHandler());
     }
 }

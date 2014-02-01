@@ -18,7 +18,6 @@ package net.openhft.fix.transport.netty;
 import net.openhft.fix.transport.Connection;
 import net.openhft.fix.transport.Context;
 import net.openhft.fix.transport.Session;
-import net.openhft.fix.transport.Settings;
 
 /**
  * @author lburgazzoli

@@ -22,10 +22,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.openhft</groupId>
-    <artifactId>fix-transport</artifactId>
+    <artifactId>fix-storage</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>OpenHFT/TransFIX/transport</name>
-    <packaging>pom</packaging>
+    <name>OpenHFT/TransFIX/storage</name>
 
     <parent>
         <groupId>net.openhft</groupId>
@@ -35,7 +34,6 @@
     </parent>
 
     <properties>
-        <netty.version>4.0.15.Final</netty.version>
         <slf4j.version>1.7.5</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
         <javassist.version>3.18.1-GA</javassist.version>
@@ -67,11 +65,6 @@
             <artifactId>javassist</artifactId>
             <version>${javassist.version}</version>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>${netty.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
