@@ -25,7 +25,6 @@
     <artifactId>fix-transport</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>OpenHFT/TransFIX/transport</name>
-    <packaging>pom</packaging>
 
     <parent>
         <groupId>net.openhft</groupId>

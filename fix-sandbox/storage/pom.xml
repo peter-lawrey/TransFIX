@@ -22,9 +22,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.openhft</groupId>
-    <artifactId>fix-storage</artifactId>
+    <artifactId>fix-net.openhft.fix.storage</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>OpenHFT/TransFIX/storage</name>
+    <name>OpenHFT/TransFIX/net.openhft.fix.storage</name>
 
     <parent>
         <groupId>net.openhft</groupId>
