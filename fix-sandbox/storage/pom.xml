@@ -22,9 +22,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.openhft</groupId>
-    <artifactId>fix-schema</artifactId>
+    <artifactId>fix-storage</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>OpenHFT/TransFIX/schema</name>
+    <name>OpenHFT/TransFIX/storage</name>
 
     <parent>
         <groupId>net.openhft</groupId>
@@ -33,4 +33,16 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <properties>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.openhft</groupId>
+            <artifactId>fix-common</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+    </dependencies>
+
 </project>
+

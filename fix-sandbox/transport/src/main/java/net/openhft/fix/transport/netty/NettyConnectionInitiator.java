@@ -24,7 +24,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.openhft.fix.transport.Context;
+import net.openhft.fix.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
