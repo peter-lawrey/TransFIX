@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.openhft.fix.transport.codec;
+package net.openhft.fix.transport.netty.codec;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -37,39 +37,29 @@ public class NettyFrameDecoder extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        doDecode(in,out);
-    }
-
-    /**
-     * TODO: loop for more messages in the ByteBuf
-     *
-     * @param in
-     * @param out
-     */
-    protected void doDecode(ByteBuf in, List<Object> out) {
         if(m_msgLength == -1) {
             if(in.readableBytes() >= NettyFrameHelper.MSG_MIN_BYTES) {
-                //int rindex = in.readerIndex();
-
-                int bsi = in.indexOf(0,12,NettyFrameHelper.BYTE_SOH);
-                int bli = in.indexOf(12,20,NettyFrameHelper.BYTE_SOH);
+                int ridx  = in.readerIndex();
+                int bssohidx = in.indexOf(ridx     ,ridx + 12,NettyFrameHelper.BYTE_SOH);
+                int blsohidx = in.indexOf(ridx + 12,ridx + 20,NettyFrameHelper.BYTE_SOH);
 
                 // check the existence of:
                 // - BeginString 8=
                 // - BodyLength  9=
-                if( in.getByte(0)       == NettyFrameHelper.BYTE_BEGIN_STRING &&
-                    in.getByte(1)       == NettyFrameHelper.BYTE_EQUALS       &&
-                    in.getByte(bsi + 1) == NettyFrameHelper.BYTE_BODY_LENGTH  &&
-                    in.getByte(bsi + 2) == NettyFrameHelper.BYTE_EQUALS       ) {
+                if( in.getByte(ridx)          == NettyFrameHelper.BYTE_BEGIN_STRING &&
+                    in.getByte(ridx + 1)      == NettyFrameHelper.BYTE_EQUALS       &&
+                    in.getByte(bssohidx + 1)  == NettyFrameHelper.BYTE_BODY_LENGTH  &&
+                    in.getByte(bssohidx + 2)  == NettyFrameHelper.BYTE_EQUALS       ) {
 
                     int bodyLength = 0;
-                    for(int i=bsi+3;i<bli;i++) {
+                    for(int i=bssohidx+3;i<blsohidx;i++) {
                         bodyLength *= 10;
                         bodyLength += ((int)in.getByte(i) - (int)'0');
                     }
 
-                    m_msgLength = 1 + bodyLength + bli + NettyFrameHelper.MSG_CSUM_LEN;
+                    m_msgLength = 1 + bodyLength + (blsohidx - ridx) + NettyFrameHelper.MSG_CSUM_LEN;
                 } else {
+                    //TODO: add some useful information to the exception
                     throw new Error("Unexpected state (header)");
                 }
             }
@@ -77,15 +67,15 @@ public class NettyFrameDecoder extends ByteToMessageDecoder {
 
         if(m_msgLength != -1 && in.readableBytes() >= m_msgLength){
             if(in.readableBytes() >= m_msgLength) {
-                byte[] rv = new byte[m_msgLength];
-                in.readBytes(rv);
-                in.discardReadBytes();
+                ByteBuf rv = ctx.alloc().buffer(m_msgLength);
+                in.readBytes(rv,m_msgLength);
 
                 //TODO: validate checksum
                 out.add(rv);
 
                 m_msgLength = -1;
             } else {
+                //TODO: add some useful information to the exception
                 throw new Error("Unexpected state (body)");
             }
         }

@@ -13,37 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.openhft.fix.transport.codec;
-
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToMessageEncoder;
-
-import java.util.List;
+package net.openhft.fix.transport;
 
 /**
  * @author lburgazzoli
  */
-public final class NettyFrameEncoder extends MessageToMessageEncoder<byte[]> {
-
-    /**
-     * c-tor
-     */
-    public NettyFrameEncoder() {
-    }
+public interface Session {
 
     /**
      *
-     * @param ctx
-     * @param msg
-     * @param out
-     * @return
      * @throws Exception
      */
-    @Override
-    protected void encode(ChannelHandlerContext ctx, byte[] msg, List<Object> out) throws Exception {
-        if (msg.length != 0) {
-            out.add(Unpooled.copiedBuffer(msg));
-        }
-    }
+    public void start() throws Exception;
+
+    /**
+     *
+     * @throws Exception
+     */
+    public void stop() throws Exception;
 }

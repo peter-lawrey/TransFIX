@@ -22,8 +22,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.openhft</groupId>
-    <artifactId>transport</artifactId>
+    <artifactId>fix-transport</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <name>OpenHFT/TransFIX/transport</name>
 
     <parent>
         <groupId>net.openhft</groupId>
@@ -32,13 +33,29 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <properties>
+        <netty.version>4.0.15.Final</netty.version>
+        <javassist.version>3.18.1-GA</javassist.version>
+    </properties>
+
     <dependencies>
+        <dependency>
+            <groupId>net.openhft</groupId>
+            <artifactId>fix-common</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>${javassist.version}</version>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.0.14.Final</version>
-            <scope>compile</scope>
+            <version>${netty.version}</version>
         </dependency>
     </dependencies>
 
 </project>
+
