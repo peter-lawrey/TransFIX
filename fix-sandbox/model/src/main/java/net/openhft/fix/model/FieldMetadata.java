@@ -21,7 +21,7 @@ import java.util.EnumSet;
 /**
  * @author Adam Rosenberger
  */
-public class FieldMetadata {
+class FieldMetadata {
     private final int fieldNumber;
     private final FixField field;
     private final int position;

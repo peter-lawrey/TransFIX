@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.openhft.fix.transport.codec;
 
 import io.netty.buffer.Unpooled;
@@ -24,22 +25,11 @@ import java.util.List;
 /**
  * @author lburgazzoli
  */
-public final class NettyFrameEncoder extends MessageToMessageEncoder<byte[]> {
+final class NettyFrameEncoder extends MessageToMessageEncoder<byte[]> {
 
-    /**
-     * c-tor
-     */
     public NettyFrameEncoder() {
     }
 
-    /**
-     *
-     * @param ctx
-     * @param msg
-     * @param out
-     * @return
-     * @throws Exception
-     */
     @Override
     protected void encode(ChannelHandlerContext ctx, byte[] msg, List<Object> out) throws Exception {
         if (msg.length != 0) {

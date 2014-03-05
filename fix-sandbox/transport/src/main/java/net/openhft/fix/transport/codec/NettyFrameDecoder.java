@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.openhft.fix.transport.codec;
 
 import io.netty.buffer.ByteBuf;
@@ -42,11 +43,8 @@ public class NettyFrameDecoder extends ByteToMessageDecoder {
 
     /**
      * TODO: loop for more messages in the ByteBuf
-     *
-     * @param in
-     * @param out
-     */
-    protected void doDecode(ByteBuf in, List<Object> out) {
+        */
+    void doDecode(ByteBuf in, List<Object> out) {
         if(m_msgLength == -1) {
             if(in.readableBytes() >= NettyFrameHelper.MSG_MIN_BYTES) {
                 //int rindex = in.readerIndex();

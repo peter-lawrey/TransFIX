@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * @author Adam Rosenberger
  */
-public class FieldLookup {
+class FieldLookup {
     private static final Map<String, FixField> FIELD_LOOKUPS = new HashMap<String, FixField>();
 
     static {
