@@ -1,5 +1,21 @@
+/*
+ * Copyright 2013 Peter Lawrey
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.openhft.fix.include.v42;
 
+import net.openhft.fix.include.util.FixConfig;
 import net.openhft.lang.model.DataValueGenerator;
 
 public class FIXMessageBuilder implements Cloneable 
@@ -10,6 +26,7 @@ public class FIXMessageBuilder implements Cloneable
 	private Components comp;
 	private Fields fields;
 	private final DataValueGenerator dvg = new DataValueGenerator();
+	private FixConfig fixConfig;
     
 	public FIXMessageBuilder clone() {
         try {
@@ -19,14 +36,29 @@ public class FIXMessageBuilder implements Cloneable
         }
     }
 	
-	public FixMessage createFixMessage(){		
+	public FixMessage createFixMessage(boolean useDefault){
+		if (useDefault){
+			fixConfig = new FixConfig().SERVER_DEFAULT_4_2.clone()
+					.createServerFixHeader()
+					.createServerFixMessages()
+					.createServerFixComponents()
+					.createServerFixTrailer()
+					.createServerFixFields();
+			
+			this.header=fixConfig.getHeader();
+			this.messages=fixConfig.getMessages();
+			this.trailer=fixConfig.getTrailer();
+			this.comp=fixConfig.getComponents();
+			this.fields=fixConfig.getFields();
+		}
 		return new FixMessage(this);
 	}
 	
    
-    public FIXMessageBuilder createHeader(int fieldCount) {        
-        this.header = dvg.nativeInstance(Header.class);
-        this.header.setFieldCount(fieldCount).getField();
+    public FIXMessageBuilder createHeader(int fieldCount) {
+    	 this.header = dvg.nativeInstance(Header.class);
+	     this.header.setFieldCount(fieldCount).getField();
+        
         return this;
     }
 
@@ -70,6 +102,12 @@ public class FIXMessageBuilder implements Cloneable
 
 	public Fields getFields() {
 		return fields;
+	}
+	
+	
+	public static void main (String ...args){
+		
+		FixMessage fm = new FIXMessageBuilder().createFixMessage(true);
 	}
 
 }
