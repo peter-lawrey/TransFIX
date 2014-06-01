@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.openhft.fix.include.v42;
 
 import net.openhft.fix.include.util.FixConfig;
 import net.openhft.lang.model.DataValueGenerator;
+
 
 public class FIXMessageBuilder implements Cloneable 
 {	
@@ -57,7 +59,7 @@ public class FIXMessageBuilder implements Cloneable
    
     public FIXMessageBuilder createHeader(int fieldCount) {
     	 this.header = dvg.nativeInstance(Header.class);
-	     this.header.setFieldCount(fieldCount).getField();
+     this.header.setFieldCount(fieldCount).getField();
         
         return this;
     }
