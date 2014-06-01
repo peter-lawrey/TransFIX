@@ -24,8 +24,10 @@ import net.openhft.fix.include.v42.Header;
 import net.openhft.fix.include.v42.Message;
 import net.openhft.fix.include.v42.Messages;
 import net.openhft.fix.include.v42.Trailer;
+import net.openhft.fix.include.v42.Value;
 import net.openhft.lang.collection.HugeArray;
 import net.openhft.lang.model.DataValueGenerator;
+import net.openhft.fix.compiler.FieldLookup;
 
 public class FixConfig implements Cloneable{
 	
@@ -111,7 +113,7 @@ public class FixConfig implements Cloneable{
 		int [] fieldYesArray=null; String [] fieldArray=null; 
 		int [] groupYesArray=null; String [] groupArray=null; int[] groupFieldSize=null; 
 		int [][] groupFieldYesArray=null; String [] groupField=null;
-		int [] innerGroupFieldSize=null; String [] innerGroupField=null;
+		int [] innerGroupFieldSize=null; String [] innerGroupField=null; String [] innerGroup=null;
 		
 		switch(msgNo){
 		case 0:
@@ -442,114 +444,218 @@ public class FixConfig implements Cloneable{
 			fieldYesArray=null; fieldArray=null; 
 			groupYesArray=null; groupArray=null; groupFieldSize=null; 
 			groupFieldYesArray=null; groupField=null;
-			innerGroupFieldSize=null; innerGroupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
 			addMessageInfo(message, FixConstants.messagesMsgCat[1], new int []{0,1}, FixConstants.messagesListCancelReq,
 					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
-					);
+					,innerGroup);
 		case 20://ListExecute
 			fieldYesArray=null; fieldArray=null; 
 			groupYesArray=null; groupArray=null; groupFieldSize=null; 
 			groupFieldYesArray=null; groupField=null;
-			innerGroupFieldSize=null; innerGroupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
 			addMessageInfo(message, FixConstants.messagesMsgCat[1], new int []{0,3}, FixConstants.messagesListExec,
 					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
-					);
+					,innerGroup);
 		case 21://ListStatusRequest
 			fieldYesArray=null; fieldArray=null; 
 			groupYesArray=null; groupArray=null; groupFieldSize=null; 
 			groupFieldYesArray=null; groupField=null;
-			innerGroupFieldSize=null; innerGroupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
 			addMessageInfo(message, FixConstants.messagesMsgCat[1], new int []{0}, FixConstants.messagesListStatusReq,
 					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
-					);
+					,innerGroup);
 		case 22://ListStatus
 			fieldYesArray=new int[]{0,1,3,4,9}; fieldArray=null;
 			groupYesArray=new int[]{0}; groupArray=FixConstants.messagesListStatusGrp; groupFieldSize=new int []{FixConstants.messagesListStatusGrpFld.length}; 
 			groupFieldYesArray=new int[][]{new int []{0,1,2,3,4,5}}; groupField=FixConstants.messagesListStatusGrpFld;
-			innerGroupFieldSize=null; innerGroupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
 			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesListStatusReq,
 					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
-					);
+					,innerGroup);
 		case 23:
 			fieldYesArray=new int[]{2,3,5}; fieldArray=null; 
 			groupYesArray=null; groupArray=null; groupFieldSize=null; 
 			groupFieldYesArray=null; groupField=null;
-			innerGroupFieldSize=null; innerGroupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
 			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesAllocationAck,
 					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
-					);
+					,innerGroup);
 		case 24://DontKnowTrade
 			fieldYesArray=new int[]{0,1,2,3,22}; fieldArray=null; 
 			groupYesArray=null; groupArray=null; groupFieldSize=null; 
 			groupFieldYesArray=null; groupField=null;
-			innerGroupFieldSize=null; innerGroupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
 			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesDNT,
 					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
-					);
+					,innerGroup);
 		case 25://QuoteRequest
 			fieldYesArray=new int[]{0}; fieldArray=null;
 			groupYesArray=new int[]{0}; groupArray=FixConstants.messagesQuoteReqGrp; groupFieldSize=new int []{FixConstants.messagesQuoteReqGrpFld.length}; 
 			groupFieldYesArray=new int[][]{new int []{0}}; groupField=FixConstants.messagesQuoteReqGrpFld;
-			innerGroupFieldSize=null; innerGroupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
 			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesQuoteReq,
 					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
-					);
+					,innerGroup);
 		case 26://Quote
 			fieldYesArray=new int[]{1,4}; fieldArray=null; 
 			groupYesArray=null; groupArray=null; groupFieldSize=null; 
 			groupFieldYesArray=null; groupField=null;
-			innerGroupFieldSize=null; innerGroupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
 			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesQuote,
 					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
-					);
+					,innerGroup);
 		case 27://SettlementInstructions
-			fieldYesArray=new int[]{01,1,2,3,4,5,14}; fieldArray=null; 
+			fieldYesArray=new int[]{0,1,2,3,4,5,14}; fieldArray=null; 
 			groupYesArray=null; groupArray=null; groupFieldSize=null; 
 			groupFieldYesArray=null; groupField=null;
-			innerGroupFieldSize=null; innerGroupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
 			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messageSettlementInst,
 					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
-					);
+					,innerGroup);
 		case 28://MarketDataRequest
 			fieldYesArray=new int[]{0,1,2}; fieldArray=null;
 			groupYesArray=new int[]{0,1}; groupArray=FixConstants.messagesMarketDataReqGrp; groupFieldSize=new int []{FixConstants.messagesMarketDataReqGrpFld.length}; 
 			groupFieldYesArray=new int[][]{new int []{0},new int []{0}}; groupField=FixConstants.messagesMarketDataReqGrpFld;
-			innerGroupFieldSize=null; innerGroupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
 			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesMarketDataReq,
 					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
-					);
+					,innerGroup);
 		case 29://MarketDataSnapshotFullRefresh
 			fieldYesArray=new int[]{1}; fieldArray=null;
 			groupYesArray=new int[]{0}; groupArray=FixConstants.messagesMarketDataSSFReqGrp; groupFieldSize=new int []{FixConstants.messagesMarketDataSSFReqGrpFld.length}; 
 			groupFieldYesArray=new int[][]{new int []{0,1}}; groupField=FixConstants.messagesMarketDataSSFReqGrpFld;
-			innerGroupFieldSize=null; innerGroupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
 			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesMarketDataSSFReq,
 					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
-					);
+					,innerGroup);
 		case 30://MarketDataIncrementalRefresh
 			fieldYesArray=null; fieldArray=null;
 			groupYesArray=new int[]{0}; groupArray=FixConstants.messagesMarketDataINCRReqGrp; groupFieldSize=new int []{FixConstants.messagesMarketDataINCRReqGrpFld.length}; 
 			groupFieldYesArray=new int[][]{new int []{0}}; groupField=FixConstants.messagesMarketDataINCRReqGrpFld;
-			innerGroupFieldSize=null; innerGroupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
 			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesMarketDataINCRReq,
 					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
-					);
-		case 32:
-		case 33:
-		case 34:
-		case 35:
-		case 36:
-		case 37:
-		case 38:
-		case 39:
-		case 40:
-		case 41:
-		case 42:
-		case 43:
-		case 44:
-		case 45:
-
-		
+					,innerGroup);
+		case 31://MarketDataRequestReject
+			fieldYesArray=new int[]{0}; fieldArray=null; 
+			groupYesArray=null; groupArray=null; groupFieldSize=null; 
+			groupFieldYesArray=null; groupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
+			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesMarketDataReqRej,
+					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
+					,innerGroup);
+		case 32://QuoteCancel
+			fieldYesArray=new int[]{1,2};; fieldArray=null;
+			groupYesArray=new int[]{0}; groupArray=FixConstants.messagesQuoteCancelGrp; groupFieldSize=new int []{FixConstants.messagesQuoteCancelGrpFlds.length}; 
+			groupFieldYesArray=new int[][]{new int []{0}}; groupField=FixConstants.messagesQuoteCancelGrpFlds;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
+			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesQuoteCancel,
+					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
+					,innerGroup);
+		case 33://QuoteStatusRequest
+			fieldYesArray=new int[]{1}; fieldArray=null; 
+			groupYesArray=null; groupArray=null; groupFieldSize=null; 
+			groupFieldYesArray=null; groupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
+			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesQuoteStmtReq,
+					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
+					,innerGroup);
+		case 34://QuoteAcknowledgement
+			fieldYesArray=new int[]{2}; fieldArray=null;
+			groupYesArray=null; groupArray=FixConstants.messagesQuoteAckGrp; groupFieldSize=new int []{FixConstants.messagesQuoteAckGrpFlds.length}; 
+			groupFieldYesArray=null; groupField=FixConstants.messagesQuoteAckGrpFlds;
+			innerGroupFieldSize=null; innerGroupField=FixConstants.messagesIQuoteAckGrpFlds;innerGroup=FixConstants.messagesIQuoteAckGrp;
+			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesQuoteAck,
+					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
+					,innerGroup);
+		case 35://SecurityDefinitionRequest
+			fieldYesArray=new int[]{2}; fieldArray=null;
+			groupYesArray=null; groupArray=FixConstants.messagesSecDefReqGrp; groupFieldSize=new int []{FixConstants.messagesSecDefReqGrpFlds.length}; 
+			groupFieldYesArray=null; groupField=FixConstants.messagesSecDefReqGrpFlds;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
+			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesSecDefReq,
+					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
+					,innerGroup);
+		case 36://SecurityDefinition
+			fieldYesArray=new int[]{0,1,3}; fieldArray=null;
+			groupYesArray=null; groupArray=FixConstants.messagesSecDefGrp; groupFieldSize=new int []{FixConstants.messagesSecDefGrpFlds.length}; 
+			groupFieldYesArray=null; groupField=FixConstants.messagesSecDefGrpFlds;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
+			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesSecDef,
+					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
+					,innerGroup);
+		case 37://SecurityStatusRequest
+			fieldYesArray=new int[]{0,1,3}; fieldArray=null;
+			groupYesArray=null; groupArray=null; groupFieldSize=null; 
+			groupFieldYesArray=null; groupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
+			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesSecStatusReq,
+					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
+					,innerGroup);
+		case 38://SecurityStatus
+			fieldYesArray=new int[]{1}; fieldArray=null;
+			groupYesArray=null; groupArray=null; groupFieldSize=null; 
+			groupFieldYesArray=null; groupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
+			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesSecStatus,
+					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
+					,innerGroup);
+		case 39://TradingSessionStatusRequest
+			fieldYesArray=new int[]{0,4}; fieldArray=null;
+			groupYesArray=null; groupArray=null; groupFieldSize=null; 
+			groupFieldYesArray=null; groupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
+			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesTSSReq,
+					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
+					,innerGroup);
+		case 40://TradingSessionStatus
+			fieldYesArray=new int[]{1,5}; fieldArray=null;
+			groupYesArray=null; groupArray=null; groupFieldSize=null; 
+			groupFieldYesArray=null; groupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
+			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesTSS,
+					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
+					,innerGroup);
+		case 41://MassQuote (InnerGroup TODO)
+			fieldYesArray=new int[]{1}; fieldArray=null;
+			groupYesArray=new int[]{0}; groupArray=FixConstants.messagesMassQGrp; groupFieldSize=new int []{FixConstants.messagesMassQGrpFlds.length}; 
+			groupFieldYesArray=null; groupField=FixConstants.messagesMassQGrpFlds;
+			innerGroupFieldSize=null; innerGroupField=FixConstants.messagesIMassQGrpFlds;innerGroup=FixConstants.messagesIMassQGrp;
+			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesMassQ,
+					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
+					,innerGroup);
+		case 42://BusinessMessageReject
+			fieldYesArray=new int[]{1,3}; fieldArray=null;
+			groupYesArray=null; groupArray=null; groupFieldSize=null; 
+			groupFieldYesArray=null; groupField=null;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
+			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesBMRej,
+					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
+					,innerGroup);
+		case 43://BidRequest
+			fieldYesArray=new int[]{1,2,4,21,22}; fieldArray=null;			 
+			groupYesArray=null; groupArray=FixConstants.messagesBidReqGrp; groupFieldSize=new int []{FixConstants.messagesBidReqGrpFld.length}; 
+			groupFieldYesArray=null; groupField=FixConstants.messagesBidReqGrpFld;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
+			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesBidReq,
+					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
+					,innerGroup);
+		case 44://BidResponse
+			fieldYesArray=null; fieldArray=null;			 
+			groupYesArray=new int[]{0,1}; groupArray=FixConstants.messagesBidResGrp; groupFieldSize=new int []{FixConstants.messagesBidResGrpFld.length}; 
+			groupFieldYesArray=null; groupField=FixConstants.messagesBidResGrpFld;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
+			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesBidRes,
+					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
+					,innerGroup);
+		case 45://ListStrikePrice
+			fieldYesArray=null; fieldArray=null;			 
+			groupYesArray=new int[]{0,22}; groupArray=FixConstants.messagesLSPriceGrp; groupFieldSize=new int []{FixConstants.messagesLSPriceGrpFld.length}; 
+			groupFieldYesArray=null; groupField=FixConstants.messagesLSPriceGrpFld;
+			innerGroupFieldSize=null; innerGroupField=null;innerGroup=null;
+			addMessageInfo(message, FixConstants.messagesMsgCat[1], fieldYesArray, FixConstants.messagesLSPrice,
+					groupYesArray,	groupArray, groupFieldSize, groupFieldYesArray, groupField, innerGroupFieldSize, innerGroupField
+					,innerGroup);
 		}
 		
 	}
@@ -558,7 +664,7 @@ public class FixConfig implements Cloneable{
 			Message message, String messageCat, 
 			int [] fieldYesArray, String [] fieldArray, 
 			int [] groupYesArray, String [] groupArray, int[] groupFieldSize, int [][] groupFieldYesArray, String [] groupField,
-			int [] innerGroupFieldSize, String [] innerGroupField
+			int [] innerGroupFieldSize, String [] innerGroupField, String [] innerGroup
 								){
 		
 		HugeArray<Field> arrayField =null;
@@ -609,31 +715,31 @@ public class FixConfig implements Cloneable{
 					groupFieldCounter++;
 				}	
 				
-				addGroupToGroup(arrayGroup.get(i), innerGroupFieldSize, innerGroupField );
+				addGroupToGroup(arrayGroup.get(i), innerGroupFieldSize, innerGroupField,innerGroup );
 			}
 		}		
 	}
 	
 	private void addGroupToGroup(Group group,			 
-			int[] innerGroupFieldSize, String [] innerGroupField
+			int[] innerGroupFieldSize, String [] innerGroupField, String [] innerGroup
 			){
 		HugeArray<Group> arrayInnerGroup =null;
 		HugeArray<Field> arrayField =null;
 		if (innerGroupFieldSize == null){return;}
 		
-		arrayInnerGroup = group.setGroupSize(innerGroupFieldSize.length).getGroup();
-		for (int i=0;i<innerGroupFieldSize.length;i++){			
-			arrayInnerGroup.get(i).setName(innerGroupField[i]);
+		arrayInnerGroup = group.setGroupSize(innerGroup.length).getGroup();
+		for (int i=0;i<innerGroup.length;i++){			
+			arrayInnerGroup.get(i).setName(innerGroup[i]);
 			arrayInnerGroup.get(i).setRequired("N");
-			
+			arrayField=null;
+			arrayField = group.setFieldSize(innerGroupField.length).getField();
+			for (int k=0;k<arrayField.length();k++){
+				arrayField.get(k).setName(innerGroupField[k]);
+				arrayField.get(k).setRequired("N");
+			}
 		}
 		
-		arrayField=null;
-		arrayField = group.setFieldSize(innerGroupField.length).getField();
-		for (int k=0;k<arrayField.length();k++){
-			arrayField.get(k).setName(innerGroupField[k]);
-			arrayField.get(k).setRequired("N");
-		}
+		
 	}
 
 	public FixConfig createServerFixTrailer(){
@@ -664,10 +770,33 @@ public class FixConfig implements Cloneable{
 	}
 	
 	public FixConfig createServerFixFields(){
-		
+		if ((currentFixVersion & fix4_2_0_mask) !=0){			
+			load42DefaultFields();
+		}
 		return this;
 	}
 	
+	private void load42DefaultFields() {
+		this.fields = dvg.nativeInstance(Fields.class);
+		HugeArray<Field> array =this.header.setFieldCount(FixConstants.fieldsNumber.length).getField();
+		//initializing Field for this Fields
+		Field field = null;
+		for (int i=0;i<FixConstants.fieldsNumber.length;i++){
+			field = array.get(i);
+			field.setNumber(FixConstants.fieldsNumber[i]);
+			field.setName(FixConstants.fieldsName[i]);
+			field.setType(FieldLookup.fieldFor(FixConstants.fieldsTypeOrdering[i]));
+		}
+		//Generating Empty Values Fields (including defined ones assuming SINGLE)
+		HugeArray<Value> valueArr = null;
+		Value value = null;
+		for (int i=0;i<FixConstants.fieldsNumber.length;i++){
+			field = array.get(i);
+			valueArr = field.setValueSize(1).getValue();//will change it if #ofValues > 1 on a field
+			value = valueArr.get(i);value.setEnum("");//TODO
+		}		
+	}
+
 	public int getFixVersionMajor() {
 		return fixVersionMajor;
 	}
