@@ -1,5 +1,21 @@
+/*
+ * Copyright 2013 Peter Lawrey
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.openhft.fix.include.v42;
 
+import net.openhft.fix.model.FixField;
 import net.openhft.lang.collection.HugeArray;
 import net.openhft.lang.collection.HugeCollections;
 
@@ -7,9 +23,9 @@ public class Field
 {
     protected HugeArray<Value> value;
     protected String name;
-    protected double number;
+    protected int number;
     protected String required;
-    protected String type;
+    protected FixField type;
     protected int valueSize;
       
     public Field setValueSize(int valueSize){
@@ -36,7 +52,7 @@ public class Field
         return number;
     }
 
-    public void setNumber(double value) {
+    public void setNumber(int value) {
         this.number = value;
     }
 
@@ -48,11 +64,11 @@ public class Field
         this.required = value;
     }
 
-    public String getType() {
+    public FixField getType() {
         return type;
     }
 
-    public void setType(String value) {
+    public void setType(FixField value) {
         this.type = value;
     }
 
