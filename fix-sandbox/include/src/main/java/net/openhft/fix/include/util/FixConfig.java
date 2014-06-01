@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.openhft.fix.include.util;
 
 import net.openhft.fix.include.v42.Components;
