@@ -24,5 +24,8 @@ public enum DataType {
     Float,
     Char,
     String,
-    Pattern
+    Pattern, 
+    Double,
+    Long,
+    Boolean
 }
