@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package net.openhft.fix.model;
+package net.openhft.fix.include.util;
+import net.openhft.fix.include.v42.FixMessage;
 
-/**
- * @author Adam Rosenberger
- */
-public enum DataType {
-    Int,
-    Float,
-    Char,
-    String,
-    Pattern, 
-    Double,
-    Long,
-    Boolean
+@SuppressWarnings("hiding")
+public interface FixPoolFactory <FixMessage>{	
+		public FixMessage create();	
 }

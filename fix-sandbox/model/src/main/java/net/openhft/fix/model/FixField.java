@@ -21,21 +21,21 @@ package net.openhft.fix.model;
  */
 public enum FixField {
     Int(DataType.Int),
-    Length(DataType.Int),
-    TagNum(DataType.Int),
-    SeqNum(DataType.Int),
-    NumInGroup(DataType.Int),
+    Length(DataType.Long),
+    TagNum(DataType.Long),
+    SeqNum(DataType.Long),
+    NumInGroup(DataType.Long),
     DayOfMonth(DataType.Int),
 
     Float(DataType.Float),
-    Qty(DataType.Float),
-    Price(DataType.Float),
-    PriceOffset(DataType.Float),
-    Amt(DataType.Float),
-    Percentage(DataType.Float),
+    Qty(DataType.Double),
+    Price(DataType.Double),
+    PriceOffset(DataType.Double),
+    Amt(DataType.Double),
+    Percentage(DataType.Double),
 
     Char(DataType.Char),
-    Boolean(DataType.Char),
+    Boolean(DataType.Boolean),
 
     String(DataType.String),
     MultipleCharValue(DataType.String),
@@ -68,9 +68,17 @@ public enum FixField {
     public final boolean isInt() {
         return dataType == DataType.Int;
     }
+    
+    public final boolean isLong() {
+        return dataType == DataType.Long;
+    }
 
     public final boolean isFloat() {
         return dataType == DataType.Float;
+    }
+    
+    public final boolean isDouble() {
+        return dataType == DataType.Double;
     }
 
     public final boolean isChar() {
@@ -79,6 +87,10 @@ public enum FixField {
 
     public final boolean isString() {
         return dataType == DataType.String;
+    }
+    
+    public final boolean isBoolean() {
+        return dataType == DataType.Boolean;
     }
 
     public final boolean isPattern() {

@@ -13,19 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package net.openhft.fix.include.v42;
 
-package net.openhft.fix.model;
+import net.openhft.lang.collection.HugeArray;
+import net.openhft.lang.collection.HugeCollections;
 
-/**
- * @author Adam Rosenberger
- */
-public enum DataType {
-    Int,
-    Float,
-    Char,
-    String,
-    Pattern, 
-    Double,
-    Long,
-    Boolean
+
+public class Trailer 
+{
+    protected HugeArray<Field> field;
+    protected int fieldSize=3;
+
+    public Trailer setFieldSize(int fieldSize){
+    	this.fieldSize=fieldSize;
+    	return this;
+    }
+    
+    public HugeArray <Field> getField() {
+        if (field == null) {
+            field = HugeCollections.newArray(Field.class, fieldSize);
+        }
+        return this.field;
+    }
+    
+    
 }

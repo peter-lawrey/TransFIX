@@ -13,19 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package net.openhft.fix.include.v42;
 
-package net.openhft.fix.model;
+public class Value 
+{
+    protected String description;
+    protected String _enum;//predefined OR UserDefined
 
-/**
- * @author Adam Rosenberger
- */
-public enum DataType {
-    Int,
-    Float,
-    Char,
-    String,
-    Pattern, 
-    Double,
-    Long,
-    Boolean
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String value) {
+        this.description = value;
+    }
+
+    public String getEnum() {
+        return _enum;
+    }
+
+    public void setEnum(String value) {
+        this._enum = value;
+    }
+
 }

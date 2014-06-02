@@ -16,6 +16,9 @@
 
 package net.openhft.fix.compiler;
 
+import net.openhft.collections.HugeConfig;
+import net.openhft.collections.HugeHashMap;
+import net.openhft.collections.SampleValues;
 import net.openhft.fix.model.FixField;
 
 import java.util.HashMap;
@@ -24,9 +27,12 @@ import java.util.Map;
 /**
  * @author Adam Rosenberger
  */
-class FieldLookup {
-    private static final Map<String, FixField> FIELD_LOOKUPS = new HashMap<String, FixField>();
-
+public class FieldLookup {
+    //private static final Map<String, FixField> FIELD_LOOKUPS = new HashMap<String, FixField>();
+	private static int count=100;
+	private static final HugeConfig config = HugeConfig.SMALL.clone().setSegments(256).setSmallEntrySize(72).setCapacity(count);	
+	private static final HugeHashMap<CharSequence, FixField> FIELD_LOOKUPS = new HugeHashMap<CharSequence, FixField>(config, CharSequence.class, FixField.class);
+	
     static {
         FIELD_LOOKUPS.put("INT", FixField.Int);
         FIELD_LOOKUPS.put("LENGTH", FixField.Length);
@@ -69,7 +75,7 @@ class FieldLookup {
         FIELD_LOOKUPS.put("RESERVED4000PLUS", FixField.Reserved4000Plus);
     }
 
-    public static FixField fieldFor(String xmlTag) {
+    public static FixField fieldFor(CharSequence xmlTag) {
         return FIELD_LOOKUPS.get(xmlTag);
     }
 

@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package net.openhft.fix.model;
+package net.openhft.fix.include.v42;
 
-/**
- * @author Adam Rosenberger
- */
-public enum DataType {
-    Int,
-    Float,
-    Char,
-    String,
-    Pattern, 
-    Double,
-    Long,
-    Boolean
+/*
+ * TODO: FIX42 has Components as NULL
+ * */
+public class Components 
+{
+
+
 }
