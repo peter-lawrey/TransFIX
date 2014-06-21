@@ -19,6 +19,9 @@ package net.openhft.fix.include.v42;
 import net.openhft.fix.include.util.FixConfig;
 import net.openhft.lang.model.DataValueGenerator;
 
+/**
+ * http://robsjava.blogspot.co.uk/2013/03/create-java-classes-at-runtime-from.html
+ * */
 
 public class FIXMessageBuilder implements Cloneable 
 {	
@@ -41,16 +44,16 @@ public class FIXMessageBuilder implements Cloneable
 	public FixMessage createFixMessage(boolean useDefault){
 		if (useDefault){
 			fixConfig = new FixConfig().SERVER_DEFAULT_4_2.clone()
-					.createServerFixHeader()
-					.createServerFixMessages()
-					.createServerFixComponents()
-					.createServerFixTrailer()
+					//.createServerFixHeader()
+					//.createServerFixMessages()
+					//.createServerFixComponents()
+					//.createServerFixTrailer()
 					.createServerFixFields();
 			
-			this.header=fixConfig.getHeader();
-			this.messages=fixConfig.getMessages();
-			this.trailer=fixConfig.getTrailer();
-			this.comp=fixConfig.getComponents();
+			//this.header=fixConfig.getHeader();
+			//this.messages=fixConfig.getMessages();
+			//this.trailer=fixConfig.getTrailer();
+			//this.comp=fixConfig.getComponents();
 			this.fields=fixConfig.getFields();
 		}
 		return new FixMessage(this);
@@ -59,7 +62,7 @@ public class FIXMessageBuilder implements Cloneable
    
     public FIXMessageBuilder createHeader(int fieldCount) {
     	 this.header = dvg.nativeInstance(Header.class);
-     this.header.setFieldCount(fieldCount).getField();
+	     this.header.setFieldSize(fieldCount).getField();
         
         return this;
     }
