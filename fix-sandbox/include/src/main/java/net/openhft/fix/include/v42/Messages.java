@@ -16,10 +16,14 @@
 
 package net.openhft.fix.include.v42;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import net.openhft.lang.collection.HugeArray;
 import net.openhft.lang.collection.HugeCollections;
 
-public class Messages 
+public class Messages implements FixMessageType
 {
     protected HugeArray<Message> messageArr;
     protected int messageSize;   
@@ -27,15 +31,20 @@ public class Messages
     protected int groupSize;
     
     
-    public Messages setMessagesSize(int messageSize){
+    @SuppressWarnings("unchecked")
+	public Messages setMessagesSize(int messageSize){
     	this.messageSize=messageSize;
     	return this;
     }
     
-    public Messages setFieldSize(int fieldSize){this.fieldSize=fieldSize;return this;}
-    public Messages setGroupSize(int groupSize){this.groupSize=groupSize;return this;}
+    @SuppressWarnings("unchecked")
+	public Messages setFieldSize(int fieldSize){this.fieldSize=fieldSize;return this;}
+    
+    @SuppressWarnings("unchecked")
+	public Messages setGroupSize(int groupSize){this.groupSize=groupSize;return this;}
         
-    public HugeArray<Message> getMessage() {
+    @SuppressWarnings("unchecked")
+	public HugeArray<Message> getMessage() {
         if (messageArr == null) {
             messageArr = HugeCollections.newArray(Message.class, messageSize);
             for (int i=0;i<messageSize;i++)
@@ -47,5 +56,40 @@ public class Messages
         }
         return this.messageArr;
     }
+
+	@Override
+	public void writeExternal(ObjectOutput out) throws IOException {
+	
+	    out.writeObject(messageArr);
+	    out.writeInt(messageSize);
+	    out.writeInt(fieldSize);
+	    out.writeInt(groupSize);
+		
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void readExternal(ObjectInput in) throws IOException,
+			ClassNotFoundException {
+		messageArr= (HugeArray<Message>) in.readObject();
+		messageSize= in.readInt();
+		fieldSize= in.readInt();
+		groupSize = in.readInt();
+		
+	}
+
+	@Override
+	public <T> T getField() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T setValueSize(int valueSize) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 
 }
