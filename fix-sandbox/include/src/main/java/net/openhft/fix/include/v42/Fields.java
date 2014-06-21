@@ -15,18 +15,29 @@
  */
 package net.openhft.fix.include.v42;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import net.openhft.lang.collection.HugeArray;
 import net.openhft.lang.collection.HugeCollections;
 
-public class Fields 
+public class Fields implements FixMessageType
 {
    protected HugeArray<Field> fieldArr;
    protected int fieldSize=446;//fix42 has 446 fields
    protected int valueSize;
         
+   @SuppressWarnings("unchecked")
+   @Override
    public Fields setFieldSize(int fieldSize){this.fieldSize=fieldSize;return this;}
+   
+   @SuppressWarnings("unchecked")
+   @Override
    public Fields setValueSize(int valueSize){this.valueSize=valueSize;return this;}
    
+   @SuppressWarnings("unchecked")
+   @Override
    public HugeArray<Field> getField() {
         if (fieldArr == null) {
             fieldArr = HugeCollections.newArray(Field.class, fieldSize);
@@ -39,4 +50,38 @@ public class Fields
         return this.fieldArr;
     }
 
+	@Override
+	public <T> T getMessage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public <T> T setMessagesSize(int messageSize) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public <T> T setGroupSize(int groupSize) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput out) throws IOException {
+		out.writeObject(fieldArr);
+		out.writeInt(fieldSize);
+		out.writeInt(valueSize);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void readExternal(ObjectInput in) throws IOException,
+			ClassNotFoundException {
+		fieldArr = (HugeArray<Field>) in.readObject();
+		fieldSize = in.readInt();
+		valueSize = in.readInt();
+	}
+	
 }
