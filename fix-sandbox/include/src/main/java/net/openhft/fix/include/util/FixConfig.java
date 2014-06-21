@@ -13,11 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.openhft.fix.include.util;
 
+import java.nio.ByteBuffer;
+
+import net.openhft.compiler.CachedCompiler;
 import net.openhft.fix.include.v42.Components;
 import net.openhft.fix.include.v42.Field;
 import net.openhft.fix.include.v42.Fields;
+import net.openhft.fix.include.v42.FixMessageType;
 import net.openhft.fix.include.v42.Group;
 import net.openhft.fix.include.v42.Header;
 import net.openhft.fix.include.v42.Message;
@@ -25,7 +30,11 @@ import net.openhft.fix.include.v42.Messages;
 import net.openhft.fix.include.v42.Trailer;
 import net.openhft.fix.include.v42.Value;
 import net.openhft.lang.collection.HugeArray;
+import net.openhft.lang.io.ByteBufferBytes;
+import net.openhft.lang.io.Bytes;
+import net.openhft.lang.model.Byteable;
 import net.openhft.lang.model.DataValueGenerator;
+import net.openhft.lang.model.JavaBeanInterface;
 import net.openhft.fix.compiler.FieldLookup;
 
 public class FixConfig implements Cloneable{
@@ -65,16 +74,32 @@ public class FixConfig implements Cloneable{
 
 	public FixConfig createServerFixHeader(){
 		if ((currentFixVersion & fix4_2_0_mask) !=0){			
-			load42DefaultHeader();
+			try {
+				load42DefaultHeader();
+			} catch (Exception e) {
+				throw new AssertionError(e);
+			}
 		}
 		return this;
 	}
 	
-	private void load42DefaultHeader() {
-		this.header = dvg.nativeInstance(Header.class);
-		HugeArray<Field> array =this.header.setFieldCount(27).getField();
+	private void load42DefaultHeader() throws Exception{
+		//this.header = (Header) dvg.nativeInstance(FixMessageType.class);
+		
+	   String actual = new DataValueGenerator().generateNativeObject(FixMessageType.class);	
+	   CachedCompiler cc = new CachedCompiler(null, null);
+       Class aClass = cc.loadFromJava(FixMessageType.class.getName() + "$$Native", actual);
+       
+       @SuppressWarnings("unchecked")
+       FixMessageType fmt = (FixMessageType) aClass.asSubclass(FixMessageType.class).newInstance();
+       Bytes bytes = new ByteBufferBytes(ByteBuffer.allocate(1024*1024));
+       ((Byteable) fmt).bytes(bytes, 0L);     
+
+		this.header = (Header) fmt;
+		//this.header = new Header();
+		HugeArray<Field> array =this.header.setFieldSize(27).getField();
 		Field field=null;
-		for (int i=0;i<FixConstants.headerFieldName.length;i++){
+		for (short i=0;i<FixConstants.headerFieldName.length;i++){
 			field = array.get(i);
 			field.setName(FixConstants.headerFieldName[i]);
 			if (i<5){
@@ -93,11 +118,12 @@ public class FixConfig implements Cloneable{
 	}
 	
 	private void load42DefaultMessages() {
-		this.messages = dvg.nativeInstance(Messages.class);
+		//this.messages = dvg.nativeInstance(Messages.class);
+		this.messages = new Messages();
 		HugeArray<Message> array = this.messages.setMessagesSize(46).getMessage();//default is 46 messages
 		Message message=null;
 		
-		for (int i=0;i<FixConstants.messsagesMsgName.length;i++){
+		for (short i=0;i<FixConstants.messsagesMsgName.length;i++){
 			message = array.get(i);
 			message.setName(FixConstants.messsagesMsgName[i]);
 			message.setMsgtype(FixConstants.messagesMsgType[i]);
@@ -127,39 +153,39 @@ public class FixConfig implements Cloneable{
 		case 2:
 			message.setMsgcat(FixConstants.messagesMsgCat[0]);arrayField = null;
 			arrayField = message.setFieldSize(FixConstants.messagesResendReq.length).getField();
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messagesResendReq[i]);arrayField.get(i).setRequired("Y");				
 			}			
 		case 3:
 			message.setMsgcat(FixConstants.messagesMsgCat[0]);arrayField = null;
 			arrayField = message.setFieldSize(FixConstants.messagesReject.length).getField();
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messagesReject[i]);
 				if (i==0){arrayField.get(i).setRequired("Y");}else{arrayField.get(i).setRequired("N");}				
 			}
 		case 4:
 			message.setMsgcat(FixConstants.messagesMsgCat[0]);arrayField = null;
 			arrayField = message.setFieldSize(FixConstants.messagesSeqReset.length).getField();
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messagesSeqReset[i]);
 				if (i==0){arrayField.get(i).setRequired("N");}else{arrayField.get(i).setRequired("Y");}						
 			}
 		case 5:
 			message.setMsgcat(FixConstants.messagesMsgCat[0]);arrayField = null;
 			arrayField = message.setFieldSize(FixConstants.messagesLogout.length).getField();
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messagesLogout[i]);arrayField.get(i).setRequired("N");				
 			}
 		case 6:
 			message.setMsgcat(FixConstants.messagesMsgCat[1]);arrayField = null;arrayGroup=null;
 			arrayField = message.setFieldSize(FixConstants.messagesIOI.length).getField();//default 36
 			arrayGroup = message.setGroupSize(FixConstants.messagesIOIGroup.length).getGroup();
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messagesIOI[i]);
 				if (i==0 || i==1 || i==3 || i==22 || i==23){arrayField.get(i).setRequired("Y");}
 				else {arrayField.get(i).setRequired("N");}
 			}
-			for (int i=0;i<arrayGroup.length();i++){
+			for (short i=0;i<arrayGroup.length();i++){
 				arrayGroup.get(i).setName(FixConstants.messagesIOIGroup[i]);
 				arrayGroup.get(i).setRequired("N");arrayField=null;
 				if (i==0){
@@ -168,7 +194,7 @@ public class FixConfig implements Cloneable{
 					arrayField.get(0).setRequired("N");
 				}else {
 					arrayField = arrayGroup.get(i).setFieldSize(FixConstants.messagesIOIGroupFields.length).getField();
-					for (int j=0;j<arrayField.length();j++){
+					for (short j=0;j<arrayField.length();j++){
 						arrayField.get(0).setName(FixConstants.messagesIOIGroupFields[j+1]);
 						arrayField.get(0).setRequired("N");
 					}
@@ -177,7 +203,7 @@ public class FixConfig implements Cloneable{
 		case 7:
 			message.setMsgcat(FixConstants.messagesMsgCat[1]);arrayField = null;
 			arrayField = message.setFieldSize(FixConstants.messagesAdv.length).getField();
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messagesAdv[i]);
 				if (i==0 || i==1 || i==3 || i==22 || i==23){arrayField.get(i).setRequired("Y");}
 				else {arrayField.get(i).setRequired("N");}
@@ -186,7 +212,7 @@ public class FixConfig implements Cloneable{
 			message.setMsgcat(FixConstants.messagesMsgCat[1]);arrayField = null;arrayGroup=null;
 			arrayField = message.setFieldSize(FixConstants.messageExecReport.length).getField();//default 36
 			arrayGroup = message.setGroupSize(1).getGroup();
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messageExecReport[i]);
 				if (i==0 || i==1 || i==3 || i==22 || i==23){arrayField.get(i).setRequired("Y");}
 				else {arrayField.get(i).setRequired("N");}
@@ -194,14 +220,14 @@ public class FixConfig implements Cloneable{
 			arrayGroup.get(0).setName(FixConstants.messageExecReportGrp);
 			arrayGroup.get(0).setRequired("N");arrayField=null;			
 			arrayField = arrayGroup.get(0).setFieldSize(FixConstants.messageExecReportGrpFlds.length).getField();
-				for (int j=0;j<arrayField.length();j++){
+				for (short j=0;j<arrayField.length();j++){
 					arrayField.get(0).setName(FixConstants.messageExecReportGrpFlds[j]);
 					arrayField.get(0).setRequired("N");
 				}
 		case 9:
 			message.setMsgcat(FixConstants.messagesMsgCat[1]);arrayField = null;
 			arrayField = message.setFieldSize(FixConstants.messageOrderCancelRej.length).getField();
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messageOrderCancelRej[i]);
 				if (i==0 || i==2 || i==3 || i==4 || i==10){arrayField.get(i).setRequired("Y");}
 				else {arrayField.get(i).setRequired("N");}				
@@ -210,7 +236,7 @@ public class FixConfig implements Cloneable{
 			message.setMsgcat(FixConstants.messagesMsgCat[0]);arrayField = null;arrayGroup=null;
 			arrayField = message.setFieldSize(FixConstants.messageLogon.length).getField();//default 36
 			arrayGroup = message.setGroupSize(1).getGroup();
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messageLogon[i]);
 				if (i==0 || i==1 ){arrayField.get(i).setRequired("Y");}
 				else {arrayField.get(i).setRequired("N");}
@@ -218,7 +244,7 @@ public class FixConfig implements Cloneable{
 			arrayGroup.get(0).setName(FixConstants.messageLogonGrp);
 			arrayGroup.get(0).setRequired("N");arrayField=null;			
 			arrayField = arrayGroup.get(0).setFieldSize(FixConstants.messageLogonGrpFlds.length).getField();
-				for (int j=0;j<arrayField.length();j++){
+				for (short j=0;j<arrayField.length();j++){
 					arrayField.get(0).setName(FixConstants.messageLogonGrpFlds[j]);
 					arrayField.get(0).setRequired("N");
 				}
@@ -226,32 +252,32 @@ public class FixConfig implements Cloneable{
 			message.setMsgcat(FixConstants.messagesMsgCat[1]);arrayField = null;arrayGroup=null;
 			arrayField = message.setFieldSize(FixConstants.messageNews.length).getField();
 			arrayGroup = message.setGroupSize(FixConstants.messageNewsGrp.length).getGroup();
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messageNews[i]);
 				if (i==0){arrayField.get(i).setRequired("Y");}
 				else {arrayField.get(i).setRequired("N");}
 			}
-			for (int i=0;i<arrayGroup.length();i++){
+			for (short i=0;i<arrayGroup.length();i++){
 				arrayGroup.get(i).setName(FixConstants.messageNewsGrp[i]);
 				arrayField=null;
 				if (i==0){
 					arrayGroup.get(i).setRequired("N");
 					arrayField = arrayGroup.get(i).setFieldSize(2).getField();
-					for (int j=0;j<arrayField.length();j++){
+					for (short j=0;j<arrayField.length();j++){
 						arrayField.get(j).setName(FixConstants.messageNewsGrpFlds[j]);
 						arrayField.get(j).setRequired("N");
 					}
 				}else if (i==1) {
 					arrayGroup.get(i).setRequired("N");
 					arrayField = arrayGroup.get(i).setFieldSize(19).getField();
-					for (int j=0;j<arrayField.length();j++){
+					for (short j=0;j<arrayField.length();j++){
 						arrayField.get(j).setName(FixConstants.messageNewsGrpFlds[j+2]);
 						arrayField.get(j).setRequired("N");
 					}
 				}else if (i==2) {
 					arrayGroup.get(i).setRequired("Y");
 					arrayField = arrayGroup.get(i).setFieldSize(3).getField();
-					for (int j=0;j<arrayField.length();j++){
+					for (short j=0;j<arrayField.length();j++){
 						arrayField.get(j).setName(FixConstants.messageNewsGrpFlds[j+21]);
 						if (j==0){
 							arrayField.get(j).setRequired("Y");//LinesOfText
@@ -265,32 +291,32 @@ public class FixConfig implements Cloneable{
 			message.setMsgcat(FixConstants.messagesMsgCat[1]);arrayField = null;arrayGroup=null;
 			arrayField = message.setFieldSize(FixConstants.messagesEmail.length).getField();
 			arrayGroup = message.setGroupSize(FixConstants.messagesEmaiGrp.length).getGroup();
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messagesEmail[i]);
 				if (i==0 || i==1 || i==3){arrayField.get(i).setRequired("Y");}
 				else {arrayField.get(i).setRequired("N");}
 			}
-			for (int i=0;i<arrayGroup.length();i++){
+			for (short i=0;i<arrayGroup.length();i++){
 				arrayGroup.get(i).setName(FixConstants.messagesEmaiGrp[i]);
 				arrayField=null;
 				if (i==0){
 					arrayGroup.get(i).setRequired("N");
 					arrayField = arrayGroup.get(i).setFieldSize(2).getField();
-					for (int j=0;j<arrayField.length();j++){
+					for (short j=0;j<arrayField.length();j++){
 						arrayField.get(j).setName(FixConstants.messagesEmaiGrpFlds[j]);
 						arrayField.get(j).setRequired("N");
 					}
 				}else if (i==1) {
 					arrayGroup.get(i).setRequired("N");
 					arrayField = arrayGroup.get(i).setFieldSize(19).getField();
-					for (int j=0;j<arrayField.length();j++){
+					for (short j=0;j<arrayField.length();j++){
 						arrayField.get(j).setName(FixConstants.messagesEmaiGrpFlds[j+2]);
 						arrayField.get(j).setRequired("N");
 					}
 				}else if (i==2) {
 					arrayGroup.get(i).setRequired("Y");
 					arrayField = arrayGroup.get(i).setFieldSize(3).getField();
-					for (int j=0;j<arrayField.length();j++){
+					for (short j=0;j<arrayField.length();j++){
 						arrayField.get(j).setName(FixConstants.messagesEmaiGrpFlds[j+21]);
 						if (j==0){
 							arrayField.get(j).setRequired("Y");//LinesOfText
@@ -304,24 +330,24 @@ public class FixConfig implements Cloneable{
 			message.setMsgcat(FixConstants.messagesMsgCat[1]);arrayField = null;arrayGroup=null;
 			arrayField = message.setFieldSize(FixConstants.messagesNOS.length).getField();
 			arrayGroup = message.setGroupSize(FixConstants.messagesNOSGrp.length).getGroup();
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messagesNOS[i]);
 				if (i==0 || i==6 || i==12 || i==32 || i==34 ||i==37){arrayField.get(i).setRequired("Y");}
 				else {arrayField.get(i).setRequired("N");}
 			}
-			for (int i=0;i<arrayGroup.length();i++){
+			for (short i=0;i<arrayGroup.length();i++){
 				arrayGroup.get(i).setName(FixConstants.messagesNOSGrp[i]);
 				arrayGroup.get(i).setRequired("N");
 				arrayField=null;
 				if (i==0){					
 					arrayField = arrayGroup.get(i).setFieldSize(2).getField();
-					for (int j=0;j<arrayField.length();j++){
+					for (short j=0;j<arrayField.length();j++){
 						arrayField.get(j).setName(FixConstants.messagesNOSGrpFlds[j]);
 						arrayField.get(j).setRequired("N");
 					}
 				}else if (i==1) {					
 					arrayField = arrayGroup.get(i).setFieldSize(1).getField();
-					for (int j=0;j<arrayField.length();j++){
+					for (short j=0;j<arrayField.length();j++){
 						arrayField.get(j).setName(FixConstants.messagesNOSGrpFlds[j+2]);
 						arrayField.get(j).setRequired("N");
 					}
@@ -331,7 +357,7 @@ public class FixConfig implements Cloneable{
 			message.setMsgcat(FixConstants.messagesMsgCat[1]);arrayField = null;arrayGroup=null;
 			arrayField = message.setFieldSize(FixConstants.messagesNOL.length).getField();
 			arrayGroup = message.setGroupSize(1).getGroup();
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messagesNOL[i]);
 				if (i==0 || i==4 || i==10){arrayField.get(i).setRequired("Y");}
 				else {arrayField.get(i).setRequired("N");}
@@ -340,25 +366,25 @@ public class FixConfig implements Cloneable{
 			arrayGroup.get(0).setRequired("Y");
 			arrayField=null;
 			arrayField = arrayGroup.get(0).setFieldSize(FixConstants.messagesNOLOuterGrpFlds.length).getField();
-			for (int j=0;j<arrayField.length();j++){
+			for (short j=0;j<arrayField.length();j++){
 				arrayField.get(j).setName(FixConstants.messagesNOLOuterGrpFlds[j]);
 				if (j==0 || j==1 || j==14 || j==34){arrayField.get(j).setRequired("Y");}
 				else {arrayField.get(j).setRequired("N");}
 			}
 			arrayInnerGroup = arrayGroup.get(0).setGroupSize(2).getGroup();
-			for (int i=0;i<arrayInnerGroup.length();i++){
+			for (short i=0;i<arrayInnerGroup.length();i++){
 				arrayInnerGroup.get(i).setName(FixConstants.messagesNOLInnerGrp[i]);
 				arrayInnerGroup.get(i).setRequired("N");
 				arrayField=null;
 				if (i==0){					
 					arrayField = arrayInnerGroup.get(i).setFieldSize(2).getField();
-					for (int j=0;j<arrayField.length();j++){
+					for (short j=0;j<arrayField.length();j++){
 						arrayField.get(j).setName(FixConstants.messagesNOLInnerGrpFlds[j]);
 						arrayField.get(j).setRequired("N");
 					}
 				}else if (i==1) {					
 					arrayField = arrayInnerGroup.get(i).setFieldSize(1).getField();
-					for (int j=0;j<arrayField.length();j++){
+					for (short j=0;j<arrayField.length();j++){
 						arrayField.get(j).setName(FixConstants.messagesNOLInnerGrpFlds[j+2]);
 						arrayField.get(j).setRequired("N");
 					}
@@ -368,7 +394,7 @@ public class FixConfig implements Cloneable{
 		case 15://OrderCancelRequest
 			message.setMsgcat(FixConstants.messagesMsgCat[1]);arrayField = null;arrayGroup=null;
 			arrayField = message.setFieldSize(FixConstants.messagesOCR.length).getField();			
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messagesOCR[i]);
 				if (i==0 || i==2 || i==7 ||i==27){arrayField.get(i).setRequired("Y");}
 				else {arrayField.get(i).setRequired("N");}
@@ -377,24 +403,24 @@ public class FixConfig implements Cloneable{
 			message.setMsgcat(FixConstants.messagesMsgCat[1]);arrayField = null;arrayGroup=null;
 			arrayField = message.setFieldSize(FixConstants.messagesOCR.length).getField();
 			arrayGroup = message.setGroupSize(FixConstants.messagesOCRGrp.length).getGroup();
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messagesOCR[i]);
 				if (i==3 || i==4 || i==9 || i==14 || i==33 || i==34 || i==37){arrayField.get(i).setRequired("Y");}
 				else {arrayField.get(i).setRequired("N");}
 			}
-			for (int i=0;i<arrayGroup.length();i++){
+			for (short i=0;i<arrayGroup.length();i++){
 				arrayGroup.get(i).setName(FixConstants.messagesOCRGrp[i]);
 				arrayGroup.get(i).setRequired("N");
 				arrayField=null;
 				if (i==0){					
 					arrayField = arrayGroup.get(i).setFieldSize(2).getField();
-					for (int j=0;j<arrayField.length();j++){
+					for (short j=0;j<arrayField.length();j++){
 						arrayField.get(j).setName(FixConstants.messagesOCRGrpFlds[j]);
 						arrayField.get(j).setRequired("N");
 					}
 				}else if (i==1) {					
 					arrayField = arrayGroup.get(i).setFieldSize(1).getField();
-					for (int j=0;j<arrayField.length();j++){
+					for (short j=0;j<arrayField.length();j++){
 						arrayField.get(j).setName(FixConstants.messagesOCRGrpFlds[j+2]);
 						arrayField.get(j).setRequired("N");
 					}
@@ -403,7 +429,7 @@ public class FixConfig implements Cloneable{
 		case 17://OrderStatusRekquest
 			message.setMsgcat(FixConstants.messagesMsgCat[1]);arrayField = null;arrayGroup=null;
 			arrayField = message.setFieldSize(FixConstants.messagesOSR.length).getField();			
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messagesOSR[i]);
 				if (i==1 || i==5 || i==2 ||i==4){arrayField.get(i).setRequired("Y");}
 				else {arrayField.get(i).setRequired("N");}
@@ -412,17 +438,17 @@ public class FixConfig implements Cloneable{
 			message.setMsgcat(FixConstants.messagesMsgCat[1]);arrayField = null;arrayGroup=null;
 			arrayField = message.setFieldSize(FixConstants.messagesAlloc.length).getField();
 			arrayGroup = message.setGroupSize(FixConstants.messagesAllocOGrp.length).getGroup();
-			for (int i=0;i<arrayField.length();i++){
+			for (short i=0;i<arrayField.length();i++){
 				arrayField.get(i).setName(FixConstants.messagesAlloc[i]);
 				if (i==0 || i==1 || i==5 || i==6 || i==25 || i==28 || i==31){arrayField.get(i).setRequired("Y");}
 				else {arrayField.get(i).setRequired("N");}
 			}
-			for (int i=0;i<arrayGroup.length();i++){
+			for (short i=0;i<arrayGroup.length();i++){
 				arrayGroup.get(i).setName(FixConstants.messagesAllocOGrp[i]);
 				arrayGroup.get(i).setRequired("N");
 				arrayField=null;
 				arrayField = arrayGroup.get(i).setFieldSize(FixConstants.messagesAllocOGrpFlds.length).getField();
-				for (int j=0;j<arrayField.length();j++){
+				for (short j=0;j<arrayField.length();j++){
 					arrayField.get(j).setName(FixConstants.messagesAllocOGrpFlds[j]);
 					if (i==2 && j==2){
 						arrayField.get(j).setRequired("Y");
@@ -431,7 +457,7 @@ public class FixConfig implements Cloneable{
 						arrayInnerGroup.get(0).setRequired("N");
 						arrayField=null;
 						arrayField = arrayGroup.get(j).setFieldSize(FixConstants.messagesAllocIGrpFlds.length).getField();
-						for (int k=0;k<arrayField.length();k++){
+						for (short k=0;k<arrayField.length();k++){
 							arrayField.get(k).setName(FixConstants.messagesAllocIGrpFlds[j]);
 							arrayField.get(k).setRequired("N");
 						}
@@ -671,9 +697,9 @@ public class FixConfig implements Cloneable{
 		
 		message.setMsgcat(messageCat);
 		arrayField = message.setFieldSize(fieldArray.length).getField();
-		for (int i=0;i<arrayField.length();i++){
+		for (short i=0;i<arrayField.length();i++){
 			arrayField.get(i).setName(fieldArray[i]);
-			for (int j=0;j<fieldYesArray.length;j++){
+			for (short j=0;j<fieldYesArray.length;j++){
 				if (i==j){
 					arrayField.get(i).setRequired("Y");
 					break;
@@ -685,9 +711,9 @@ public class FixConfig implements Cloneable{
 
 		if (groupArray != null){
 			arrayGroup = message.setGroupSize(groupArray.length).getGroup();
-			for (int i=0;i<arrayGroup.length();i++){
+			for (short i=0;i<arrayGroup.length();i++){
 				arrayGroup.get(i).setName(groupArray[i]);				
-				for (int j=0;j<groupYesArray.length;j++){
+				for (short j=0;j<groupYesArray.length;j++){
 					if (i==j){
 						arrayGroup.get(i).setRequired("Y");
 						break;
@@ -696,13 +722,13 @@ public class FixConfig implements Cloneable{
 					}				
 				}	
 				arrayField=null;		
-				int groupFieldCounter =0;
+				short groupFieldCounter =0;
 				int [] arrayYesCounter=groupFieldYesArray[i];
 				arrayField = arrayGroup.get(i).setFieldSize(groupFieldSize[i]).getField();
 				
-				for (int j=groupFieldCounter;j<arrayField.length();j++){
+				for (short j=groupFieldCounter;j<arrayField.length();j++){
 					arrayField.get(j).setName(groupField[j]);
-					for (int k=0;j<arrayYesCounter.length;k++){
+					for (short k=0;j<arrayYesCounter.length;k++){
 						if (j==k){
 							arrayField.get(j).setRequired("Y");
 							break;
@@ -727,12 +753,12 @@ public class FixConfig implements Cloneable{
 		if (innerGroupFieldSize == null){return;}
 		
 		arrayInnerGroup = group.setGroupSize(innerGroup.length).getGroup();
-		for (int i=0;i<innerGroup.length;i++){			
+		for (short i=0;i<innerGroup.length;i++){			
 			arrayInnerGroup.get(i).setName(innerGroup[i]);
 			arrayInnerGroup.get(i).setRequired("N");
 			arrayField=null;
 			arrayField = group.setFieldSize(innerGroupField.length).getField();
-			for (int k=0;k<arrayField.length();k++){
+			for (short k=0;k<arrayField.length();k++){
 				arrayField.get(k).setName(innerGroupField[k]);
 				arrayField.get(k).setRequired("N");
 			}
@@ -749,10 +775,11 @@ public class FixConfig implements Cloneable{
 	}
 	
 	private void load42DefaultTrailer() {
-		this.trailer = dvg.nativeInstance(Trailer.class);
+		//this.trailer = dvg.nativeInstance(Trailer.class);
+		this.trailer = new Trailer();
 		HugeArray<Field> array = this.trailer.setFieldSize(3).getField();
 		Field field=null;
-		for (int i=0;i<FixConstants.trailerFieldName.length;i++){
+		for (short i=0;i<FixConstants.trailerFieldName.length;i++){
 			field = array.get(i);
 			field.setName(FixConstants.trailerFieldName[i]);
 			if (i==2){
@@ -776,11 +803,12 @@ public class FixConfig implements Cloneable{
 	}
 	
 	private void load42DefaultFields() {
-		this.fields = dvg.nativeInstance(Fields.class);
-		HugeArray<Field> array =this.header.setFieldCount(FixConstants.fieldsNumber.length).getField();
+		//this.fields = dvg.nativeInstance(Fields.class);
+		this.fields = new Fields();
+		HugeArray<Field> array =this.header.setFieldSize(FixConstants.fieldsNumber.length).getField();
 		//initializing Field for this Fields
 		Field field = null;
-		for (int i=0;i<FixConstants.fieldsNumber.length;i++){
+		for (short i=0;i<FixConstants.fieldsNumber.length;i++){
 			field = array.get(i);
 			field.setNumber(FixConstants.fieldsNumber[i]);
 			field.setName(FixConstants.fieldsName[i]);
@@ -789,9 +817,9 @@ public class FixConfig implements Cloneable{
 		//Generating Empty Values Fields (including defined ones assuming SINGLE)
 		HugeArray<Value> valueArr = null;
 		Value value = null;
-		for (int i=0;i<FixConstants.fieldsNumber.length;i++){
+		for (short i=0;i<FixConstants.fieldsNumber.length;i++){
 			field = array.get(i);
-			valueArr = field.setValueSize(1).getValue();//will change it if #ofValues > 1 on a field
+			//valueArr = field.setValueSize(1).getValue();//will change it if #ofValues > 1 on a field
 			value = valueArr.get(i);value.setEnum("");//TODO
 		}		
 	}
@@ -847,5 +875,7 @@ public class FixConfig implements Cloneable{
 	public Fields getFields() {
 		return fields;
 	}
+	
+	
 
 }

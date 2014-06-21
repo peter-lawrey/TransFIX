@@ -15,10 +15,15 @@
  */
 package net.openhft.fix.include.v42;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import net.openhft.lang.collection.HugeArray;
 import net.openhft.lang.collection.HugeCollections;
 
-public class Message 
+public class Message implements Externalizable
 {
     protected HugeArray<Field> field;
     protected HugeArray<Group> group;
@@ -68,5 +73,28 @@ public class Message
     public void setName(String name) {
         this.name = name;
     }
+	@Override
+	public void writeExternal(ObjectOutput out) throws IOException {
+	    out.writeObject(field);
+	    out.writeObject(group);
+	    out.writeUTF(msgcat);
+	    out.writeUTF(msgtype);
+	    out.writeUTF(name);
+	    out.writeInt(fieldSize);
+	    out.writeInt(groupSize);
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public void readExternal(ObjectInput in) throws IOException,
+			ClassNotFoundException {
+		// TODO Auto-generated method stub
+		field= (HugeArray<Field>) in.readObject();
+		group = (HugeArray<Group>) in.readObject();
+	    msgcat= in.readUTF();
+	    msgtype= in.readUTF();
+	    name= in.readUTF();
+	    fieldSize= in.readInt();
+	    groupSize= in.readInt();
+	}
 
 }

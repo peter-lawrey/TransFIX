@@ -32,7 +32,6 @@ public class FixMessagePool implements FixPoolFactory<FixMessage>{
 	private final long ARR_INDEX;
 	private final long TAIL_ADJUSTMENT;
 	
-	public ReentrantLock reentLock = new ReentrantLock();
 	private ThreadLocal<FixMessageContainer<FixMessage>> fixLocal = new ThreadLocal<>();
 	
 	@SuppressWarnings({ "unchecked", "restriction" })
@@ -82,8 +81,6 @@ public class FixMessagePool implements FixPoolFactory<FixMessage>{
 	
 	@SuppressWarnings("restriction")
 	public void putFixMessage(FixMessageContainer<FixMessage> fixMessage) throws Exception{
-		reentLock.lockInterruptibly();
-		try{
 			int localPosition=objectPutPosition;			
 			long index = ((localPosition & mask)<<TAIL_ADJUSTMENT ) + BASE_ADDR;
 			if(fixMessage.state.compareAndSet(FixMessageContainer.AVAILABLE_STATE, FixMessageContainer.IN_USE_STATE)){
@@ -92,11 +89,7 @@ public class FixMessagePool implements FixPoolFactory<FixMessage>{
 			}
 			else{
 				throw new Exception("Not a valid position address");
-			}
-		}
-		finally{
-			reentLock.unlock();
-		}
+			}		
 	}
 	
 	@SuppressWarnings("hiding")

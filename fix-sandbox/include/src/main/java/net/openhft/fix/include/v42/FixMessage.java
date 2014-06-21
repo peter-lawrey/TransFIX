@@ -15,9 +15,14 @@
  */
 package net.openhft.fix.include.v42;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import net.openhft.fix.include.util.FixConstants;
 
-public class FixMessage 
+public class FixMessage implements Externalizable 
 {
 	protected Header header;
     protected Messages messages;
@@ -28,9 +33,9 @@ public class FixMessage
     protected int major=4;
     protected int minor=2;
     protected int servicepack=0;
-    protected final String type="FIX";
+    protected CharSequence type="FIX";
     private StringBuilder fixMsgOutput;
-    private char delim = '|';
+    private byte delim = (byte)'|';
     
     public FixMessage(FIXMessageBuilder fixMsgBuilder){
     	  this.header=fixMsgBuilder.getHeader();
@@ -41,7 +46,11 @@ public class FixMessage
     	  this.fixMsgOutput = new StringBuilder();
     }
     
-    public Header getHeader() {
+    public FixMessage() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Header getHeader() {
         return header;
     }
 
@@ -73,7 +82,7 @@ public class FixMessage
         return servicepack;
     }
 
-    public String getType() {
+    public CharSequence getType() {
         return type;
     }
     
@@ -91,5 +100,37 @@ public class FixMessage
     	this.fixMsgOutput.append(FixConstants.fieldsNumber[33]);this.fixMsgOutput.append(this.delim);
     	return this.fixMsgOutput.toString();
     }
+
+	@Override
+	public void writeExternal(ObjectOutput out) throws IOException {
+	    out.writeObject(header);
+	    out.writeObject(messages);
+	    out.writeObject(trailer);
+	    out.writeObject(components);
+	    out.writeObject(fields);
+		out.writeInt(major);
+		out.writeInt(minor);
+		out.writeInt(servicepack);
+		out.writeUTF((String)type);
+		out.writeObject(this.fixMsgOutput);
+		out.writeByte(delim);
+	}
+
+	@Override
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException 
+	{
+		header = (Header) in.readObject();
+	    messages= (Messages) in.readObject();
+	    trailer= (Trailer) in.readObject();
+	    components= (Components) in.readObject();
+	    fields= (Fields) in.readObject();
+		major= in.readInt();
+		minor= in.readInt();
+		servicepack= in.readInt();
+		type = in.readUTF();
+		this.fixMsgOutput= (StringBuilder) in.readObject();
+		delim= (byte) in.readChar();
+		
+	}
 
 }

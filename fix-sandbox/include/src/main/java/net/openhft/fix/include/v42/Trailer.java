@@ -15,26 +15,73 @@
  */
 package net.openhft.fix.include.v42;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import net.openhft.lang.collection.HugeArray;
 import net.openhft.lang.collection.HugeCollections;
 
 
-public class Trailer 
+public class Trailer implements FixMessageType
 {
     protected HugeArray<Field> field;
     protected int fieldSize=3;
 
-    public Trailer setFieldSize(int fieldSize){
+    @SuppressWarnings("unchecked")
+    @Override
+	public Trailer setFieldSize(int fieldSize){
     	this.fieldSize=fieldSize;
     	return this;
     }
     
-    public HugeArray <Field> getField() {
+    @SuppressWarnings("unchecked")
+    @Override
+	public HugeArray <Field> getField() {
         if (field == null) {
             field = HugeCollections.newArray(Field.class, fieldSize);
         }
         return this.field;
     }
-    
+
+	@Override
+	public <T> T setValueSize(int valueSize) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T getMessage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T setMessagesSize(int messageSize) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T setGroupSize(int groupSize) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput out) throws IOException {
+		out.writeObject(field);
+	    out.writeInt(fieldSize);		
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void readExternal(ObjectInput in) throws IOException,
+			ClassNotFoundException {
+		// TODO Auto-generated method stub
+		field= (HugeArray<Field>) in.readObject();
+		fieldSize= in.readInt();
+		
+	}   
     
 }
