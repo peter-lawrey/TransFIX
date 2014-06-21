@@ -15,61 +15,139 @@
  */
 package net.openhft.fix.include.v42;
 
-import net.openhft.fix.model.FixField;
-import net.openhft.lang.collection.HugeArray;
-import net.openhft.lang.collection.HugeCollections;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
-public class Field 
+import net.openhft.fix.model.FixFieldTypeInterface;
+import net.openhft.lang.io.ByteBufferBytes;
+import net.openhft.lang.io.Bytes;
+/**
+ * 
+ * Class with different fix Fields
+ * 
+ * @author Anshul Shelley
+ *
+ */
+public class Field implements FixFieldInterface
 {
-    protected HugeArray<Value> value;
-    protected String name;
+    //protected HugeArray<Value> value;
+    protected CharSequence name;
     protected int number;
-    protected String required;
-    protected FixField type;
+    protected CharSequence required;
+    protected FixFieldTypeInterface type;
     protected int valueSize;
+    protected Bytes fieldData = new ByteBufferBytes(ByteBuffer.allocate(1024).order(ByteOrder.nativeOrder()));
+    private static final byte MULTI_VALUE_DELIM = 1;
       
     public Field setValueSize(int valueSize){
     	this.valueSize = valueSize;
     	return this;
     }
     
-    public HugeArray<Value> getValue() {
+    public Field(){}
+    
+    /*public HugeArray<Value> getValue() {
         if (value == null) {            
             value = HugeCollections.newArray(Value.class, valueSize);
         }
         return this.value;
-    }
-
-    public String getName() {
+    }*/
+    
+    /**
+     * Returns corresponding fix field name as per FixConstants.fieldsName[@number] for this message
+     * @return name
+     */
+    public CharSequence getName() {
         return name;
     }
 
-    public void setName(String value) {
+    /**
+     * Sets corresponding fix field name as per FixConstants.fieldsName[@number] for this message
+     */
+    public void setName(CharSequence value) {
         this.name = value;
     }
-
-    public double getNumber() {
+    
+    /**
+     * Returns corresponding fix field ID as per FixConstants.fieldsNumber[@fieldID--used by parser] for this message
+     * @return number
+     */
+    public int getNumber() {
         return number;
     }
 
+    /**
+     * Sets corresponding fix field ID as per FixConstants.fieldsNumber[@fieldID--used by parser]
+     */
     public void setNumber(int value) {
         this.number = value;
     }
 
-    public String getRequired() {
+    public CharSequence getRequired() {
         return required;
     }
 
-    public void setRequired(String value) {
+    public void setRequired(CharSequence value) {
         this.required = value;
     }
 
-    public FixField getType() {
+    public FixFieldTypeInterface getType() {
         return type;
     }
 
-    public void setType(FixField value) {
+    public void setType(FixFieldTypeInterface value) {
         this.type = value;
     }
 
+	public void writeExternal(ObjectOutput out) throws IOException {
+		// TODO Auto-generated method stub
+	    //out.writeObject(value);
+	    out.writeUTF((String)name);
+	    out.writeInt(number);
+	    out.writeUTF((String)required);
+	    out.writeObject(type);
+	    out.writeInt(valueSize);
+	    
+	}
+
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+		// TODO Auto-generated method stub
+		//value = (HugeArray<Value>) in.readObject();
+		name = in.readUTF();
+	    number = in.readInt();
+	    required = in.readUTF();
+	    type = (FixFieldTypeInterface) in.readObject();
+	    valueSize = in.readInt();
+	}
+
+	public Bytes getFieldData() {
+		return fieldData;
+	}
+	
+	public void setFieldData(Bytes bytes){
+		this.fieldData = bytes;
+	}
+
+	public static byte getMultiValueDelim() {
+		return MULTI_VALUE_DELIM;
+	}
+
+	@Override
+	public void reset() {
+		
+		this.fieldData = fieldData.zeroOut();		
+		this.name = null;
+		this.number = -1;
+		this.required = null;
+		this.type = null;
+		this.valueSize = -1;
+	}
+	
+	public void printValues(){
+		System.out.println("name "+name);
+	}
+		
 }
