@@ -19,7 +19,7 @@ package net.openhft.fix.model;
 /**
  * @author Adam Rosenberger
  */
-public enum FixField {
+public enum FixField implements FixFieldTypeInterface{
     Int(DataType.Int),
     Length(DataType.Long),
     TagNum(DataType.Long),
@@ -27,7 +27,7 @@ public enum FixField {
     NumInGroup(DataType.Long),
     DayOfMonth(DataType.Int),
 
-    Float(DataType.Float),
+    Double(DataType.Double),
     Qty(DataType.Double),
     Price(DataType.Double),
     PriceOffset(DataType.Double),
