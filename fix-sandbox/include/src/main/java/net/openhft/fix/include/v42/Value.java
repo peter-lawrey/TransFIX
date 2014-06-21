@@ -15,7 +15,12 @@
  */
 package net.openhft.fix.include.v42;
 
-public class Value 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
+public class Value implements Externalizable
 {
     protected String description;
     protected String _enum;//predefined OR UserDefined
@@ -35,5 +40,21 @@ public class Value
     public void setEnum(String value) {
         this._enum = value;
     }
+
+	@Override
+	public void writeExternal(ObjectOutput out) throws IOException {
+
+	    out.writeUTF(description);
+	    out.writeUTF(_enum);
+		
+	}
+
+	@Override
+	public void readExternal(ObjectInput in) throws IOException,
+			ClassNotFoundException {
+		description = in.readUTF();
+		_enum = in.readUTF();
+		
+	}
 
 }
