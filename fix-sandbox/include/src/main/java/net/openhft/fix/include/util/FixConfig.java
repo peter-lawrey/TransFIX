@@ -17,6 +17,7 @@
 package net.openhft.fix.include.util;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 import net.openhft.compiler.CachedCompiler;
 import net.openhft.fix.include.v42.Components;
@@ -66,10 +67,10 @@ public class FixConfig implements Cloneable{
 												.setFixVersionMajor(4)
 												.setFixVersionMinor(2)
 												.setFixVersionServicePack(0)
-												.createServerFixHeader()
+												/*.createServerFixHeader()
 												.createServerFixMessages()
 												.createServerFixTrailer()
-												.createServerFixComponents()
+												.createServerFixComponents()*/
 												.createServerFixFields();
 
 	public FixConfig createServerFixHeader(){
@@ -801,27 +802,37 @@ public class FixConfig implements Cloneable{
 		}
 		return this;
 	}
+	private Field [] fieldArr;
+	public Field[] getFieldArr() {
+		return fieldArr;
+	}
+
+	//private Field fieldFill = new Field();
 	
 	private void load42DefaultFields() {
 		//this.fields = dvg.nativeInstance(Fields.class);
-		this.fields = new Fields();
-		HugeArray<Field> array =this.header.setFieldSize(FixConstants.fieldsNumber.length).getField();
+		//this.fields = new Fields();
+		//HugeArray<Field> array =this.header.setFieldSize(FixConstants.fieldsNumber.length).getField();
+		fieldArr = new Field[FixConstants.fieldsNumber.length];
+		//Arrays.fill(fieldArr, 0,fieldArr.length,fieldFill);
 		//initializing Field for this Fields
-		Field field = null;
+		//Field field = null;
 		for (short i=0;i<FixConstants.fieldsNumber.length;i++){
-			field = array.get(i);
-			field.setNumber(FixConstants.fieldsNumber[i]);
-			field.setName(FixConstants.fieldsName[i]);
-			field.setType(FieldLookup.fieldFor(FixConstants.fieldsTypeOrdering[i]));
+			//field = array.get(i);
+			//field = fieldArr[i];
+			fieldArr[i] = new Field();
+			fieldArr[i].setNumber(FixConstants.fieldsNumber[i]);			
+			fieldArr[i].setName(FixConstants.fieldsName[i]);
+			fieldArr[i].setType(FieldLookup.fieldFor(FixConstants.fieldsTypeOrdering[i]));
 		}
 		//Generating Empty Values Fields (including defined ones assuming SINGLE)
-		HugeArray<Value> valueArr = null;
+		/*HugeArray<Value> valueArr = null;
 		Value value = null;
 		for (short i=0;i<FixConstants.fieldsNumber.length;i++){
 			field = array.get(i);
 			//valueArr = field.setValueSize(1).getValue();//will change it if #ofValues > 1 on a field
 			value = valueArr.get(i);value.setEnum("");//TODO
-		}		
+		}	*/	
 	}
 
 	public int getFixVersionMajor() {

@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package net.openhft.fix.include.v42;
 
-package net.openhft.fix.include.util;
 import java.io.Externalizable;
-import net.openhft.fix.include.v42.FixMessage;
 
-@SuppressWarnings("hiding")
-public interface FixPoolFactory <FixMessage> extends Externalizable{	
-		public FixMessage create(boolean useDefault);	
+public interface FixMessageInterface extends Externalizable
+{
+	public int getMajor() ;
+    public int getMinor() ;
+    public int getServicepack() ;
+    public CharSequence getType();
 }

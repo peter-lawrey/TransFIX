@@ -17,10 +17,14 @@
 package net.openhft.fix.include.v42;
 
 import net.openhft.fix.include.util.FixConfig;
+import net.openhft.fix.include.util.FixMessagePool;
+import net.openhft.fix.include.util.FixMessagePool.FixMessageContainer;
+import net.openhft.lang.io.DirectStore;
+import net.openhft.lang.io.NativeBytes;
 import net.openhft.lang.model.DataValueGenerator;
 
 /**
- * http://robsjava.blogspot.co.uk/2013/03/create-java-classes-at-runtime-from.html
+ * 
  * */
 
 public class FIXMessageBuilder implements Cloneable 
@@ -32,6 +36,7 @@ public class FIXMessageBuilder implements Cloneable
 	private Fields fields;
 	private final DataValueGenerator dvg = new DataValueGenerator();
 	private FixConfig fixConfig;
+	private int poolSize = 10;
     
 	public FIXMessageBuilder clone() {
         try {
@@ -41,8 +46,9 @@ public class FIXMessageBuilder implements Cloneable
         }
     }
 	
-	public FixMessage createFixMessage(boolean useDefault){
-		if (useDefault){
+	public FixMessagePool initFixMessagePool(boolean useDefault, int poolSize){
+		this.poolSize = poolSize;
+		/*if (useDefault){
 			fixConfig = new FixConfig().SERVER_DEFAULT_4_2.clone()
 					//.createServerFixHeader()
 					//.createServerFixMessages()
@@ -56,7 +62,14 @@ public class FIXMessageBuilder implements Cloneable
 			//this.comp=fixConfig.getComponents();
 			this.fields=fixConfig.getFields();
 		}
-		return new FixMessage(this);
+		return new FixMessagePool(this);
+		*/
+		if (useDefault)
+		{
+			return new FixMessagePool(null, poolSize, useDefault);
+		}
+		
+		return null;
 	}
 	
    
@@ -110,9 +123,16 @@ public class FIXMessageBuilder implements Cloneable
 	}
 	
 	
-	public static void main (String ...args){
+	public static void main (String ...args) throws Exception{
+		int fixMsgCount = 5;
+		FixMessagePool fmp = new FIXMessageBuilder().initFixMessagePool(true, fixMsgCount);
+		FixMessageContainer<FixMessage> fmc = fmp.getFixMessageContainer();
+		FixMessage fm =  fmc.getFixMessage();		
+		//fm.getField(9).setFieldData(new DirectStore("121212121".length()).bytes());
+		fm.getField(9).setName("asdjaklsdjh");
+		System.out.println(fm.getFixString());
+		fmp.putFixMessageContainer(fmc);
 		
-		FixMessage fm = new FIXMessageBuilder().createFixMessage(true);
 	}
 
 }
