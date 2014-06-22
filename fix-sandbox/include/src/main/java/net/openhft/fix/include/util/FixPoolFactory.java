@@ -15,9 +15,10 @@
  */
 
 package net.openhft.fix.include.util;
+import java.io.Externalizable;
 import net.openhft.fix.include.v42.FixMessage;
 
 @SuppressWarnings("hiding")
-public interface FixPoolFactory <FixMessage>{	
-		public FixMessage create();	
+public interface FixPoolFactory <FixMessage> extends Externalizable{	
+		public FixMessage create(boolean useDefault);	
 }
