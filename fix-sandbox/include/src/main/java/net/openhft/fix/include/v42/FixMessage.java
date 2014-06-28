@@ -102,11 +102,12 @@ public class FixMessage implements FixMessageInterface
     
     public String getFixString(){//depends on your business logic
     	//8|9|35|34
+    	int msgSize = 0;
     	this.fixMsgOutput = new StringBuilder();
     	this.fixMsgOutput.setLength(0);
     	this.fixMsgOutput.append(FixConstants.fieldsNumber[7]);
-    	this.fixMsgOutput.append(this.type);
     	this.fixMsgOutput.append(this.equalsChar);
+    	this.fixMsgOutput.append(this.type);    	
     	this.fixMsgOutput.append(this.major);
     	this.fixMsgOutput.append(this.minor);
     	this.fixMsgOutput.append(this.servicepack);
@@ -115,11 +116,20 @@ public class FixMessage implements FixMessageInterface
     	{
 	    	for (int i=0;i<field.length;i++)
 	    	{
-	    		this.fixMsgOutput.append(field[i].getNumber());
-	    		this.fixMsgOutput.append(field[i].getName());
-	    		this.fixMsgOutput.append(this.equalsChar);
-	    		this.fixMsgOutput.append(this.delim);
+	    		if (field[i].getFieldDataPostion() > 0 && i != 8)
+	    		{
+	    			System.out.println(field[i].getFieldDataPostion());
+		    		this.fixMsgOutput.append(field[i].getNumber());	    				
+		    		this.fixMsgOutput.append(this.equalsChar);		    		
+		    		this.fixMsgOutput.append(field[i].getFieldData().readUTFΔ());
+		    		this.fixMsgOutput.append(this.delim);
+		    		msgSize += field[i].getFieldDataPostion();
+	    		}
 	    	}
+	    	this.fixMsgOutput.append(field[8].getNumber());	    				
+    		this.fixMsgOutput.append(this.equalsChar);		    		
+    		this.fixMsgOutput.append(msgSize);
+    		this.fixMsgOutput.append(this.delim);   	
     	}
        	return this.fixMsgOutput.toString();
     }
