@@ -40,7 +40,7 @@ public class FieldLookup {
         FIELD_LOOKUPS.put("SEQNUM", FixField.SeqNum);
         FIELD_LOOKUPS.put("NUMINGROUP", FixField.NumInGroup);
         FIELD_LOOKUPS.put("DAYOFMONTH", FixField.DayOfMonth);
-        FIELD_LOOKUPS.put("FLOAT", FixField.Float);
+        FIELD_LOOKUPS.put("FLOAT", FixField.Double);
         FIELD_LOOKUPS.put("QTY", FixField.Qty);
         FIELD_LOOKUPS.put("QUANTITY", FixField.Qty);
         FIELD_LOOKUPS.put("PRICE", FixField.Price);
