@@ -40,7 +40,7 @@ public class Field implements FixFieldInterface
     protected FixFieldTypeInterface type;
     protected int valueSize;
     protected Bytes fieldData = new ByteBufferBytes(ByteBuffer.allocate(1024).order(ByteOrder.nativeOrder()));
-    private static final byte MULTI_VALUE_DELIM = 1;
+    private static final byte MULTI_VALUE_DELIM = 1;    
       
     public Field setValueSize(int valueSize){
     	this.valueSize = valueSize;
@@ -128,7 +128,7 @@ public class Field implements FixFieldInterface
 	}
 	
 	public void setFieldData(Bytes bytes){
-		this.fieldData = bytes;
+		this.fieldData = bytes;		
 	}
 
 	public static byte getMultiValueDelim() {
@@ -148,6 +148,10 @@ public class Field implements FixFieldInterface
 	
 	public void printValues(){
 		System.out.println("name "+name);
+	}
+
+	public int getFieldDataPostion() {		
+		return (int)fieldData.position();
 	}
 		
 }
