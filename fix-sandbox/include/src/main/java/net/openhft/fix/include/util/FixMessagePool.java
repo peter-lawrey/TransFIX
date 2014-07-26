@@ -35,7 +35,7 @@ public class FixMessagePool implements FixPoolFactory<FixMessage>{
 	private final long TAIL_ADJUSTMENT;
 	private FixConfig fixConfig = new FixConfig();
 	
-	private ThreadLocal<FixMessageContainer<FixMessage>> fixLocal = new ThreadLocal<>();
+	private ThreadLocal<FixMessageContainer<FixMessage>> fixLocal = new ThreadLocal<FixMessageContainer<FixMessage>>();
 	
 	@SuppressWarnings({ "unchecked", "restriction" })
 	public FixMessagePool(FixPoolFactory<FixMessage> fixPoolFactory , int poolSize, boolean useDefault){
