@@ -1,7 +1,7 @@
 TransFIX
 ========
+A Fix 4.2 Message Parser with Sub Millisecond Latency
 
-Faster FIX engine.
 ![TransFIX](http://openhft.net/wp-content/uploads/2014/09/TransFix_200px.png)
 
 # TransFix
