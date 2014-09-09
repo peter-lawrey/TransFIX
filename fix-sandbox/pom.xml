@@ -38,6 +38,7 @@
         <module>schema</module>
         <module>compiler</module>
         <module>transport</module>
+        <module>include</module>
     </modules>
 
     <dependencies>
