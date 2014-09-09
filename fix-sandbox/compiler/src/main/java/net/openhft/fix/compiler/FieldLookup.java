@@ -18,11 +18,7 @@ package net.openhft.fix.compiler;
 
 import net.openhft.collections.HugeConfig;
 import net.openhft.collections.HugeHashMap;
-import net.openhft.collections.SampleValues;
 import net.openhft.fix.model.FixField;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Adam Rosenberger
