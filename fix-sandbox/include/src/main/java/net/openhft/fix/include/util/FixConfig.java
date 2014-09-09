@@ -16,27 +16,16 @@
 
 package net.openhft.fix.include.util;
 
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-
 import net.openhft.compiler.CachedCompiler;
-import net.openhft.fix.include.v42.Components;
-import net.openhft.fix.include.v42.Field;
-import net.openhft.fix.include.v42.Fields;
-import net.openhft.fix.include.v42.FixMessageType;
-import net.openhft.fix.include.v42.Group;
-import net.openhft.fix.include.v42.Header;
-import net.openhft.fix.include.v42.Message;
-import net.openhft.fix.include.v42.Messages;
-import net.openhft.fix.include.v42.Trailer;
-import net.openhft.fix.include.v42.Value;
+import net.openhft.fix.compiler.FieldLookup;
+import net.openhft.fix.include.v42.*;
 import net.openhft.lang.collection.HugeArray;
 import net.openhft.lang.io.ByteBufferBytes;
 import net.openhft.lang.io.Bytes;
 import net.openhft.lang.model.Byteable;
 import net.openhft.lang.model.DataValueGenerator;
-import net.openhft.lang.model.JavaBeanInterface;
-import net.openhft.fix.compiler.FieldLookup;
+
+import java.nio.ByteBuffer;
 
 public class FixConfig implements Cloneable{
 	
