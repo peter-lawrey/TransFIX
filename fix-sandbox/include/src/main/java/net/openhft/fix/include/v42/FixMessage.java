@@ -23,12 +23,6 @@ import net.openhft.fix.include.util.FixConstants;
 
 public class FixMessage implements FixMessageInterface 
 {
-	//protected Header header;
-    //protected Messages messages;
-    //protected Trailer trailer;
-    //protected Components components;
-    //protected Fields fields;
-    
     protected int major=4;
     protected int minor=2;
     protected int servicepack=0;
@@ -38,15 +32,6 @@ public class FixMessage implements FixMessageInterface
     private char equalsChar = '=';
     private Field[] field;
     
-    /*public FixMessage(FIXMessageBuilder fixMsgBuilder){
-    	  this.header=fixMsgBuilder.getHeader();
-    	  this.messages=fixMsgBuilder.getMessages();
-    	  this.trailer=fixMsgBuilder.getTrailer();
-    	  this.components=fixMsgBuilder.getComp();
-    	  this.fields=fixMsgBuilder.getFields();
-    	  this.fixMsgOutput = new StringBuilder();
-    }*/
-    
     public FixMessage(FIXMessageBuilder fixMsgBuilder) {
     	
 	}
@@ -54,26 +39,6 @@ public class FixMessage implements FixMessageInterface
     public FixMessage(Field[] field){
     	this.field = field;
     }
-
-	/*public Header getHeader() {
-        return header;
-    }
-
-    public Messages getMessages() {
-        return messages;
-    }
-
-     public Trailer getTrailer() {
-        return trailer;
-    }
-  
-    public Components getComponents() {
-        return components;
-    }
-
-    public Fields getFields() {
-        return fields;
-    }*/
 
     public int getMajor() {
         return major;
@@ -136,11 +101,6 @@ public class FixMessage implements FixMessageInterface
 
 	@Override
 	public void writeExternal(ObjectOutput out) throws IOException {
-	    /*out.writeObject(header);
-	    out.writeObject(messages);
-	    out.writeObject(trailer);
-	    out.writeObject(components);
-	    out.writeObject(fields);*/
 		out.writeInt(major);
 		out.writeInt(minor);
 		out.writeInt(servicepack);
@@ -152,11 +112,6 @@ public class FixMessage implements FixMessageInterface
 	@Override
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException 
 	{
-		/*header = (Header) in.readObject();
-	    messages= (Messages) in.readObject();
-	    trailer= (Trailer) in.readObject();
-	    components= (Components) in.readObject();
-	    fields= (Fields) in.readObject();*/
 		major= in.readInt();
 		minor= in.readInt();
 		servicepack= in.readInt();
