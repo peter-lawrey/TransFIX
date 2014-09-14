@@ -28,6 +28,11 @@ public class FixMessageReader {
 	private Bytes fixMsgBytes;
 	private final int FIELD_SIZE=FixConstants.fieldsNumber.length;
 	private Field field[] = new Field[FIELD_SIZE];
+	
+	public Field[] getField() {
+		return field;
+	}
+
 	private StringBuilder tempStringValue= new StringBuilder();
 	private final byte FIELD_TERMINATOR = 1;
 	private byte VERSION_CHECKED=0;
