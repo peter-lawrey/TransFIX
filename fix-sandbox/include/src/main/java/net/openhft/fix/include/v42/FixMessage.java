@@ -23,7 +23,7 @@ import net.openhft.fix.include.util.FixConstants;
 
 public class FixMessage implements FixMessageInterface 
 {
-    protected int major=4;
+	protected int major=4;
     protected int minor=2;
     protected int servicepack=0;
     protected CharSequence type="FIX";
@@ -107,6 +107,16 @@ public class FixMessage implements FixMessageInterface
 		out.writeUTF((String)type);
 		out.writeObject(this.fixMsgOutput);
 		out.writeChar(delim);
+	}
+	
+	public int getCheckSum(){
+		int checksum=0;
+		if (field != null){
+			for (int i=0; i<field.length;i++){
+				checksum += field[i].getFieldData().position();
+			}
+		}
+		return checksum % 256;
 	}
 
 	@Override
