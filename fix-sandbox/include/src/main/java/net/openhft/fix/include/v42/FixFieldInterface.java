@@ -1,7 +1,7 @@
 package net.openhft.fix.include.v42;
 
 import net.openhft.fix.model.FixFieldTypeInterface;
-import net.openhft.lang.io.Bytes;
+import net.openhft.lang.io.ByteBufferBytes;
 
 /**
  * Fix field definition. 
@@ -20,6 +20,6 @@ public interface FixFieldInterface {
 	void setRequired(CharSequence value);
 	FixFieldTypeInterface getType();
 	void setType(FixFieldTypeInterface value);
-	Bytes getFieldData();
+	ByteBufferBytes getFieldData();
 	void reset();
 }
