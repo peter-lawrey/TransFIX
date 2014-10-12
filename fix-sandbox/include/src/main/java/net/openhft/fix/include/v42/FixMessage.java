@@ -57,7 +57,7 @@ public class FixMessage implements FixMessageInterface
     }
     
     public Field getField(int fieldLocation){
-    	System.out.println(fieldLocation +"====="+FixConstants.fieldsNumber[FixConstants.fieldsNumber.length-1]);
+    	//System.out.println(fieldLocation +"====="+FixConstants.fieldsNumber[FixConstants.fieldsNumber.length-1]);
     	if (fieldLocation <= FixConstants.fieldsNumber[FixConstants.fieldsNumber.length-1]){
     		return this.field[fieldLocation-1];
     	}
@@ -86,7 +86,7 @@ public class FixMessage implements FixMessageInterface
 	    			System.out.println(field[i].getFieldDataPostion());
 		    		this.fixMsgOutput.append(field[i].getNumber());	    				
 		    		this.fixMsgOutput.append(this.equalsChar);		    		
-		    		this.fixMsgOutput.append(field[i].getFieldData().readUTFΔ());
+		    		this.fixMsgOutput.append(field[i].getFieldData().readUTF());
 		    		this.fixMsgOutput.append(this.delim);
 		    		msgSize += field[i].getFieldDataPostion();
 	    		}
