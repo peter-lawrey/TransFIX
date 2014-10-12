@@ -39,7 +39,7 @@ public class Field implements FixFieldInterface
     protected CharSequence required;
     protected FixFieldTypeInterface type;
     protected int valueSize;
-    protected Bytes fieldData = new ByteBufferBytes(ByteBuffer.allocate(1024).order(ByteOrder.nativeOrder()));
+    protected ByteBufferBytes fieldData = new ByteBufferBytes(ByteBuffer.allocate(1024).order(ByteOrder.nativeOrder()));
     private static final byte MULTI_VALUE_DELIM = 1;    
       
     public Field setValueSize(int valueSize){
@@ -123,14 +123,18 @@ public class Field implements FixFieldInterface
 	    valueSize = in.readInt();
 	}
 
-	public Bytes getFieldData() {
+	public ByteBufferBytes getFieldData() {
 		return fieldData;
 	}
 	
-	public void setFieldData(Bytes bytes){
-		this.fieldData = bytes;		
+	public void setFieldData(byte[] bytes){
+		this.fieldData.write(bytes);
 	}
 
+	public void setFieldData(ByteBufferBytes bytes){
+		this.fieldData.write(bytes);
+	}
+	
 	public static byte getMultiValueDelim() {
 		return MULTI_VALUE_DELIM;
 	}
@@ -138,7 +142,7 @@ public class Field implements FixFieldInterface
 	@Override
 	public void reset() {
 		
-		this.fieldData = fieldData.zeroOut();		
+		this.fieldData = (ByteBufferBytes) fieldData.zeroOut();		
 		this.name = null;
 		this.number = -1;
 		this.required = null;
