@@ -58,8 +58,8 @@ public class FixMessage implements FixMessageInterface
     
     public Field getField(int fieldLocation){
     	//System.out.println(fieldLocation +"====="+FixConstants.fieldsNumber[FixConstants.fieldsNumber.length-1]);
-    	if (fieldLocation <= FixConstants.fieldsNumber[FixConstants.fieldsNumber.length-1]){
-    		return this.field[fieldLocation-1];
+    	if (fieldLocation < FixConstants.fieldsNumber[FixConstants.fieldsNumber.length-1]){
+    		return this.field[fieldLocation];
     	}
     	
     	return null;
@@ -129,6 +129,33 @@ public class FixMessage implements FixMessageInterface
 		this.fixMsgOutput= (StringBuilder) in.readObject();
 		delim= in.readChar();
 		
+	}
+	
+	//checks if the session information of these tags is valid 8|9|34|35|49|56|10 
+	public int isValid(){
+		int validTagArray [] = {8,9,34,35,49,56,10};
+		
+		for (int i=0; i<validTagArray.length;i++){
+			System.out.println("Data position("+i+")-->"+field[i].getFieldData().position());
+			System.out.println("Data position("+i+")-->"+field[i].getFieldData().limit());
+			if (field[i].getFieldData().position() < 1 ){
+				return 0;				
+			}		
+		}
+		
+		return 1;
+	}
+	
+	
+	/**
+	 * Resets Field[] data
+	 */
+	public void reset(){		
+		if (field != null){
+			for (int i=0; i<field.length;i++){
+				field[i].reset();
+			}
+		}		
 	}
 
 }
