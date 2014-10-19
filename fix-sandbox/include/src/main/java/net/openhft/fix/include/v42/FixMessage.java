@@ -136,8 +136,6 @@ public class FixMessage implements FixMessageInterface
 		int validTagArray [] = {8,9,34,35,49,56,10};
 		
 		for (int i=0; i<validTagArray.length;i++){
-			System.out.println("Data position("+i+")-->"+field[i].getFieldData().position());
-			System.out.println("Data position("+i+")-->"+field[i].getFieldData().limit());
 			if (field[i].getFieldData().position() < 1 ){
 				return 0;				
 			}		
