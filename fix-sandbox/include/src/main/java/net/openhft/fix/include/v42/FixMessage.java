@@ -15,11 +15,14 @@
  */
 package net.openhft.fix.include.v42;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 import net.openhft.fix.include.util.FixConstants;
+import net.openhft.lang.io.ByteBufferBytes;
 
 public class FixMessage implements FixMessageInterface 
 {
@@ -35,6 +38,10 @@ public class FixMessage implements FixMessageInterface
     public FixMessage(FIXMessageBuilder fixMsgBuilder) {
     	
 	}
+    
+    public Field[] getField(){
+    	return field;
+    }
     
     public FixMessage(Field[] field){
     	this.field = field;
@@ -59,7 +66,7 @@ public class FixMessage implements FixMessageInterface
     public Field getField(int fieldLocation){
     	//System.out.println(fieldLocation +"====="+FixConstants.fieldsNumber[FixConstants.fieldsNumber.length-1]);
     	if (fieldLocation < FixConstants.fieldsNumber[FixConstants.fieldsNumber.length-1]){
-    		return this.field[fieldLocation];
+    		return this.field[fieldLocation-1];
     	}
     	
     	return null;
@@ -133,10 +140,9 @@ public class FixMessage implements FixMessageInterface
 	
 	//checks if the session information of these tags is valid 8|9|34|35|49|56|10 
 	public int isValid(){
-		int validTagArray [] = {8,9,34,35,49,56,10};
-		
+		int validTagArray [] = {8,9,34,35,49,56,10};		
 		for (int i=0; i<validTagArray.length;i++){
-			if (field[i].getFieldData().position() < 1 ){
+			if (field[validTagArray[i]-1].getFieldData().position() < 1 ){
 				return 0;				
 			}		
 		}
