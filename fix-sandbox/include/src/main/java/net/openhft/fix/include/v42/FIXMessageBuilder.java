@@ -141,7 +141,7 @@ public class FIXMessageBuilder implements Cloneable
 		fm.getField(12).getFieldData().writeUTF("StringTestoeriupwouropweiur");
 		//fm.getField(12).getFieldData().position(0);
 		//fm.getField(12).getFieldData().flip();
-		System.out.println(fm.getFixString());
+		System.out.println("-->"+fm.getFixString());
 		fmp.putFixMessageContainer(fmc);
 		
 	}
