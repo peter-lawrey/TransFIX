@@ -6,6 +6,8 @@ import java.util.Arrays;
 
 import net.openhft.fix.compiler.FieldLookup;
 import net.openhft.fix.include.util.FixConstants;
+import net.openhft.fix.include.util.FixMessagePool;
+import net.openhft.fix.include.util.FixMessagePool.FixMessageContainer;
 import net.openhft.lang.io.ByteBufferBytes;
 import net.openhft.lang.io.Bytes;
 import net.openhft.lang.io.DirectStore;
@@ -27,18 +29,24 @@ public class FixMessageReader {
 	@SuppressWarnings("unused")
 	private Bytes fixMsgBytes;
 	private final int FIELD_SIZE=FixConstants.fieldsNumber.length;
-	private Field field[] = new Field[FIELD_SIZE];
-	
-	public Field[] getField() {
-		return field;
-	}
-
 	private StringBuilder tempStringValue= new StringBuilder();
 	private final byte FIELD_TERMINATOR = 1;
 	private byte VERSION_CHECKED=0;
-	private Field fieldFill = new Field();
+	private FixMessage fixMsg;
 	
-	//private HugeArray <FixFieldInterface> fixField = HugeCollections.newArray(FixFieldInterface.class, FIELD_SIZE);
+	//for new objects of this class
+	public FixMessageReader(FixMessage fixMsg){
+		this.fixMsg = fixMsg;
+	}
+	
+	public FixMessage getFixMessage(){
+		return fixMsg;
+	}
+	
+	//for reusing the same object with a new FixMess
+	public void setFixMessage(FixMessage fixMsg){
+		this.fixMsg = fixMsg;
+	}
 	
 	/**
 	 * Accepts a new Fix Message ByteBufferBytes. This method is a precursor to parseFixMsgBytes()
@@ -46,35 +54,20 @@ public class FixMessageReader {
 	 */
 	public void setFixBytes(ByteBufferBytes fixMsgBufBytes){
 		if (this.fixMsgBytes != null){this.fixMsgBytes.clear();}
-		this.fixMsgBytes = fixMsgBufBytes;
-		fieldFill.reset();
-		Arrays.fill(field, 0,field.length,fieldFill);
+		this.fixMsgBytes = fixMsgBufBytes.flip();
 	}
 	/**
 	 * A CharSequence of raw fix message is converted to NativeBytes. This method is a precursor to parseFixMsgBytes()
 	 * @param fixMsgChars
 	 */
-	public void setFixBytes(CharSequence fixMsgChars)
+	public void setFixBytes(String fixMsgChars)
 	{
-		this.fixMsgChars = fixMsgChars;
-		NativeBytes nativeBytes = new DirectStore(fixMsgChars.length()).bytes();
-		nativeBytes.write(((String) fixMsgChars).replace('|', '\u0001').getBytes());
+		this.fixMsgChars = fixMsgChars;				
+		byte [] msgBytes = fixMsgChars.replace('|', '\u0001').getBytes();
+		ByteBufferBytes byteBufBytes = new ByteBufferBytes(ByteBuffer.allocate(msgBytes.length).order(ByteOrder.nativeOrder()));
+		byteBufBytes.write(msgBytes);		
 		if (fixMsgBytes != null){this.fixMsgBytes.clear();}
-		fixMsgBytes = nativeBytes.flip();
-		fieldFill.reset();
-		Arrays.fill(field, 0,field.length, fieldFill);
-	}
-	
-	/**
-	 * Directly uses NativeBytes for parsing. This method is a precursor to parseFixMsgBytes(). Performance of NativeBytes is better during higher load situations
-	 * @param fixNativeBytes
-	 */
-	public void setFixBytes(NativeBytes fixNativeBytes)
-	{
-		if (fixMsgBytes != null){this.fixMsgBytes.clear();}
-		fixMsgBytes = fixNativeBytes.flip();
-		fieldFill.reset();
-		Arrays.fill(field, 0,field.length, fieldFill);
+		fixMsgBytes = byteBufBytes.flip();
 	}
 
 	/**
@@ -86,10 +79,10 @@ public class FixMessageReader {
 	 * System.out.println("Fix Field Name:"+fixField.getName());
 	 * Prints BeginString;
 	 * 
-	 * @return Field []
+	 * @return 
 	 * @throws Exception
 	 */
-	public Field[] parseFixMsgBytes() throws Exception{
+	public void parseFixMsgBytes() throws Exception{
 		
 		if (fixMsgBytes == null ){throw new Exception("Bytes is null or not preceded by setFixBytes()");}
 		
@@ -109,7 +102,7 @@ public class FixMessageReader {
                 long end = fixMsgBytes.position() - 1;
                 fixMsgBytes.limit(end);
                 fixMsgBytes.position(pos);
-                updateFixMessageFields(fieldNum, fixMsgBytes);
+                updateFixMessageField(fieldNum, fixMsgBytes);
 
                 fixMsgBytes.limit(limit);
                 fixMsgBytes.position(end + 1);                
@@ -119,7 +112,7 @@ public class FixMessageReader {
         } finally {
         	fixMsgBytes.selfTerminating(tmpSelf);
         }
-        return field;
+        //return field;
 	}
 	/**
 	 * 
@@ -129,6 +122,13 @@ public class FixMessageReader {
         while (bytes.readByte() != FIELD_TERMINATOR) ;
     }
 	
+	private void updateFixMessageField(int fieldID, Bytes fieldValue){
+		if (fixMsg.getField(fieldID).getFieldData().position() !=0 ){
+			fixMsg.getField(fieldID).getFieldData().writeByte(Field.getMultiValueDelim());//adding delim for multi values
+		}
+		fixMsg.getField(fieldID).setFieldData((ByteBufferBytes)fieldValue);
+	}
+	
 	/**
 	 * 
 	 * @param fieldID
@@ -137,48 +137,49 @@ public class FixMessageReader {
 	 */
 	private void updateFixMessageFields(int fieldID, Bytes fieldValue) throws Exception{
 		
-		if (field[fieldID] ==  null){System.out.println("NULL...."+fieldID);System.exit(0);}
-		field[fieldID].setName(FixConstants.fieldsName[fieldID]);
-		field[fieldID].setNumber(fieldID);
+		//fixMsg.getField(fieldID).setFieldData(fixData[1].getBytes());
+		//if (field[fieldID] ==  null){System.out.println("NULL...."+fieldID);System.exit(0);}
+		fixMsg.getField(fieldID).setName(FixConstants.fieldsName[fieldID]);
+		fixMsg.getField(fieldID).setNumber(fieldID);
 		FixField ff = FieldLookup.fieldFor(FixConstants.fieldsTypeOrdering[fieldID+1]);
 		
 		if (ff.isChar())
 		{
-			field[fieldID].setType(FixField.Boolean);
-			if (field[fieldID].getFieldData().position() !=0 ){
-				field[fieldID].getFieldData().writeByte(Field.getMultiValueDelim());//adding delim for multi values
+			fixMsg.getField(fieldID).setType(FixField.Boolean);
+			if (fixMsg.getField(fieldID).getFieldData().position() !=0 ){
+				fixMsg.getField(fieldID).getFieldData().writeByte(Field.getMultiValueDelim());//adding delim for multi values
 			}
-			field[fieldID].getFieldData().writeChar(fieldValue.readChar());
+			fixMsg.getField(fieldID).getFieldData().writeChar(fieldValue.readChar());
 		}
 		else if (ff.isDouble())
 		{
-			field[fieldID].setType(FixField.Double);
-			if (field[fieldID].getFieldData().position() !=0 ){
-				field[fieldID].getFieldData().writeByte(Field.getMultiValueDelim());
+			fixMsg.getField(fieldID).setType(FixField.Double);
+			if (fixMsg.getField(fieldID).getFieldData().position() !=0 ){
+				fixMsg.getField(fieldID).getFieldData().writeByte(Field.getMultiValueDelim());
 			}
-			field[fieldID].getFieldData().writeDouble(fieldValue.parseDouble());
+			fixMsg.getField(fieldID).getFieldData().writeDouble(fieldValue.parseDouble());
 		}
 		else if (ff.isInt())
 		{
-			field[fieldID].setType(FixField.Int);
-			if (field[fieldID].getFieldData().position() !=0 ){
-				field[fieldID].getFieldData().writeByte(Field.getMultiValueDelim());
+			fixMsg.getField(fieldID).setType(FixField.Int);
+			if (fixMsg.getField(fieldID).getFieldData().position() !=0 ){
+				fixMsg.getField(fieldID).getFieldData().writeByte(Field.getMultiValueDelim());
 			}
-			field[fieldID].getFieldData().writeInt24((int)fieldValue.parseLong());
+			fixMsg.getField(fieldID).getFieldData().writeInt24((int)fieldValue.parseLong());
 		}
 		else if (ff.isLong())
 		{
-			field[fieldID].setType(FixField.Length);
-			if (field[fieldID].getFieldData().position() !=0 ){
-				field[fieldID].getFieldData().writeByte(Field.getMultiValueDelim());
+			fixMsg.getField(fieldID).setType(FixField.Length);
+			if (fixMsg.getField(fieldID).getFieldData().position() !=0 ){
+				fixMsg.getField(fieldID).getFieldData().writeByte(Field.getMultiValueDelim());
 			}
-			field[fieldID].getFieldData().writeLong(fieldValue.parseLong());
+			fixMsg.getField(fieldID).getFieldData().writeLong(fieldValue.parseLong());
 			
 		}else if (ff.isString())
 		{					
-			field[fieldID].setType(FixField.String);
-			if (field[fieldID].getFieldData().position() !=0 ){
-				field[fieldID].getFieldData().writeByte(Field.getMultiValueDelim());
+			fixMsg.getField(fieldID).setType(FixField.String);
+			if (fixMsg.getField(fieldID).getFieldData().position() !=0 ){
+				fixMsg.getField(fieldID).getFieldData().writeByte(Field.getMultiValueDelim());
 			}
 			tempStringValue.setLength(0);
 			fieldValue.parseUTF(tempStringValue, StopCharTesters.ALL);
@@ -191,7 +192,7 @@ public class FixMessageReader {
 					throw new Exception("Only FIX.4.2 supported");
 				}
 			}
-			field[fieldID].getFieldData().write(tempStringValue.toString().getBytes());//???to not use toString()			
+			fixMsg.getField(fieldID).getFieldData().write(tempStringValue.toString().getBytes());//???to not use toString()			
 		}
 		//field[fieldID].printValues();
 	}
@@ -199,7 +200,11 @@ public class FixMessageReader {
 	public static void main (String [] args) throws Exception
 	{
 		String sampleFixMessage = "8=FIX.4.2|9=154|35=6|49=BRKR|56=INVMGR|34=238|52=19980604-07:59:56|23=115686|28=N|55=FIA.MI|54=2|27=250000|44=7900.000000|25=H|10=231|";
-		FixMessageReader fmr = new FixMessageReader();		
+		int fixMsgCount = Runtime.getRuntime().availableProcessors();
+		FixMessagePool fmp = new FIXMessageBuilder().initFixMessagePool(true, fixMsgCount);
+		FixMessageContainer<FixMessage> fmc = fmp.getFixMessageContainer();
+		FixMessage fm =  fmc.getFixMessage();
+		FixMessageReader fmr = new FixMessageReader(fm);		
 		/*try {
 			fmr.parseFixMsgBytes();
 			System.out.println("Parsing done...");
