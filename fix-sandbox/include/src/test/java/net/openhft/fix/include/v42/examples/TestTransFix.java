@@ -40,7 +40,7 @@ public class TestTransFix {
 		FixMessage fm = fmc.getFixMessage();
 		
 		//create an instance of FixMessageReader instance for parsing
-		FixMessageReader fmr = new FixMessageReader();
+		FixMessageReader fmr = new FixMessageReader(fm);
 		
 		//An instance of NativeBytes for converting a String to bytes data 
 		NativeBytes nativeBytes = new DirectStore(sampleFixMessage.length()).bytes();
@@ -54,7 +54,7 @@ public class TestTransFix {
         fmr.parseFixMsgBytes();
         
         //gets a Field array with parsed data
-        Field[] field = fmr.getField();
+        Field[] field = fmr.getFixMessage().getField();
         
         //Sets a checkedout FixMessage instance object with the FIX message information.
         for (int i=0;i<field.length;i++){
@@ -139,37 +139,26 @@ public class TestTransFix {
 		FixMessagePool fmp = new FIXMessageBuilder().initFixMessagePool(true, fixMsgCount);
 		FixMessageContainer<FixMessage> fmc = fmp.getFixMessageContainer();
 		FixMessage fm =  fmc.getFixMessage();
-		FixMessageReader fmr = new FixMessageReader();
-		
-		NativeBytes nativeBytes = null;
-		byte [] msgBytes = null;
-		ByteBufferBytes byteBufBytes = null;
-		
+		FixMessageReader fmr = new FixMessageReader(fm);
+	
 		for (int i=0;i<fixMessagesArray.length;i++){
-			
-			nativeBytes = new DirectStore(fixMessagesArray[i].length()).bytes();
-			nativeBytes.write(fixMessagesArray[i].replace('|', '\u0001').getBytes());
-			msgBytes = fixMessagesArray[i].replace('|', '\u0001').getBytes();
-			byteBufBytes = new ByteBufferBytes(ByteBuffer.allocate(msgBytes.length).order(ByteOrder.nativeOrder()));
-			byteBufBytes.write(msgBytes);
-			fmr.setFixBytes(byteBufBytes);
+			fmr.setFixMessage(fm);
+			fmr.setFixBytes(fixMessagesArray[i]);			
 			try {
 				fmr.parseFixMsgBytes();
-				Field[] field = fmr.getField();
-				
-				for (int j=0;j<field.length;j++){
-		        	try {		        		
-						fm.getField(j).setFieldData(field[j].getFieldData());
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-		        } 
-				assertEquals(1, fm.isValid());
+				if (i==0){
+					System.out.println("Valid-!!->\t  "+fixMessagesArray[i]);
+					assertEquals(1, fm.isValid());
+				}
+				else {
+					System.out.println("INVALID??-->>\t"+fixMessagesArray[i]);
+					assertEquals(0, fm.isValid());
+				}
 				fm.reset();				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				fm.reset();	
 			}
 			
 			//checks the validity of this message
@@ -179,7 +168,5 @@ public class TestTransFix {
 		
 		
 	}
-	
-	
-	
+
 }
