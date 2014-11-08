@@ -40,13 +40,13 @@ Since the default config will load all of the described fields (1-436) for each 
 TransFix supports `java.lang.String` or `NativeBytes `or `ByteBufferBytes `as input data to `FixMessageBuilder`. Its recommended to use `NativeBytes` for maximum performance even though all types work ok. The average `NativeBytes` message parsing time is 0.03us while for transmitting a `FixMessage` the average latency is about 1.5us.
 
 Some latency numbers for parsing a sample Fix message "8=FIX.4.2|9=154|35=6|49=BRKR|56=INVMGR|34=238|52=19980604-07:59:56|23=115686|28=N|55=FIA.MI|54=2|27=250000|44=7900.000000|25=H|10=231|";
-Average parse time was 0.13 us, fields per message 1.00, for 0.30m iterations
-Average parse time was 0.05 us, fields per message 1.00, for 1.00m iterations
-Average parse time was 0.02 us, fields per message 1.00, for 10.00m iterations
-Average parse time was 0.01 us, fields per message 1.00, for 50.00m iterations
+###Average parse time was 0.13 us, fields per message 1.00, for 0.30m iterations
+###Average parse time was 0.05 us, fields per message 1.00, for 1.00m iterations
+###Average parse time was 0.02 us, fields per message 1.00, for 10.00m iterations
+###Average parse time was 0.01 us, fields per message 1.00, for 50.00m iterations
 
-For reverse look up ( setting a single Fix message retrieved from pool and then iterating over it n times to calculate ByteBufferBytes based look up):
-Average reverse-look-up time was 0.75 us, for 0.30m iterations
-Average reverse-look-up time was 0.66 us, for 1.00m iterations
-Average reverse-look-up time was 0.60 us, for 10.00m iterations
-Average reverse-look-up time was 0.57 us, for 50.00m iterations
+###For reverse look up ( setting a single Fix message retrieved from pool and then iterating over it n times to calculate ByteBufferBytes based look up):
+###Average reverse-look-up time was 0.75 us, for 0.30m iterations
+###Average reverse-look-up time was 0.66 us, for 1.00m iterations
+###Average reverse-look-up time was 0.60 us, for 10.00m iterations
+###Average reverse-look-up time was 0.57 us, for 50.00m iterations
