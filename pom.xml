@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright 2014 Higher Frequency Trading
@@ -17,27 +18,152 @@
   ~ limitations under the License.
   -->
 
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
         <groupId>net.openhft</groupId>
-        <artifactId>root-parent-pom</artifactId>
-        <version>1.0.1</version>
+        <artifactId>java-parent-pom</artifactId>
+        <version>1.1.2</version>
+        <relativePath />
     </parent>
 
+    <modelVersion>1.0.0</modelVersion>
     <artifactId>TransFIX</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <name>OpenHFT/TransFIX</name>
+    <description>TransFIX</description>
 
-    <name>TransFIX Parent</name>
-    <description>Faster FIX engine.</description>
+    <dependencyManagement>
+        <dependencies>
 
-    <modules>
-        <module>fix-sandbox</module>
-    </modules>
+            <dependency>
+                <groupId>net.openhft</groupId>
+                <artifactId>third-party-bom</artifactId>
+                <type>pom</type>
+                <version>3.4.8</version>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>net.openhft</groupId>
+                <artifactId>lang</artifactId>
+                <version>6.4.12</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.openhft</groupId>
+                <artifactId>compiler</artifactId>
+                <version>2.2.0</version>
+            </dependency>
+			<dependency>
+	            <groupId>net.openhft</groupId>
+	            <artifactId>model</artifactId>
+	            <version>1.0.0-SNAPSHOT</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>net.openhft</groupId>
+	            <artifactId>collections</artifactId>
+	            <version>3.2.1</version>
+	        </dependency>
+	        
+			<dependency>
+	            <groupId>io.netty</groupId>
+	            <artifactId>netty-all</artifactId>
+	            <version>4.0.14.Final</version>
+	            <scope>compile</scope>
+	        </dependency>
+        
+        </dependencies>
+
+    </dependencyManagement>
+    <dependencies>
+
+        <dependency>
+            <groupId>net.openhft</groupId>
+            <artifactId>compiler</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.openhft</groupId>
+            <artifactId>lang</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.intellij</groupId>
+            <artifactId>annotations</artifactId>
+        </dependency>
+
+			<dependency>
+	            <groupId>net.openhft</groupId>
+	            <artifactId>model</artifactId>
+	        </dependency>
+
+	        <dependency>
+	            <groupId>net.openhft</groupId>
+	            <artifactId>collections</artifactId>
+	        </dependency>
+	        
+			<dependency>
+	            <groupId>io.netty</groupId>
+	            <artifactId>netty-all</artifactId>
+	        </dependency>
+
+
+
+        <!-- test dependencies -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-publish-plugin</artifactId>
+                <configuration>
+                    <checkoutDirectory>${project.build.directory}/scmpublish/javadoc
+                    </checkoutDirectory>
+                    <checkinComment>Publishing javadoc for ${project.artifactId}:${project.version}
+                    </checkinComment>
+                    <content>${project.reporting.outputDirectory}</content>
+                    <skipDeletedFiles>true</skipDeletedFiles>
+                    <pubScmUrl>scm:git:git@github.com:OpenHFT/TransFIX</pubScmUrl>
+                    <scmBranch>gh-pages</scmBranch>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <links>
+                        <link>http://openhft.github.io/Java-Lang/apidocs/</link>
+                    </links>
+                    <excludePackageNames>net.openhft.chronicle.hash.serialization.internal</excludePackageNames>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <scm>
+        <url>scm:git:git@github.com:OpenHFT/TransFIX.git</url>
+        <connection>scm:git:git@github.com:OpenHFT/TransFIX.git</connection>
+        <developerConnection>scm:git:git@github.com:OpenHFT/TransFIX.git</developerConnection>
+        <tag>master</tag>
+    </scm>
+
 
 </project>
+
