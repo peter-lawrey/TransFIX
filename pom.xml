@@ -25,8 +25,9 @@
         <groupId>net.openhft</groupId>
         <artifactId>java-parent-pom</artifactId>
         <version>1.1.2</version>
-        <relativePath/>
+        <relativePath />
     </parent>
+
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>TransFIX</artifactId>
@@ -67,7 +68,6 @@
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
                 <version>4.0.14.Final</version>
-                <scope>compile</scope>
             </dependency>
 
         </dependencies>
