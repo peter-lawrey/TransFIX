@@ -16,19 +16,37 @@
 
 package net.openhft.fix.compiler;
 
-import net.openhft.collections.HugeConfig;
-import net.openhft.collections.HugeHashMap;
+
+import net.openhft.chronicle.map.ChronicleMapBuilder;
 import net.openhft.fix.model.FixField;
+
+import java.util.Map;
 
 /**
  * @author Adam Rosenberger
  */
 public class FieldLookup {
     //private static final Map<String, FixField> FIELD_LOOKUPS = new HashMap<String, FixField>();
-	private static int count=100;
-	private static final HugeConfig config = HugeConfig.SMALL.clone().setSegments(256).setSmallEntrySize(72).setCapacity(count);	
-	private static final HugeHashMap<CharSequence, FixField> FIELD_LOOKUPS = new HugeHashMap<CharSequence, FixField>(config, CharSequence.class, FixField.class);
-	
+    private static int count = 100;
+  /*  private static final HugeConfig config = HugeConfig.SMALL.clone().setSegments(256).setSmallEntrySize
+            (72).setCapacity(count);*/
+    private static final Map<CharSequence, FixField> FIELD_LOOKUPS;
+    //config,
+
+
+    static {
+
+        Map<CharSequence, FixField> map = null;
+        try {
+            map = ChronicleMapBuilder.of(CharSequence.class, FixField.class).create();
+        } catch (Exception e) {
+
+        }
+
+        FIELD_LOOKUPS = map;
+
+    }
+
     static {
         FIELD_LOOKUPS.put("INT", FixField.Int);
         FIELD_LOOKUPS.put("LENGTH", FixField.Length);

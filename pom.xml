@@ -25,7 +25,7 @@
         <groupId>net.openhft</groupId>
         <artifactId>java-parent-pom</artifactId>
         <version>1.1.2</version>
-        <relativePath />
+        <relativePath/>
     </parent>
 
 
@@ -60,8 +60,8 @@
 
             <dependency>
                 <groupId>net.openhft</groupId>
-                <artifactId>collections</artifactId>
-                <version>3.2.1</version>
+                <artifactId>chronicle-map</artifactId>
+                <version>2.0.8a</version>
             </dependency>
 
             <dependency>
@@ -74,6 +74,12 @@
 
     </dependencyManagement>
     <dependencies>
+
+        <dependency>
+            <groupId>net.openhft</groupId>
+            <artifactId>chronicle-map</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>net.openhft</groupId>
@@ -90,10 +96,6 @@
             <artifactId>annotations</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>net.openhft</groupId>
-            <artifactId>collections</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>io.netty</groupId>
