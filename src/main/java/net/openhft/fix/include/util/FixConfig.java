@@ -73,7 +73,7 @@ public class FixConfig implements Cloneable{
 		return this;
 	}
 	
-	private void load42DefaultHeader() throws Exception{
+	void load42DefaultHeader() throws Exception{
 		//this.header = (Header) dvg.nativeInstance(FixMessageType.class);
 		
 	   String actual = new DataValueGenerator().generateNativeObject(FixMessageType.class);	
@@ -107,7 +107,7 @@ public class FixConfig implements Cloneable{
 		return this;
 	}
 	
-	private void load42DefaultMessages() {
+	void load42DefaultMessages() {
 		//this.messages = dvg.nativeInstance(Messages.class);
 		this.messages = new Messages();
 		HugeArray<Message> array = this.messages.setMessagesSize(46).getMessage();//default is 46 messages
@@ -121,7 +121,7 @@ public class FixConfig implements Cloneable{
 		}		
 	}
 
-	private void populateMessage(int msgNo, Message message) {
+	void populateMessage(int msgNo, Message message) {
 		HugeArray<Field> arrayField =null;
 		HugeArray<Group> arrayGroup =null;
 		HugeArray<Group> arrayInnerGroup =null;
@@ -675,7 +675,7 @@ public class FixConfig implements Cloneable{
 		
 	}
 	
-	private void addMessageInfo(
+	void addMessageInfo(
 			Message message, String messageCat, 
 			int [] fieldYesArray, String [] fieldArray, 
 			int [] groupYesArray, String [] groupArray, int[] groupFieldSize, int [][] groupFieldYesArray, String [] groupField,
@@ -735,7 +735,7 @@ public class FixConfig implements Cloneable{
 		}		
 	}
 	
-	private void addGroupToGroup(Group group,			 
+	void addGroupToGroup(Group group,			 
 			int[] innerGroupFieldSize, String [] innerGroupField, String [] innerGroup
 			){
 		HugeArray<Group> arrayInnerGroup =null;
@@ -764,7 +764,7 @@ public class FixConfig implements Cloneable{
 		return this;
 	}
 	
-	private void load42DefaultTrailer() {
+	void load42DefaultTrailer() {
 		//this.trailer = dvg.nativeInstance(Trailer.class);
 		this.trailer = new Trailer();
 		HugeArray<Field> array = this.trailer.setFieldSize(3).getField();
@@ -791,14 +791,14 @@ public class FixConfig implements Cloneable{
 		}
 		return this;
 	}
-	private Field [] fieldArr;
+	Field [] fieldArr;
 	public Field[] getFieldArr() {
 		return fieldArr;
 	}
 
 	//private Field fieldFill = new Field();
 	
-	private void load42DefaultFields() {
+	void load42DefaultFields() {
 		//this.fields = dvg.nativeInstance(Fields.class);
 		//this.fields = new Fields();
 		//HugeArray<Field> array =this.header.setFieldSize(FixConstants.fieldsNumber.length).getField();
@@ -852,7 +852,7 @@ public class FixConfig implements Cloneable{
 		return this;
 	}
 	
-	private void setCurrentFixVersion(){
+	void setCurrentFixVersion(){
 		currentFixVersion = fixVersionMajor | fixVersionMinor | fixVersionServicePack;
 	}
 
