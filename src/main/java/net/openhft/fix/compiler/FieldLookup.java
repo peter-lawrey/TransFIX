@@ -16,37 +16,20 @@
 
 package net.openhft.fix.compiler;
 
-
-import net.openhft.chronicle.map.ChronicleMapBuilder;
+import net.openhft.collections.HugeConfig;
+import net.openhft.collections.HugeHashMap;
 import net.openhft.fix.model.FixField;
 
-import java.util.Map;
-
 /**
- * @author Adam Rosenberger
+ * This class is used for 
+ * @author Adam Rosenberger/Anshul Shelley
  */
 public class FieldLookup {
     //private static final Map<String, FixField> FIELD_LOOKUPS = new HashMap<String, FixField>();
-    private static int count = 100;
-  /*  private static final HugeConfig config = HugeConfig.SMALL.clone().setSegments(256).setSmallEntrySize
-            (72).setCapacity(count);*/
-    private static final Map<CharSequence, FixField> FIELD_LOOKUPS;
-    //config,
-
-
-    static {
-
-        Map<CharSequence, FixField> map = null;
-        try {
-            map = ChronicleMapBuilder.of(CharSequence.class, FixField.class).create();
-        } catch (Exception e) {
-
-        }
-
-        FIELD_LOOKUPS = map;
-
-    }
-
+	private static int count=100;
+	private static final HugeConfig config = HugeConfig.SMALL.clone().setSegments(256).setSmallEntrySize(72).setCapacity(count);	
+	private static final HugeHashMap<CharSequence, FixField> FIELD_LOOKUPS = new HugeHashMap<CharSequence, FixField>(config, CharSequence.class, FixField.class);
+	
     static {
         FIELD_LOOKUPS.put("INT", FixField.Int);
         FIELD_LOOKUPS.put("LENGTH", FixField.Length);
@@ -89,6 +72,11 @@ public class FieldLookup {
         FIELD_LOOKUPS.put("RESERVED4000PLUS", FixField.Reserved4000Plus);
     }
 
+    /**
+     * Looks up and returns appropriate FixField as per 4.2 spec.
+     * @param xmlTag - published 4.2 data type.
+     * @return - FixField
+     */
     public static FixField fieldFor(CharSequence xmlTag) {
         return FIELD_LOOKUPS.get(xmlTag);
     }
