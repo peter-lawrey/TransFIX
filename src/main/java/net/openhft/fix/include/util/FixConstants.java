@@ -15,6 +15,11 @@
  */
 package net.openhft.fix.include.util;
 
+/**
+ * Represents actual Fix 4.2 header/tailer/messages/fields in static arrays. This class is loaded during initialization of 
+ * <FixMessagePool> class and access to array elements is via index thereafter.  
+ *
+ */
 public class FixConstants {
 	
 	public final static String [] headerFieldName = {
