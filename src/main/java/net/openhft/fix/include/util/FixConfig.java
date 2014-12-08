@@ -16,17 +16,31 @@
 
 package net.openhft.fix.include.util;
 
+import java.nio.ByteBuffer;
+
 import net.openhft.compiler.CachedCompiler;
-import net.openhft.fix.compiler.FieldLookup;
-import net.openhft.fix.include.v42.*;
+import net.openhft.fix.include.v42.Components;
+import net.openhft.fix.include.v42.Field;
+import net.openhft.fix.include.v42.Fields;
+import net.openhft.fix.include.v42.FixMessageType;
+import net.openhft.fix.include.v42.Group;
+import net.openhft.fix.include.v42.Header;
+import net.openhft.fix.include.v42.Message;
+import net.openhft.fix.include.v42.Messages;
+import net.openhft.fix.include.v42.Trailer;
 import net.openhft.lang.collection.HugeArray;
 import net.openhft.lang.io.ByteBufferBytes;
 import net.openhft.lang.io.Bytes;
 import net.openhft.lang.model.Byteable;
 import net.openhft.lang.model.DataValueGenerator;
+import net.openhft.fix.compiler.FieldLookup;
 
-import java.nio.ByteBuffer;
-
+/**
+ * Default configuration class for a Fix 4.2 message. Uses static methods to initialize FIX 4.2 header and fields. 
+ * The main purpose of this class is to initialize standard fix 4.2 fields to allocate memory before usage to avoid dynamic 
+ * allocation of ByteBufferBytes during runtime for FIX fields data.  
+ *
+ */
 public class FixConfig implements Cloneable{
 	
 	private int fixVersionMajor;
@@ -62,6 +76,10 @@ public class FixConfig implements Cloneable{
 												.createServerFixComponents()*/
 												.createServerFixFields();
 
+	/**
+	 * Static factory method to initializes FIX message header to default Fix 4.2 version
+	 * @return -FixConfig
+	 */
 	public FixConfig createServerFixHeader(){
 		if ((currentFixVersion & fix4_2_0_mask) !=0){			
 			try {
@@ -73,7 +91,7 @@ public class FixConfig implements Cloneable{
 		return this;
 	}
 	
-	void load42DefaultHeader() throws Exception{
+	private void load42DefaultHeader() throws Exception{
 		//this.header = (Header) dvg.nativeInstance(FixMessageType.class);
 		
 	   String actual = new DataValueGenerator().generateNativeObject(FixMessageType.class);	
@@ -100,6 +118,10 @@ public class FixConfig implements Cloneable{
 		}	
 	}
 
+	/**
+	 * Static factory method to initializes all the standard FIX <Messages> of FIX 4.2 version
+	 * @return -FixConfig
+	 */
 	public FixConfig createServerFixMessages(){
 		if ((currentFixVersion & fix4_2_0_mask) !=0){			
 			load42DefaultMessages();
@@ -107,7 +129,7 @@ public class FixConfig implements Cloneable{
 		return this;
 	}
 	
-	void load42DefaultMessages() {
+	private void load42DefaultMessages() {
 		//this.messages = dvg.nativeInstance(Messages.class);
 		this.messages = new Messages();
 		HugeArray<Message> array = this.messages.setMessagesSize(46).getMessage();//default is 46 messages
@@ -121,7 +143,7 @@ public class FixConfig implements Cloneable{
 		}		
 	}
 
-	void populateMessage(int msgNo, Message message) {
+	private void populateMessage(int msgNo, Message message) {
 		HugeArray<Field> arrayField =null;
 		HugeArray<Group> arrayGroup =null;
 		HugeArray<Group> arrayInnerGroup =null;
@@ -675,7 +697,7 @@ public class FixConfig implements Cloneable{
 		
 	}
 	
-	void addMessageInfo(
+	private void addMessageInfo(
 			Message message, String messageCat, 
 			int [] fieldYesArray, String [] fieldArray, 
 			int [] groupYesArray, String [] groupArray, int[] groupFieldSize, int [][] groupFieldYesArray, String [] groupField,
@@ -735,7 +757,7 @@ public class FixConfig implements Cloneable{
 		}		
 	}
 	
-	void addGroupToGroup(Group group,			 
+	private void addGroupToGroup(Group group,			 
 			int[] innerGroupFieldSize, String [] innerGroupField, String [] innerGroup
 			){
 		HugeArray<Group> arrayInnerGroup =null;
@@ -757,6 +779,10 @@ public class FixConfig implements Cloneable{
 		
 	}
 
+	/**
+	 * Static factory method to initializes Trailer fields of FIX 4.2 version
+	 * @return - FixConfig
+	 */
 	public FixConfig createServerFixTrailer(){
 		if ((currentFixVersion & fix4_2_0_mask) !=0){			
 			load42DefaultTrailer();
@@ -764,7 +790,7 @@ public class FixConfig implements Cloneable{
 		return this;
 	}
 	
-	void load42DefaultTrailer() {
+	private void load42DefaultTrailer() {
 		//this.trailer = dvg.nativeInstance(Trailer.class);
 		this.trailer = new Trailer();
 		HugeArray<Field> array = this.trailer.setFieldSize(3).getField();
@@ -780,25 +806,35 @@ public class FixConfig implements Cloneable{
 		}		
 	}
 
-	public FixConfig createServerFixComponents(){
-		
+	
+	@SuppressWarnings("unused")
+	private FixConfig createServerFixComponents(){		
 		return this;
 	}
 	
+	/**
+	 * Static factory method to initializes all the standard FIX <Field> of FIX 4.2 version
+	 * @return -FixConfig
+	 */
 	public FixConfig createServerFixFields(){
 		if ((currentFixVersion & fix4_2_0_mask) !=0){			
 			load42DefaultFields();
 		}
 		return this;
 	}
-	Field [] fieldArr;
+	
+	private Field [] fieldArr;
+	
+	
+	/** 
+	 * Returns an array of all the initialized Fix Fields
+	 * @return -Field[]
+	 */
 	public Field[] getFieldArr() {
 		return fieldArr;
 	}
 
-	//private Field fieldFill = new Field();
-	
-	void load42DefaultFields() {
+	private void load42DefaultFields() {
 		//this.fields = dvg.nativeInstance(Fields.class);
 		//this.fields = new Fields();
 		//HugeArray<Field> array =this.header.setFieldSize(FixConstants.fieldsNumber.length).getField();
@@ -824,58 +860,103 @@ public class FixConfig implements Cloneable{
 		}	*/	
 	}
 
+	/**
+	 * Returns Fix version 'Major'; like 3 or 4 or 5
+	 * @return - fixVersionMajor
+	 */
 	public int getFixVersionMajor() {
 		return fixVersionMajor;
 	}
 
+	
+	/**
+	 * Static factory method to set FIX protocol version-major
+	 * @param fixVersionMajor
+	 * @return - FixConfig
+	 */
 	public FixConfig setFixVersionMajor(int fixVersionMajor) {
 		this.fixVersionMajor = fixVersionMajor;
 		return this;
 	}
 
+	/**
+	 * Returns minor value of the FIX protocol version like 2 or 4 for Fix 4.2 or 4.4
+	 * @return -fixVersionMinor
+	 */
 	public int getFixVersionMinor() {
 		return fixVersionMinor;
 	}
 
+	/**
+	 * Static factory method to set FIX protocol version-minor
+	 * @param fixVersionMinor
+	 * @return -FixConfig
+	 */
 	public FixConfig setFixVersionMinor(int fixVersionMinor) {
 		this.fixVersionMinor = fixVersionMinor;
 		return this;
 	}
 
+	/**
+	 * Returns Fix Protocol service Pack value for this FIX object
+	 * @return -fixVersionServicePack
+	 */
 	public int getFixVersionServicePack() {
 		return fixVersionServicePack;
 	}
-
+	
+	/**
+	 * Static factory method to set Fix Protocol service Pack value
+	 * @param fixVersionMinor
+	 * @return -FixConfig
+	 */
 	public FixConfig setFixVersionServicePack(int fixVersionServicePack) {
 		this.fixVersionServicePack = fixVersionServicePack;
 		setCurrentFixVersion();
 		return this;
 	}
 	
-	void setCurrentFixVersion(){
+	private void setCurrentFixVersion(){
 		currentFixVersion = fixVersionMajor | fixVersionMinor | fixVersionServicePack;
 	}
 
+	/**
+	 * Returns Tailer object for this FIX message
+	 * @return -trailer
+	 */
 	public Trailer getTrailer() {
 		return trailer;
 	}
-
+	
+	/**
+	 * Returns Header object for this FIX message
+	 * @return -header
+	 */
 	public Header getHeader() {
 		return header;
 	}
-
+	
+	/**
+	 * Returns Messages object for this FIX message
+	 * @return -messages
+	 */
 	public Messages getMessages() {
 		return messages;
 	}
-
+	
+	/**
+	 * Returns Components object for this FIX message
+	 * @return -components
+	 */
 	public Components getComponents() {
 		return components;
 	}
-
+	
+	/**
+	 * Returns Fields object for this FIX message
+	 * @return -fields
+	 */	
 	public Fields getFields() {
 		return fields;
 	}
-	
-	
-
 }
