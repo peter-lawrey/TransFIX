@@ -20,6 +20,10 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+/**
+ * Place holder for FIX Protocol FixMessage field value. This is currently also implemented using ByteBufferBytes
+ *
+ */
 public class Value implements Externalizable
 {
     protected String description;
