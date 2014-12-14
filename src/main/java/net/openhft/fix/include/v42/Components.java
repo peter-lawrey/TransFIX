@@ -23,7 +23,7 @@ import java.io.ObjectOutput;
 import net.openhft.lang.collection.HugeArray;
 
 /*
- * TODO: FIX42 has Components as NULL
+ * This class is a placeholder for future implementation of FIX Components
  * */
 public class Components implements FixMessageType
 {
