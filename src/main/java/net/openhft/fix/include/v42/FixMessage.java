@@ -15,12 +15,16 @@
  */
 package net.openhft.fix.include.v42;
 
-import net.openhft.fix.include.util.FixConstants;
-
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import net.openhft.fix.include.util.FixConstants;
+
+/**
+ * An object of this class represents FIX protocol message. 
+ *
+ */
 public class FixMessage implements FixMessageInterface 
 {
 	protected int major=4;
@@ -32,34 +36,60 @@ public class FixMessage implements FixMessageInterface
     private char equalsChar = '=';
     private Field[] field;
     
+    /**
+     * @param fixMsgBuilder - for static builder implementation.
+     */
     public FixMessage(FIXMessageBuilder fixMsgBuilder) {
     	
 	}
     
+    /**
+     * @return field- Field[] for all data fields in this FIX object
+     */
     public Field[] getField(){
     	return field;
     }
     
+    /**
+     * @param field - Can be used for setting/resetting this object's FIX fields
+     */
     public FixMessage(Field[] field){
     	this.field = field;
     }
 
+    /* (non-Javadoc)
+     * @see net.openhft.fix.include.v42.FixMessageInterface#getMajor()
+     */
     public int getMajor() {
         return major;
     }
 
+    /* (non-Javadoc)
+     * @see net.openhft.fix.include.v42.FixMessageInterface#getMinor()
+     */
     public int getMinor() {
         return minor;
     }
 
+    /* (non-Javadoc)
+     * @see net.openhft.fix.include.v42.FixMessageInterface#getServicepack()
+     */
     public int getServicepack() {
         return servicepack;
     }
 
+    /* (non-Javadoc)
+     * @see net.openhft.fix.include.v42.FixMessageInterface#getType()
+     */
     public CharSequence getType() {
         return type;
     }
     
+    /**
+     * 
+     * @param fieldLocation- Position of this field in the array
+     * @return - Field Object corresponding to the position of the fieldLocation
+     */
     public Field getField(int fieldLocation){
     	//System.out.println(fieldLocation +"====="+FixConstants.fieldsNumber[FixConstants.fieldsNumber.length-1]);
     	if (fieldLocation < FixConstants.fieldsNumber[FixConstants.fieldsNumber.length-1]){
@@ -69,6 +99,9 @@ public class FixMessage implements FixMessageInterface
     	return null;
     }
     
+    /**
+     * @return -String value of this FIX object
+     */
     public String getFixString(){//depends on your business logic
     	//8|9|35|34
     	int msgSize = 0;
@@ -103,6 +136,9 @@ public class FixMessage implements FixMessageInterface
        	return this.fixMsgOutput.toString();
     }
 
+	/* (non-Javadoc)
+	 * @see java.io.Externalizable#writeExternal(java.io.ObjectOutput)
+	 */
 	@Override
 	public void writeExternal(ObjectOutput out) throws IOException {
 		out.writeInt(major);
@@ -113,6 +149,9 @@ public class FixMessage implements FixMessageInterface
 		out.writeChar(delim);
 	}
 	
+	/**
+	 * @return - checksum of tag10 value
+	 */
 	public int getCheckSum(){
 		int checksum=0;
 		if (field != null){
@@ -123,6 +162,9 @@ public class FixMessage implements FixMessageInterface
 		return checksum % 256;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.io.Externalizable#readExternal(java.io.ObjectInput)
+	 */
 	@Override
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException 
 	{
@@ -135,7 +177,11 @@ public class FixMessage implements FixMessageInterface
 		
 	}
 	
-	//checks if the session information of these tags is valid 8|9|34|35|49|56|10 
+	 
+	/**
+	 * checks if the session information of these tags is valid 8|9|34|35|49|56|10
+	 * @return - 0 for Invalid; 1 for valid
+	 */
 	public int isValid(){
 		int validTagArray [] = {8,9,34,35,49,56,10};		
 		for (int i=0; i<validTagArray.length;i++){
@@ -150,7 +196,7 @@ public class FixMessage implements FixMessageInterface
 	
 	/**
 	 * Resets Field[] data
-	 */
+	 */	
 	public void reset(){		
 		if (field != null){
 			for (int i=0; i<field.length;i++){
