@@ -23,6 +23,10 @@ import java.io.ObjectOutput;
 import net.openhft.lang.collection.HugeArray;
 import net.openhft.lang.collection.HugeCollections;
 
+/**
+ * Place holder for FIX Protocol object Message
+ *
+ */
 public class Message implements Externalizable
 {
     protected HugeArray<Field> field;
