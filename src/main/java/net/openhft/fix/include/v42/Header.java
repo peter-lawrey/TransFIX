@@ -23,6 +23,10 @@ import java.io.ObjectOutput;
 import net.openhft.lang.collection.HugeArray;
 import net.openhft.lang.collection.HugeCollections;
 
+/**
+ * Place holder for FIX Protocol object Header
+ *
+ */
 public class Header implements FixMessageType
 {
     protected HugeArray<Field> field;
