@@ -23,6 +23,9 @@ import net.openhft.lang.collection.HugeArray;
 import net.openhft.lang.collection.HugeCollections;
 
 
+/**
+ * Place holder for FIX Protocol object Trailer
+ */
 public class Trailer implements FixMessageType
 {
     protected HugeArray<Field> field;
