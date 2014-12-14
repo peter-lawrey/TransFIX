@@ -17,6 +17,7 @@
 package net.openhft.fix.model;
 
 /**
+ * Enumeration to define primitive JAVA types
  * @author Adam Rosenberger
  */
 public enum DataType {
