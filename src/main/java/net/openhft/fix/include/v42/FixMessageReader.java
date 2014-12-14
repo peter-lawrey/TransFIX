@@ -1,18 +1,3 @@
-/*
- * Copyright 2013 Peter Lawrey
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package net.openhft.fix.include.v42;
 
 import java.nio.ByteBuffer;
@@ -32,8 +17,6 @@ import net.openhft.fix.model.FixField;
 /**
  * 
  * This class is used for parsing a FIX 4.2 message. It follows a standard Fix4.2 protocol Field-specification that adheres to FixCommunity.org  definition.
- * 
- * @author Anshul Shelley
  *
  */
 public class FixMessageReader {
@@ -49,16 +32,26 @@ public class FixMessageReader {
 	private byte VERSION_CHECKED=0;
 	private FixMessage fixMsg;
 	
-	//for new objects of this class
+	
+	/**
+	 * 
+	 * @param fixMsg- FixMessage object to be read/parsed by the object of this class, at the time of initialization.
+	 */
 	public FixMessageReader(FixMessage fixMsg){
 		this.fixMsg = fixMsg;
 	}
 	
+	/**
+	 * @return - Returns FixMessage object to be read/parsed by the object of this class, previously set.
+	 */
 	public FixMessage getFixMessage(){
 		return fixMsg;
 	}
 	
 	//for reusing the same object with a new FixMess
+	/**
+	 * @param fixMsg -FixMessage object to be read/parsed by the object of this class
+	 */
 	public void setFixMessage(FixMessage fixMsg){
 		this.fixMsg = fixMsg;
 	}
@@ -74,7 +67,7 @@ public class FixMessageReader {
 	/**
 	 * A CharSequence of raw fix message is converted to NativeBytes. This method is a precursor to parseFixMsgBytes()
 	 * @param fixMsgChars
-	 */
+	 */	
 	public void setFixBytes(String fixMsgChars)
 	{
 		this.fixMsgChars = fixMsgChars;				
@@ -133,11 +126,11 @@ public class FixMessageReader {
 	 * 
 	 * @param bytes
 	 */
-	void searchForTheEndOfField(Bytes bytes) {
+	private void searchForTheEndOfField(Bytes bytes) {
         while (bytes.readByte() != FIELD_TERMINATOR) ;
     }
 	
-	void updateFixMessageField(int fieldID, Bytes fieldValue){
+	private void updateFixMessageField(int fieldID, Bytes fieldValue){
 		if (fixMsg.getField(fieldID).getFieldData().position() !=0 ){
 			fixMsg.getField(fieldID).getFieldData().writeByte(Field.getMultiValueDelim());//adding delim for multi values
 		}
@@ -145,12 +138,12 @@ public class FixMessageReader {
 	}
 	
 	/**
-	 * 
+	 * Iteratively sets all the fields based on identifying corresponding java data types for this FixObject
 	 * @param fieldID
 	 * @param fieldValue
 	 * @throws Exception
 	 */
-	void updateFixMessageFields(int fieldID, Bytes fieldValue) throws Exception{
+	private void updateFixMessageFields(int fieldID, Bytes fieldValue) throws Exception{
 		
 		//fixMsg.getField(fieldID).setFieldData(fixData[1].getBytes());
 		//if (field[fieldID] ==  null){System.out.println("NULL...."+fieldID);System.exit(0);}
