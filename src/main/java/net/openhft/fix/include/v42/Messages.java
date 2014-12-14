@@ -23,6 +23,10 @@ import java.io.ObjectOutput;
 import net.openhft.lang.collection.HugeArray;
 import net.openhft.lang.collection.HugeCollections;
 
+/**
+ * Encapsulating class for representing all FIX Protocol object Messages
+ *
+ */
 public class Messages implements FixMessageType
 {
     protected HugeArray<Message> messageArr;
