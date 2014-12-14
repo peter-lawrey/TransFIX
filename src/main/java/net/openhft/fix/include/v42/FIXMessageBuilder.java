@@ -16,18 +16,13 @@
 
 package net.openhft.fix.include.v42;
 
-import java.nio.ByteBuffer;
-
-import sun.nio.ch.DirectBuffer;
 import net.openhft.fix.include.util.FixConfig;
 import net.openhft.fix.include.util.FixMessagePool;
 import net.openhft.fix.include.util.FixMessagePool.FixMessageContainer;
-import net.openhft.lang.io.DirectStore;
-import net.openhft.lang.io.NativeBytes;
 import net.openhft.lang.model.DataValueGenerator;
 
 /**
- * 
+ * This class is used for creating off-heap message objects for the corresponding FIX protocol object
  * */
 
 public class FIXMessageBuilder implements Cloneable 
@@ -41,6 +36,9 @@ public class FIXMessageBuilder implements Cloneable
 	private FixConfig fixConfig;
 	private int poolSize = 10;
     
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
 	public FIXMessageBuilder clone() {
         try {
             return (FIXMessageBuilder) super.clone();
@@ -49,6 +47,12 @@ public class FIXMessageBuilder implements Cloneable
         }
     }
 	
+	/**
+	 * Initializes and returns a Fix Object pool Object.
+	 * @param useDefault
+	 * @param poolSize
+	 * @return
+	 */
 	public FixMessagePool initFixMessagePool(boolean useDefault, int poolSize){
 		this.poolSize = poolSize;
 		/*if (useDefault){
@@ -76,6 +80,11 @@ public class FIXMessageBuilder implements Cloneable
 	}
 	
    
+    /**
+     * Creates FIX protocol header
+     * @param fieldCount
+     * @return
+     */
     public FIXMessageBuilder createHeader(int fieldCount) {
     	 this.header = dvg.nativeInstance(Header.class);
 	     this.header.setFieldSize(fieldCount).getField();
@@ -83,44 +92,80 @@ public class FIXMessageBuilder implements Cloneable
         return this;
     }
 
+    /**
+     * Creates FIX protocol Messages
+     * @param messagesSize
+     * @param fieldSize
+     * @param groupSize
+     * @return
+     */
     public FIXMessageBuilder createMessages(int messagesSize, int fieldSize, int groupSize) {
         this.messages = dvg.nativeInstance(Messages.class);
         this.messages.setMessagesSize(messagesSize).setFieldSize(fieldSize).setGroupSize(groupSize).getMessage();
         return this;
     }	
     
+    /**
+     * Creates FIX Protocol Trailer
+     * @param fieldSize
+     * @return
+     */
     public FIXMessageBuilder createTrailer(int fieldSize) {
         this.trailer = dvg.nativeInstance(Trailer.class);
         this.trailer.getField();//not setting the size since default are only 3 fields.
         return this;
 	}
     
+    /**
+     * Currently un-implemented since all the field headers are included inside the Field object
+     * @return- 
+     */
     public FIXMessageBuilder createComponents() {
         return this;
     }
 
+    /**
+     * @param fieldSize
+     * @param valueSize
+     * @return
+     */
     public FIXMessageBuilder createFields(int fieldSize, int valueSize) {        
         this.fields = dvg.nativeInstance(Fields.class);
         this.fields.setFieldSize(fieldSize).setValueSize(valueSize);
         return this;
     }
     
+    /**
+     * @return - Header object
+     */
     public Header getHeader() {
 		return header;
 	}
 
+	/**
+	 * @return - Message object
+	 */
 	public Messages getMessages() {
 		return messages;
 	}
 
+	/**
+	 * @return -trailer Object
+	 */
 	public Trailer getTrailer() {
 		return trailer;
 	}
 
+	/**
+	 * @return -components object
+	 */
 	public Components getComp() {
 		return comp;
 	}
 
+	/**
+	 * @return - Reference to Fields object that contains individual Field object for this FIX object
+	 */
 	public Fields getFields() {
 		return fields;
 	}
