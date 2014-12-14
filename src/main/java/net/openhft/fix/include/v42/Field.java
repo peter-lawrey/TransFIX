@@ -25,10 +25,8 @@ import net.openhft.fix.model.FixFieldTypeInterface;
 import net.openhft.lang.io.ByteBufferBytes;
 import net.openhft.lang.io.Bytes;
 /**
- * 
- * Class with different fix Fields
- * 
- * @author Anshul Shelley
+ * Represents a FIX protocol 4.2 field. A field's value is represented by ByteBufferBytes with a default size of 1MB. 
+ *  
  *
  */
 public class Field implements FixFieldInterface
@@ -86,23 +84,40 @@ public class Field implements FixFieldInterface
         this.number = value;
     }
 
+    /* (non-Javadoc)
+     * @see net.openhft.fix.include.v42.FixFieldInterface#getRequired()
+     */
     public CharSequence getRequired() {
         return required;
     }
 
+    /* (non-Javadoc)
+     * @see net.openhft.fix.include.v42.FixFieldInterface#setRequired(java.lang.CharSequence)
+     */
     public void setRequired(CharSequence value) {
         this.required = value;
     }
 
+    /* (non-Javadoc)
+     * @see net.openhft.fix.include.v42.FixFieldInterface#getType()
+     */
     public FixFieldTypeInterface getType() {
         return type;
     }
 
+    /* (non-Javadoc)
+     * @see net.openhft.fix.include.v42.FixFieldInterface#setType(net.openhft.fix.model.FixFieldTypeInterface)
+     */
     public void setType(FixFieldTypeInterface value) {
         this.type = value;
     }
 
-	public void writeExternal(ObjectOutput out) throws IOException {
+	/**
+	 * Used for serialization
+	 * @param out
+	 * @throws IOException
+	 */
+	void writeExternal(ObjectOutput out) throws IOException {
 		// TODO Auto-generated method stub
 	    //out.writeObject(value);
 	    out.writeUTF((String)name);
@@ -113,7 +128,13 @@ public class Field implements FixFieldInterface
 	    
 	}
 
-	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+	/**
+	 * Read serialzed bytes for this Field
+	 * @param in
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 		// TODO Auto-generated method stub
 		//value = (HugeArray<Value>) in.readObject();
 		name = in.readUTF();
@@ -123,10 +144,17 @@ public class Field implements FixFieldInterface
 	    valueSize = in.readInt();
 	}
 
+	/* (non-Javadoc)
+	 * @see net.openhft.fix.include.v42.FixFieldInterface#getFieldData()
+	 */
 	public ByteBufferBytes getFieldData() {
 		return fieldData;
 	}
 	
+	/**
+	 * Update ByteBufferBytes field data object
+	 * @param bytes
+	 */
 	public void setFieldData(byte[] bytes){
 		this.fieldData.write(bytes);
 	}
@@ -135,10 +163,17 @@ public class Field implements FixFieldInterface
 		this.fieldData.write(bytes);
 	}
 	
+	/**
+	 * If this field is repeated inside the FIX tag, use this delimiter for parsing. This is not related to Multi-leg data
+	 * @return
+	 */
 	public static byte getMultiValueDelim() {
 		return MULTI_VALUE_DELIM;
 	}
 
+	/* (non-Javadoc)
+	 * @see net.openhft.fix.include.v42.FixFieldInterface#reset()
+	 */
 	@Override
 	public void reset() {
 		
@@ -149,11 +184,11 @@ public class Field implements FixFieldInterface
 		this.type = null;
 		this.valueSize = -1;
 	}
-	
-	public void printValues(){
-		System.out.println("name "+name);
-	}
 
+	/**
+	 * Position of this field's ByteBufferBytes
+	 * @return
+	 */
 	public int getFieldDataPostion() {		
 		return (int)fieldData.position();
 	}
