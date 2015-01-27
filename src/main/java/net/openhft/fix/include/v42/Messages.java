@@ -16,84 +16,86 @@
 
 package net.openhft.fix.include.v42;
 
+import net.openhft.lang.collection.HugeArray;
+import net.openhft.lang.collection.HugeCollections;
+
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import net.openhft.lang.collection.HugeArray;
-import net.openhft.lang.collection.HugeCollections;
-
 /**
  * Encapsulating class for representing all FIX Protocol object Messages
- *
  */
-public class Messages implements FixMessageType
-{
+public class Messages implements FixMessageType {
     protected HugeArray<Message> messageArr;
-    protected int messageSize;   
+    protected int messageSize;
     protected int fieldSize;
     protected int groupSize;
-    
-    
+
+
     @SuppressWarnings("unchecked")
-	public Messages setMessagesSize(int messageSize){
-    	this.messageSize=messageSize;
-    	return this;
+    public Messages setMessagesSize(int messageSize) {
+        this.messageSize = messageSize;
+        return this;
     }
-    
+
     @SuppressWarnings("unchecked")
-	public Messages setFieldSize(int fieldSize){this.fieldSize=fieldSize;return this;}
-    
+    public Messages setFieldSize(int fieldSize) {
+        this.fieldSize = fieldSize;
+        return this;
+    }
+
     @SuppressWarnings("unchecked")
-	public Messages setGroupSize(int groupSize){this.groupSize=groupSize;return this;}
-        
+    public Messages setGroupSize(int groupSize) {
+        this.groupSize = groupSize;
+        return this;
+    }
+
     @SuppressWarnings("unchecked")
-	public HugeArray<Message> getMessage() {
+    public HugeArray<Message> getMessage() {
         if (messageArr == null) {
             messageArr = HugeCollections.newArray(Message.class, messageSize);
-            for (int i=0;i<messageSize;i++)
-            {
-            	Message message = messageArr.get(i);
-            	message.setFieldSize(fieldSize);
-            	message.setGroupSize(groupSize);
+            for (int i = 0; i < messageSize; i++) {
+                Message message = messageArr.get(i);
+                message.setFieldSize(fieldSize);
+                message.setGroupSize(groupSize);
             }
         }
         return this.messageArr;
     }
 
-	@Override
-	public void writeExternal(ObjectOutput out) throws IOException {
-	
-	    out.writeObject(messageArr);
-	    out.writeInt(messageSize);
-	    out.writeInt(fieldSize);
-	    out.writeInt(groupSize);
-		
-	}
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void readExternal(ObjectInput in) throws IOException,
-			ClassNotFoundException {
-		messageArr= (HugeArray<Message>) in.readObject();
-		messageSize= in.readInt();
-		fieldSize= in.readInt();
-		groupSize = in.readInt();
-		
-	}
+        out.writeObject(messageArr);
+        out.writeInt(messageSize);
+        out.writeInt(fieldSize);
+        out.writeInt(groupSize);
 
-	@Override
-	public <T> T getField() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    }
 
-	@Override
-	public <T> T setValueSize(int valueSize) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public void readExternal(ObjectInput in) throws IOException,
+            ClassNotFoundException {
+        messageArr = (HugeArray<Message>) in.readObject();
+        messageSize = in.readInt();
+        fieldSize = in.readInt();
+        groupSize = in.readInt();
 
+    }
+
+    @Override
+    public <T> T getField() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public <T> T setValueSize(int valueSize) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 
 }

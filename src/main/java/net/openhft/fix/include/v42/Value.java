@@ -21,11 +21,10 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Place holder for FIX Protocol FixMessage field value. This is currently also implemented using ByteBufferBytes
- *
+ * Place holder for FIX Protocol FixMessage field value. This is currently also implemented using
+ * ByteBufferBytes
  */
-public class Value implements Externalizable
-{
+public class Value implements Externalizable {
     protected String description;
     protected String _enum;//predefined OR UserDefined
 
@@ -45,20 +44,20 @@ public class Value implements Externalizable
         this._enum = value;
     }
 
-	@Override
-	public void writeExternal(ObjectOutput out) throws IOException {
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
 
-	    out.writeUTF(description);
-	    out.writeUTF(_enum);
-		
-	}
+        out.writeUTF(description);
+        out.writeUTF(_enum);
 
-	@Override
-	public void readExternal(ObjectInput in) throws IOException,
-			ClassNotFoundException {
-		description = in.readUTF();
-		_enum = in.readUTF();
-		
-	}
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException,
+            ClassNotFoundException {
+        description = in.readUTF();
+        _enum = in.readUTF();
+
+    }
 
 }

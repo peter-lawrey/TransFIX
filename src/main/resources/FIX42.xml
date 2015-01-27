@@ -1856,7 +1856,8 @@
             <value enum='X'
                    description='SHORT_EXEMPT_TRANSACTION_FOR_MEMBER_COMPETING_MARKET_MAKER_NOT_AFFILIATED_WITH_THE_FIRM_CLEARING_THE_TRADE'/>
             <value enum='Y' description='PROGRAM_ORDER_NON_INDEX_ARB_FOR_OTHER_AGENCY'/>
-            <value enum='Z' description='SHORT_EXEMPT_TRANSACTION_FOR_NON_MEMBER_COMPETING_MARKET_MAKER'/>
+            <value enum='Z'
+                   description='SHORT_EXEMPT_TRANSACTION_FOR_NON_MEMBER_COMPETING_MARKET_MAKER'/>
         </field>
         <field number='48' name='SecurityID' type='STRING'/>
         <field number='49' name='SenderCompID' type='STRING'/>
@@ -1995,7 +1996,8 @@
             <value enum='0' description='TOO_LATE_TO_CANCEL'/>
             <value enum='1' description='UNKNOWN_ORDER'/>
             <value enum='2' description='BROKER_OPTION'/>
-            <value enum='3' description='ORDER_ALREADY_IN_PENDING_CANCEL_OR_PENDING_REPLACE_STATUS'/>
+            <value enum='3'
+                   description='ORDER_ALREADY_IN_PENDING_CANCEL_OR_PENDING_REPLACE_STATUS'/>
         </field>
         <field number='103' name='OrdRejReason' type='INT'>
             <value enum='0' description='BROKER_OPTION'/>
@@ -2460,14 +2462,16 @@
         <field number='320' name='SecurityReqID' type='STRING'/>
         <field number='321' name='SecurityRequestType' type='INT'>
             <value enum='0' description='REQUEST_SECURITY_IDENTITY_AND_SPECIFICATIONS'/>
-            <value enum='1' description='REQUEST_SECURITY_IDENTITY_FOR_THE_SPECIFICATIONS_PROVIDED'/>
+            <value enum='1'
+                   description='REQUEST_SECURITY_IDENTITY_FOR_THE_SPECIFICATIONS_PROVIDED'/>
             <value enum='2' description='REQUEST_LIST_SECURITY_TYPES'/>
             <value enum='3' description='REQUEST_LIST_SECURITIES'/>
         </field>
         <field number='322' name='SecurityResponseID' type='STRING'/>
         <field number='323' name='SecurityResponseType' type='INT'>
             <value enum='1' description='ACCEPT_SECURITY_PROPOSAL_AS_IS'/>
-            <value enum='2' description='ACCEPT_SECURITY_PROPOSAL_WITH_REVISIONS_AS_INDICATED_IN_THE_MESSAGE'/>
+            <value enum='2'
+                   description='ACCEPT_SECURITY_PROPOSAL_WITH_REVISIONS_AS_INDICATED_IN_THE_MESSAGE'/>
             <value enum='3' description='LIST_OF_SECURITY_TYPES_RETURNED_PER_REQUEST'/>
             <value enum='4' description='LIST_OF_SECURITIES_RETURNED_PER_REQUEST'/>
             <value enum='5' description='REJECT_SECURITY_PROPOSAL'/>

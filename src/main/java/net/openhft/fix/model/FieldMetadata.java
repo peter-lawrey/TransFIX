@@ -20,6 +20,7 @@ import java.util.EnumSet;
 
 /**
  * Used for a FIX field's meta data like number, position, types etc.
+ *
  * @author Adam Rosenberger
  */
 class FieldMetadata {

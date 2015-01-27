@@ -38,32 +38,32 @@ public class NettyFrameDecoder extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        doDecode(in,out);
+        doDecode(in, out);
     }
 
     /**
      * TODO: loop for more messages in the ByteBuf
-        */
+     */
     void doDecode(ByteBuf in, List<Object> out) {
-        if(m_msgLength == -1) {
-            if(in.readableBytes() >= NettyFrameHelper.MSG_MIN_BYTES) {
+        if (m_msgLength == -1) {
+            if (in.readableBytes() >= NettyFrameHelper.MSG_MIN_BYTES) {
                 //int rindex = in.readerIndex();
 
-                int bsi = in.indexOf(0,12,NettyFrameHelper.BYTE_SOH);
-                int bli = in.indexOf(12,20,NettyFrameHelper.BYTE_SOH);
+                int bsi = in.indexOf(0, 12, NettyFrameHelper.BYTE_SOH);
+                int bli = in.indexOf(12, 20, NettyFrameHelper.BYTE_SOH);
 
                 // check the existence of:
                 // - BeginString 8=
                 // - BodyLength  9=
-                if( in.getByte(0)       == NettyFrameHelper.BYTE_BEGIN_STRING &&
-                    in.getByte(1)       == NettyFrameHelper.BYTE_EQUALS       &&
-                    in.getByte(bsi + 1) == NettyFrameHelper.BYTE_BODY_LENGTH  &&
-                    in.getByte(bsi + 2) == NettyFrameHelper.BYTE_EQUALS       ) {
+                if (in.getByte(0) == NettyFrameHelper.BYTE_BEGIN_STRING &&
+                        in.getByte(1) == NettyFrameHelper.BYTE_EQUALS &&
+                        in.getByte(bsi + 1) == NettyFrameHelper.BYTE_BODY_LENGTH &&
+                        in.getByte(bsi + 2) == NettyFrameHelper.BYTE_EQUALS) {
 
                     int bodyLength = 0;
-                    for(int i=bsi+3;i<bli;i++) {
+                    for (int i = bsi + 3; i < bli; i++) {
                         bodyLength *= 10;
-                        bodyLength += ((int)in.getByte(i) - (int)'0');
+                        bodyLength += ((int) in.getByte(i) - (int) '0');
                     }
 
                     m_msgLength = 1 + bodyLength + bli + NettyFrameHelper.MSG_CSUM_LEN;
@@ -73,8 +73,8 @@ public class NettyFrameDecoder extends ByteToMessageDecoder {
             }
         }
 
-        if(m_msgLength != -1 && in.readableBytes() >= m_msgLength){
-            if(in.readableBytes() >= m_msgLength) {
+        if (m_msgLength != -1 && in.readableBytes() >= m_msgLength) {
+            if (in.readableBytes() >= m_msgLength) {
                 byte[] rv = new byte[m_msgLength];
                 in.readBytes(rv);
                 in.discardReadBytes();

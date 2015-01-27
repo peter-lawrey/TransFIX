@@ -18,9 +18,10 @@ package net.openhft.fix.model;
 
 /**
  * This enum determines the mapping of fix 4.2 datatypes to java primitives
+ *
  * @author Adam Rosenberger/Anshul Shelley
  */
-public enum FixField implements FixFieldTypeInterface{
+public enum FixField implements FixFieldTypeInterface {
     Int(DataType.Int),
     Length(DataType.Long),
     TagNum(DataType.Long),
@@ -69,7 +70,7 @@ public enum FixField implements FixFieldTypeInterface{
     public final boolean isInt() {
         return dataType == DataType.Int;
     }
-    
+
     public final boolean isLong() {
         return dataType == DataType.Long;
     }
@@ -77,7 +78,7 @@ public enum FixField implements FixFieldTypeInterface{
     public final boolean isFloat() {
         return dataType == DataType.Float;
     }
-    
+
     public final boolean isDouble() {
         return dataType == DataType.Double;
     }
@@ -89,7 +90,7 @@ public enum FixField implements FixFieldTypeInterface{
     public final boolean isString() {
         return dataType == DataType.String;
     }
-    
+
     public final boolean isBoolean() {
         return dataType == DataType.Boolean;
     }

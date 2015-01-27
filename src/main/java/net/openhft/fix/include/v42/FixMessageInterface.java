@@ -19,22 +19,23 @@ import java.io.Externalizable;
 
 /**
  * Interface necessary to implement a FixMessage object
- *
  */
-public interface FixMessageInterface extends Externalizable
-{
-     /**
-	 * @return - int value of FIX major version
-	 */
-    public int getMajor() ;
+public interface FixMessageInterface extends Externalizable {
+    /**
+     * @return - int value of FIX major version
+     */
+    public int getMajor();
+
     /**
      * @return - int value of FIX minor version
      */
-    public int getMinor() ;
+    public int getMinor();
+
     /**
      * @return - int value of FIX service pack
      */
-    public int getServicepack() ;
+    public int getServicepack();
+
     /**
      * @return - CharSequence of this FIX message type
      */

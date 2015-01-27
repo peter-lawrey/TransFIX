@@ -23,7 +23,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * This class is used for 
+ * This class is used for
+ *
  * @author Adam Rosenberger/Anshul Shelley
  */
 public class FieldLookup {
@@ -46,7 +47,7 @@ public class FieldLookup {
 
     private static final Map<CharSequence, FixField> FIELD_LOOKUPS =
             new TreeMap<>(charSequenceIgnoreCaseComparator);
-    
+
     static {
         FIELD_LOOKUPS.put("INT", FixField.Int);
         FIELD_LOOKUPS.put("LENGTH", FixField.Length);
@@ -91,6 +92,7 @@ public class FieldLookup {
 
     /**
      * Looks up and returns appropriate FixField as per 4.2 spec.
+     *
      * @param xmlTag - published 4.2 data type.
      * @return - FixField
      */

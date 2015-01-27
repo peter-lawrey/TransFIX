@@ -15,25 +15,25 @@
  */
 
 package net.openhft.fix.include.util;
+
 import java.io.Externalizable;
-import net.openhft.fix.include.v42.FixMessage;
 
 /**
- * Interface for defining a FixMessage Object Factory. An implementation of this interface is required for 
+ * Interface for defining a FixMessage Object Factory. An implementation of this interface is required for
  * intializing FixMessagePool.
  *
  * @param <FixMessage>
  */
 @SuppressWarnings("hiding")
-public interface FixPoolFactory <FixMessage> extends Externalizable{	
-		/**
-		 * This method creates a new instance of FixMessage object to be used by the FixMessagePool. 
-		 * A FixMessage created from this method should have all its fields initialized for pre-allocation
-		 * of memory required to be re-used for each one of its fields. Each Field object of this FixMessage object
-		 * uses ByteBufferBytes for re-use purpose.
-		 * 
-		 * @param useDefault -Choose to use defaults inside FixConfig
-		 * @return -a newly created FixMessage Object
-		 */
-		public FixMessage create(boolean useDefault);	
+public interface FixPoolFactory<FixMessage> extends Externalizable {
+    /**
+     * This method creates a new instance of FixMessage object to be used by the FixMessagePool.
+     * A FixMessage created from this method should have all its fields initialized for pre-allocation
+     * of memory required to be re-used for each one of its fields. Each Field object of this FixMessage object
+     * uses ByteBufferBytes for re-use purpose.
+     *
+     * @param useDefault -Choose to use defaults inside FixConfig
+     * @return -a newly created FixMessage Object
+     */
+    public FixMessage create(boolean useDefault);
 }

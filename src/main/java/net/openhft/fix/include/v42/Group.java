@@ -15,41 +15,46 @@
  */
 package net.openhft.fix.include.v42;
 
+import net.openhft.lang.collection.HugeArray;
+import net.openhft.lang.collection.HugeCollections;
+
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import net.openhft.lang.collection.HugeArray;
-import net.openhft.lang.collection.HugeCollections;
-
 /**
  * Place holder for FIX Protocol object Group
- *
  */
-public class Group implements Externalizable
-{
+public class Group implements Externalizable {
 
     protected HugeArray<Field> field;
     protected HugeArray<Group> group;
     protected String name;
     protected String required;
-	protected int fieldSize;
-	protected int groupSize;
+    protected int fieldSize;
+    protected int groupSize;
 
-    public Group setFieldSize(int fieldSize){this.fieldSize = fieldSize;return this;}
-    public Group setGroupSize(int groupSize){this.groupSize = groupSize;return this;}
-    
+    public Group setFieldSize(int fieldSize) {
+        this.fieldSize = fieldSize;
+        return this;
+    }
+
+    public Group setGroupSize(int groupSize) {
+        this.groupSize = groupSize;
+        return this;
+    }
+
     public HugeArray<Field> getField() {
         if (field == null) {
-        	field = HugeCollections.newArray(Field.class, fieldSize);
+            field = HugeCollections.newArray(Field.class, fieldSize);
         }
         return this.field;
     }
-    
+
     public HugeArray<Group> getGroup() {
         if (group == null) {
-        	group = HugeCollections.newArray(Group.class, groupSize);
+            group = HugeCollections.newArray(Group.class, groupSize);
         }
         return this.group;
     }
@@ -69,28 +74,30 @@ public class Group implements Externalizable
     public void setRequired(String value) {
         this.required = value;
     }
-	@Override
-	public void writeExternal(ObjectOutput out) throws IOException {
-		out.writeObject(field);
-		out.writeObject(group);
-		out.writeUTF(name);
-		out.writeUTF(required);
-		out.writeInt(fieldSize);
-		out.writeInt(groupSize);
-		
-	}
-	@SuppressWarnings("unchecked")
-	@Override
-	public void readExternal(ObjectInput in) throws IOException,
-			ClassNotFoundException {
-		field= (HugeArray<Field>) in.readObject();
-		group= (HugeArray<Group>) in.readObject();
-		name= in.readUTF();
-		required= in.readUTF();
-		fieldSize= in.readInt();
-		groupSize= in.readInt();
-		
-		
-	}
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeObject(field);
+        out.writeObject(group);
+        out.writeUTF(name);
+        out.writeUTF(required);
+        out.writeInt(fieldSize);
+        out.writeInt(groupSize);
+
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void readExternal(ObjectInput in) throws IOException,
+            ClassNotFoundException {
+        field = (HugeArray<Field>) in.readObject();
+        group = (HugeArray<Group>) in.readObject();
+        name = in.readUTF();
+        required = in.readUTF();
+        fieldSize = in.readInt();
+        groupSize = in.readInt();
+
+
+    }
 
 }

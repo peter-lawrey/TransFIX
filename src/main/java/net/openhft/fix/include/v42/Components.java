@@ -20,60 +20,57 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import net.openhft.lang.collection.HugeArray;
-
 /*
  * This class is a placeholder for future implementation of FIX Components
  * */
-public class Components implements FixMessageType
-{
+public class Components implements FixMessageType {
 
-	@Override
-	public <T> T getField() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public <T> T getField() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public <T> T setFieldSize(int fieldSize) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public <T> T setFieldSize(int fieldSize) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public <T> T setValueSize(int valueSize) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public <T> T setValueSize(int valueSize) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public <T> T getMessage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public <T> T getMessage() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public <T> T setMessagesSize(int messageSize) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public <T> T setMessagesSize(int messageSize) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public <T> T setGroupSize(int groupSize) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public <T> T setGroupSize(int groupSize) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public void writeExternal(ObjectOutput out) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void readExternal(ObjectInput in) throws IOException,
-			ClassNotFoundException {
-		// TODO Auto-generated method stub
-		
-	}
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException,
+            ClassNotFoundException {
+        // TODO Auto-generated method stub
+
+    }
 }

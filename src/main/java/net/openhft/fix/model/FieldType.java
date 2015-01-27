@@ -18,6 +18,7 @@ package net.openhft.fix.model;
 
 /**
  * Fix Field type as per FIX definition
+ *
  * @author Adam Rosenberger
  */
 public enum FieldType {

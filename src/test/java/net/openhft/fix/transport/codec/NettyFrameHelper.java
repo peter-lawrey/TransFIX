@@ -19,13 +19,13 @@ package net.openhft.fix.transport.codec;
  * @author lburgazzoli
  */
 public class NettyFrameHelper {
-    public static final int    MSG_MIN_BYTES     = 30;
-    public static final int    MSG_CSUM_LEN      = 7;
-    public static final byte   BYTE_EQUALS       = '=';
-    public static final char   CHAR_EQUALS       = '=';
-    public static final byte   BYTE_SOH          = 0x01;
-    public static final char   CHAR_SOH          = (char)0x01;
-    public static final char   CHAR_PIPE         = '|';
-    public static final byte   BYTE_BEGIN_STRING = '8';
-    public static final byte   BYTE_BODY_LENGTH  = '9';
+    public static final int MSG_MIN_BYTES = 30;
+    public static final int MSG_CSUM_LEN = 7;
+    public static final byte BYTE_EQUALS = '=';
+    public static final char CHAR_EQUALS = '=';
+    public static final byte BYTE_SOH = 0x01;
+    public static final char CHAR_SOH = (char) 0x01;
+    public static final char CHAR_PIPE = '|';
+    public static final byte BYTE_BEGIN_STRING = '8';
+    public static final byte BYTE_BODY_LENGTH = '9';
 }

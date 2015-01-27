@@ -18,88 +18,88 @@
   -->
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-  <xs:element name="fix">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="header"/>
-        <xs:element ref="messages"/>
-        <xs:element ref="trailer"/>
-        <xs:element ref="components"/>
-        <xs:element ref="fields"/>
-      </xs:sequence>
-      <xs:attribute name="major" use="required" type="xs:integer"/>
-      <xs:attribute name="minor" use="required" type="xs:integer"/>
-      <xs:attribute name="servicepack" use="required" type="xs:integer"/>
-      <xs:attribute name="type" use="required" type="xs:NCName"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="header">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="field"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="messages">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="message"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="message">
-    <xs:complexType>
-      <xs:choice maxOccurs="unbounded">
-        <xs:element ref="field"/>
-        <xs:element ref="group"/>
-      </xs:choice>
-      <xs:attribute name="msgcat" use="required" type="xs:NCName"/>
-      <xs:attribute name="msgtype" use="required" type="xs:NMTOKEN"/>
-      <xs:attribute name="name" use="required" type="xs:NCName"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="trailer">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="field"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="components">
-    <xs:complexType/>
-  </xs:element>
-  <xs:element name="fields">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="field"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="field">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" maxOccurs="unbounded" ref="value"/>
-      </xs:sequence>
-      <xs:attribute name="name" use="required" type="xs:NCName"/>
-      <xs:attribute name="number" type="xs:integer"/>
-      <xs:attribute name="required" type="xs:NCName"/>
-      <xs:attribute name="type" type="xs:NCName"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="value">
-    <xs:complexType>
-      <xs:attribute name="description" use="required" type="xs:NMTOKEN"/>
-      <xs:attribute name="enum" use="required"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="group">
-    <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="field"/>
-        <xs:element ref="group"/>
-      </xs:choice>
-      <xs:attribute name="name" use="required" type="xs:NCName"/>
-      <xs:attribute name="required" use="required" type="xs:NCName"/>
-    </xs:complexType>
-  </xs:element>
+    <xs:element name="fix">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="header"/>
+                <xs:element ref="messages"/>
+                <xs:element ref="trailer"/>
+                <xs:element ref="components"/>
+                <xs:element ref="fields"/>
+            </xs:sequence>
+            <xs:attribute name="major" use="required" type="xs:integer"/>
+            <xs:attribute name="minor" use="required" type="xs:integer"/>
+            <xs:attribute name="servicepack" use="required" type="xs:integer"/>
+            <xs:attribute name="type" use="required" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="header">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="field"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="messages">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="message"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="message">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element ref="field"/>
+                <xs:element ref="group"/>
+            </xs:choice>
+            <xs:attribute name="msgcat" use="required" type="xs:NCName"/>
+            <xs:attribute name="msgtype" use="required" type="xs:NMTOKEN"/>
+            <xs:attribute name="name" use="required" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="trailer">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="field"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="components">
+        <xs:complexType/>
+    </xs:element>
+    <xs:element name="fields">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="field"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="field">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="value"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:NCName"/>
+            <xs:attribute name="number" type="xs:integer"/>
+            <xs:attribute name="required" type="xs:NCName"/>
+            <xs:attribute name="type" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="value">
+        <xs:complexType>
+            <xs:attribute name="description" use="required" type="xs:NMTOKEN"/>
+            <xs:attribute name="enum" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="group">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="field"/>
+                <xs:element ref="group"/>
+            </xs:choice>
+            <xs:attribute name="name" use="required" type="xs:NCName"/>
+            <xs:attribute name="required" use="required" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
 </xs:schema>
