@@ -16,20 +16,37 @@
 
 package net.openhft.fix.compiler;
 
-import net.openhft.collections.HugeConfig;
-import net.openhft.collections.HugeHashMap;
 import net.openhft.fix.model.FixField;
+
+import java.util.Comparator;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * This class is used for 
  * @author Adam Rosenberger/Anshul Shelley
  */
 public class FieldLookup {
-    //private static final Map<String, FixField> FIELD_LOOKUPS = new HashMap<String, FixField>();
-	private static int count=100;
-	private static final HugeConfig config = HugeConfig.SMALL.clone().setSegments(256).setSmallEntrySize(72).setCapacity(count);	
-	private static final HugeHashMap<CharSequence, FixField> FIELD_LOOKUPS = new HugeHashMap<CharSequence, FixField>(config, CharSequence.class, FixField.class);
-	
+    private static final Comparator<CharSequence> charSequenceIgnoreCaseComparator =
+            new Comparator<CharSequence>() {
+        @Override
+        public int compare(CharSequence o1, CharSequence o2) {
+            int len1 = o1.length();
+            int len2 = o2.length();
+            int n = Math.min(len1, len2);
+            for (int i = 0; i < n; i++) {
+                char c1 = Character.toLowerCase(o1.charAt(i));
+                char c2 = Character.toLowerCase(o2.charAt(i));
+                if (c1 != c2)
+                    return c1 - c2;
+            }
+            return len1 - len2;
+        }
+    };
+
+    private static final Map<CharSequence, FixField> FIELD_LOOKUPS =
+            new TreeMap<>(charSequenceIgnoreCaseComparator);
+    
     static {
         FIELD_LOOKUPS.put("INT", FixField.Int);
         FIELD_LOOKUPS.put("LENGTH", FixField.Length);
