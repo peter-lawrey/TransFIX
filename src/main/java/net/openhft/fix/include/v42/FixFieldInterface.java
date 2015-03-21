@@ -20,7 +20,7 @@ import net.openhft.lang.io.ByteBufferBytes;
 
 /**
  * Fix field definition. This interface defines the required methods for implementation of
- * FIX protocol <Field>
+ * FIX protocol &lt;Field&gt;
  */
 public interface FixFieldInterface {
 

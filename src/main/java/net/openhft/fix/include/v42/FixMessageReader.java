@@ -86,13 +86,12 @@ public class FixMessageReader {
      * Only support FIX 4.2 version. Parses fixMessage and return an array of Field objects.
      * Precursor function to setFixBytes() else throws Exception
      * A Field array index is defined by FixConstants.fieldsNumber
-     * <p/>
-     * As an example
-     * Field fixField = Field[8];
-     * System.out.println("Fix Field Name:"+fixField.getName());
-     * Prints BeginString;
+     * <p>
+     * As an example<p>
+     * <pre>Field fixField = Field[8];
+     * System.out.println("Fix Field Name:"+fixField.getName());</pre>
+     * Prints <pre>BeginString;</pre>
      *
-     * @return
      * @throws Exception
      */
     public void parseFixMsgBytes() throws Exception {

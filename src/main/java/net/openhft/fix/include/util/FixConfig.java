@@ -112,7 +112,7 @@ public class FixConfig implements Cloneable {
     }
 
     /**
-     * Static factory method to initializes all the standard FIX <Messages> of FIX 4.2 version
+     * Static factory method to initializes all the standard FIX &lt;Messages&gt; of FIX 4.2 version
      *
      * @return -FixConfig
      */
@@ -1080,7 +1080,7 @@ public class FixConfig implements Cloneable {
     }
 
     /**
-     * Static factory method to initializes all the standard FIX <Field> of FIX 4.2 version
+     * Static factory method to initializes all the standard FIX &lt;Field&gt; of FIX 4.2 version
      *
      * @return -FixConfig
      */
