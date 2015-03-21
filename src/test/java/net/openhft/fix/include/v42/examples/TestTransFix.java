@@ -18,14 +18,6 @@ import static org.junit.Assert.assertEquals;
 
 public class TestTransFix {
 
-
-    public static void main(String[] args) throws Exception {
-
-        TestTransFix ttf = new TestTransFix();
-        ttf.testReadEditModifyFixMsg();
-
-    }
-
     /**
      * Tests read/modify/edit functionality of a FixMessage object. First a FixMessagePool with default available processors is
      * created with FixMessage objects, then Field objects of each FixMessage object's ByteBufferByte are used for data read/write.

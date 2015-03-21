@@ -484,12 +484,4 @@ public class FixConstants {
             "LOCALMKTDATE", "CHAR", "CHAR", "FLOAT", "FLOAT", "QTY", "UTCTIMESTAMP", "STRING", "STRING", "INT", "CHAR", "UTCTIMESTAMP",
             "STRING", "LENGTH", "DATA"
     };
-
-    public static void main(String... args) {
-        System.out.println(fieldsNumber.length);
-        System.out.println(fieldsName.length);
-        System.out.println(fieldsTypeOrdering.length);
-        System.out.println(fieldsWithDefinedValues.length);
-
-    }
 }
