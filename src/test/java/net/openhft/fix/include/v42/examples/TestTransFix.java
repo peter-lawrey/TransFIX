@@ -34,7 +34,7 @@ public class TestTransFix {
      * @throws Exception
      */
     @Test
-    private void testReadEditModifyFixMsg() throws Exception {
+    public void testReadEditModifyFixMsg() throws Exception {
         String sampleFixMessage = "8=FIX.4.2|9=154|35=6|49=BRKR|56=INVMGR|34=238|52=19980604-07:59:56|23=115686|28=N|55=AXX.AX|54=2|27=250000|44=7900.000000|25=H|10=231|";
 
         int fixMsgCount = Runtime.getRuntime().availableProcessors();
@@ -65,7 +65,7 @@ public class TestTransFix {
 
         //Sets a checkedout FixMessage instance object with the FIX message information.
         for (int i = 0; i < field.length; i++) {
-            fm.getField(i).setFieldData(field[i].getFieldData());
+            fm.getField(i + 1).setFieldData(field[i].getFieldData());
         }
 
     }
