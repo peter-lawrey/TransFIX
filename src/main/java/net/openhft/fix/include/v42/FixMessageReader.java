@@ -73,13 +73,14 @@ public class FixMessageReader {
     public void setFixBytes(String fixMsgChars) {
         this.fixMsgChars = fixMsgChars;
         byte[] msgBytes = fixMsgChars.replace('|', '\u0001').getBytes();
-        ByteBufferBytes byteBufBytes = new ByteBufferBytes(ByteBuffer.allocate(msgBytes.length)
-                .order(ByteOrder.nativeOrder()));
-        byteBufBytes.write(msgBytes);
-        if (fixMsgBytes != null) {
-            this.fixMsgBytes.clear();
+        try (ByteBufferBytes byteBufBytes = new ByteBufferBytes(ByteBuffer.allocate(msgBytes.length)
+                .order(ByteOrder.nativeOrder()))) {
+	        byteBufBytes.write(msgBytes);
+	        if (fixMsgBytes != null) {
+	            this.fixMsgBytes.clear();
+	        }
+	        fixMsgBytes = byteBufBytes.flip();
         }
-        fixMsgBytes = byteBufBytes.flip();
     }
 
     /**
