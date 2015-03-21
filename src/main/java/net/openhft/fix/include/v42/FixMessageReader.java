@@ -1,14 +1,14 @@
 package net.openhft.fix.include.v42;
 
-import net.openhft.fix.compiler.FieldLookup;
-import net.openhft.fix.include.util.FixConstants;
-import net.openhft.fix.include.util.FixMessagePool;
-import net.openhft.fix.include.util.FixMessagePool.FixMessageContainer;
-import net.openhft.fix.model.FixField;
-import net.openhft.lang.io.*;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+
+import net.openhft.fix.compiler.FieldLookup;
+import net.openhft.fix.include.util.FixConstants;
+import net.openhft.fix.model.FixField;
+import net.openhft.lang.io.ByteBufferBytes;
+import net.openhft.lang.io.Bytes;
+import net.openhft.lang.io.StopCharTesters;
 
 /**
  * This class is used for parsing a FIX 4.2 message. It follows a standard Fix4.2 protocol Field-specification that adheres to FixCommunity.org  definition.

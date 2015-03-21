@@ -18,7 +18,6 @@ package net.openhft.fix.include.v42;
 
 import net.openhft.fix.include.util.FixConfig;
 import net.openhft.fix.include.util.FixMessagePool;
-import net.openhft.fix.include.util.FixMessagePool.FixMessageContainer;
 import net.openhft.lang.model.DataValueGenerator;
 
 /**

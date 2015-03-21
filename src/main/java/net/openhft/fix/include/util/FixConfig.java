@@ -89,7 +89,7 @@ public class FixConfig implements Cloneable {
 
         String actual = new DataValueGenerator().generateNativeObject(FixMessageType.class);
         CachedCompiler cc = new CachedCompiler(null, null);
-        Class aClass = cc.loadFromJava(FixMessageType.class.getName() + "$$Native", actual);
+        Class<?> aClass = cc.loadFromJava(FixMessageType.class.getName() + "$$Native", actual);
 
         @SuppressWarnings("unchecked")
         FixMessageType fmt = (FixMessageType) aClass.asSubclass(FixMessageType.class).newInstance();
