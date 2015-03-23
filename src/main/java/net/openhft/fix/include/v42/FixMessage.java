@@ -90,11 +90,12 @@ public class FixMessage implements FixMessageInterface {
     public Field getField(int fieldLocation) {
         //System.out.println(fieldLocation +
         // "====="+FixConstants.fieldsNumber[FixConstants.fieldsNumber.length-1]);
-        if (fieldLocation < FixConstants.fieldsNumber[FixConstants.fieldsNumber.length - 1]) {
+        if ((fieldLocation >= 0) &&
+        	(fieldLocation < this.field.length)) {
             return this.field[fieldLocation - 1];
+        } else {
+        	return null;
         }
-
-        return null;
     }
 
     /**
