@@ -1,14 +1,14 @@
 package net.openhft.fix.include.v42;
 
-import net.openhft.fix.compiler.FieldLookup;
-import net.openhft.fix.include.util.FixConstants;
-import net.openhft.fix.include.util.FixMessagePool;
-import net.openhft.fix.include.util.FixMessagePool.FixMessageContainer;
-import net.openhft.fix.model.FixField;
-import net.openhft.lang.io.*;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+
+import net.openhft.fix.compiler.FieldLookup;
+import net.openhft.fix.include.util.FixConstants;
+import net.openhft.fix.model.FixField;
+import net.openhft.lang.io.ByteBufferBytes;
+import net.openhft.lang.io.Bytes;
+import net.openhft.lang.io.StopCharTesters;
 
 /**
  * This class is used for parsing a FIX 4.2 message. It follows a standard Fix4.2 protocol Field-specification that adheres to FixCommunity.org  definition.
@@ -73,26 +73,26 @@ public class FixMessageReader {
     public void setFixBytes(String fixMsgChars) {
         this.fixMsgChars = fixMsgChars;
         byte[] msgBytes = fixMsgChars.replace('|', '\u0001').getBytes();
-        ByteBufferBytes byteBufBytes = new ByteBufferBytes(ByteBuffer.allocate(msgBytes.length)
-                .order(ByteOrder.nativeOrder()));
-        byteBufBytes.write(msgBytes);
-        if (fixMsgBytes != null) {
-            this.fixMsgBytes.clear();
+        try (ByteBufferBytes byteBufBytes = new ByteBufferBytes(ByteBuffer.allocate(msgBytes.length)
+                .order(ByteOrder.nativeOrder()))) {
+	        byteBufBytes.write(msgBytes);
+	        if (fixMsgBytes != null) {
+	            this.fixMsgBytes.clear();
+	        }
+	        fixMsgBytes = byteBufBytes.flip();
         }
-        fixMsgBytes = byteBufBytes.flip();
     }
 
     /**
      * Only support FIX 4.2 version. Parses fixMessage and return an array of Field objects.
      * Precursor function to setFixBytes() else throws Exception
      * A Field array index is defined by FixConstants.fieldsNumber
-     * <p/>
-     * As an example
-     * Field fixField = Field[8];
-     * System.out.println("Fix Field Name:"+fixField.getName());
-     * Prints BeginString;
+     * <p>
+     * As an example<p>
+     * <pre>Field fixField = Field[8];
+     * System.out.println("Fix Field Name:"+fixField.getName());</pre>
+     * Prints <pre>BeginString;</pre>
      *
-     * @return
      * @throws Exception
      */
     public void parseFixMsgBytes() throws Exception {
@@ -208,43 +208,4 @@ public class FixMessageReader {
         //field[fieldID].printValues();
     }
 
-    public static void main(String[] args) throws Exception {
-        String sampleFixMessage = "8=FIX.4.2|9=154|35=6|49=BRKR|56=INVMGR|34=238|" +
-                "52=19980604-07:59:56|23=115686|28=N|55=FIA.MI|54=2|27=250000|" +
-                "44=7900.000000|25=H|10=231|";
-        int fixMsgCount = Runtime.getRuntime().availableProcessors();
-        FixMessagePool fmp = new FIXMessageBuilder().initFixMessagePool(true, fixMsgCount);
-        FixMessageContainer fmc = fmp.getFixMessageContainer();
-        FixMessage fm = fmc.getFixMessage();
-        FixMessageReader fmr = new FixMessageReader(fm);
-        /*try {
-			fmr.parseFixMsgBytes();
-			System.out.println("Parsing done...");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-
-        NativeBytes nativeBytes = new DirectStore(sampleFixMessage.length()).bytes();
-        nativeBytes.write(sampleFixMessage.replace('|', '\u0001').getBytes());
-        //ByteBufferBytes byteBufBytesNative = (ByteBufferBytes)((Bytes)nativeBytes.flip());
-        //fmr.setFixBytes((ByteBufferBytes)(Bytes)nativeBytes.flip());
-        byte[] msgBytes = sampleFixMessage.replace('|', '\u0001').getBytes();
-        ByteBufferBytes byteBufBytes = new ByteBufferBytes(ByteBuffer.allocate(msgBytes.length)
-                .order(ByteOrder.nativeOrder()));
-        byteBufBytes.write(msgBytes);
-
-        int counter = 0;
-        int runs = 300000;
-        long start = System.nanoTime();
-        for (int i = 0; i < runs; i++) {
-            fmr.setFixBytes(byteBufBytes);
-            fmr.parseFixMsgBytes();
-            counter++;
-        }
-        long time = System.nanoTime() - start;
-        System.out.printf("Average parse time was %.2f us, fields per message %.2f%n",
-                time / runs / 1e3, (double) counter / runs);
-
-    }
 }
