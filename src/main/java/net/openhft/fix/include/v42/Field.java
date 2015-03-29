@@ -159,7 +159,7 @@ public class Field implements FixFieldInterface {
     /**
      * Update ByteBufferBytes field data object
      *
-     * @param bytes
+     * @param bytes - byte representation of object data
      */
     public void setFieldData(byte[] bytes) {
         this.fieldData.write(bytes);
@@ -173,7 +173,7 @@ public class Field implements FixFieldInterface {
      * If this field is repeated inside the FIX tag, use this delimiter for parsing.
      * This is not related to Multi-leg data
      *
-     * @return
+     * @return -delimiter for multileg tags
      */
     public static byte getMultiValueDelim() {
         return MULTI_VALUE_DELIM;
@@ -196,7 +196,7 @@ public class Field implements FixFieldInterface {
     /**
      * Position of this field's ByteBufferBytes
      *
-     * @return
+     * @return - int value for field position
      */
     public int getFieldDataPostion() {
         return (int) fieldData.position();
