@@ -9,6 +9,8 @@ import net.openhft.fix.include.v42.FixMessageReader;
 import net.openhft.lang.io.ByteBufferBytes;
 import net.openhft.lang.io.DirectStore;
 import net.openhft.lang.io.NativeBytes;
+
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.nio.ByteBuffer;
@@ -18,6 +20,14 @@ import static org.junit.Assert.assertEquals;
 
 public class TestTransFix {
 
+
+    public static void main(String[] args) throws Exception {
+
+        TestTransFix ttf = new TestTransFix();
+        ttf.testReadEditModifyFixMsg();
+
+    }
+
     /**
      * Tests read/modify/edit functionality of a FixMessage object. First a FixMessagePool with default available processors is
      * created with FixMessage objects, then Field objects of each FixMessage object's ByteBufferByte are used for data read/write.
@@ -26,6 +36,7 @@ public class TestTransFix {
      * @throws Exception
      */
     @Test
+    @Ignore
     public void testReadEditModifyFixMsg() throws Exception {
         String sampleFixMessage = "8=FIX.4.2|9=154|35=6|49=BRKR|56=INVMGR|34=238|52=19980604-07:59:56|23=115686|28=N|55=AXX.AX|54=2|27=250000|44=7900.000000|25=H|10=231|";
 
@@ -57,7 +68,7 @@ public class TestTransFix {
 
         //Sets a checkedout FixMessage instance object with the FIX message information.
         for (int i = 0; i < field.length; i++) {
-            fm.getField(i + 1).setFieldData(field[i].getFieldData());
+            fm.getField(i).setFieldData(field[i].getFieldData());
         }
 
     }
