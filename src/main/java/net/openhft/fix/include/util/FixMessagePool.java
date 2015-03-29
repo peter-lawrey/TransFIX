@@ -111,7 +111,7 @@ public class FixMessagePool implements FixPoolFactory<FixMessage> {
 
     /**
      * @param fixMsgContainer -checks in this FixMessage object from FixMessageContainer.
-     * @throws Exception
+     * @throws Exception- For invalid position address
      */
     @SuppressWarnings("restriction")
     public void putFixMessageContainer(FixMessageContainer fixMsgContainer) throws Exception {
