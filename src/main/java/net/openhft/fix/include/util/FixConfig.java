@@ -89,7 +89,7 @@ public class FixConfig implements Cloneable {
 
         String actual = new DataValueGenerator().generateNativeObject(FixMessageType.class);
         CachedCompiler cc = new CachedCompiler(null, null);
-        Class aClass = cc.loadFromJava(FixMessageType.class.getName() + "$$Native", actual);
+        Class<?> aClass = cc.loadFromJava(FixMessageType.class.getName() + "$$Native", actual);
 
         @SuppressWarnings("unchecked")
         FixMessageType fmt = (FixMessageType) aClass.asSubclass(FixMessageType.class).newInstance();
@@ -112,7 +112,7 @@ public class FixConfig implements Cloneable {
     }
 
     /**
-     * Static factory method to initializes all the standard FIX <Messages> of FIX 4.2 version
+     * Static factory method to initializes all the standard FIX &lt;Messages&gt; of FIX 4.2 version
      *
      * @return -FixConfig
      */
@@ -1080,7 +1080,7 @@ public class FixConfig implements Cloneable {
     }
 
     /**
-     * Static factory method to initializes all the standard FIX <Field> of FIX 4.2 version
+     * Static factory method to initializes all the standard FIX &lt;Field&gt; of FIX 4.2 version
      *
      * @return -FixConfig
      */

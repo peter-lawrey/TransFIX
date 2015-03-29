@@ -10,3 +10,9 @@
 *.iml
 *.ipr
 *.iws
+
+# Eclipse #
+target/
+.classpath
+.project
+.settings/
