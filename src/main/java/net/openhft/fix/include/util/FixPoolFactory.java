@@ -22,7 +22,7 @@ import java.io.Externalizable;
  * Interface for defining a FixMessage Object Factory. An implementation of this interface is required for
  * intializing FixMessagePool.
  *
- * @param <FixMessage>
+ * @param <FixMessage>- FixMessage Object
  */
 @SuppressWarnings("hiding")
 public interface FixPoolFactory<FixMessage> extends Externalizable {
