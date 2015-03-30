@@ -28,7 +28,7 @@
 
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>TransFIX</artifactId>
+    <artifactId>transfix</artifactId>
     <version>1.0.1-alpha-SNAPSHOT</version>
     <name>OpenHFT/TransFIX</name>
     <description>TransFIX</description>
