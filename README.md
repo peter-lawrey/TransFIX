@@ -13,7 +13,7 @@ A Fix 4.2 Message Parser with Sub Millisecond Latency
 TransFix is a Fix4.2 version fast fix parser for parsing inbound fix messages. It can also be used by a OMS/EMS to send out FIX messages. This is a standard Fix4.2 implementation and at this time does not allow custom fix message configurations. Since TransFix is used in the eco-system of Chronicle, all message transactions can be persisted. TransFix uses a fast, off-heap object pool for Fix message sessions. This is useful when there is a need to read/send multiple FIX messages during transactions with multiple clients.
 
 ### Object Construction
-To download the JAR which contains TransFix package, we recommend you use maven, which will download it from [Maven Central](search.maven.org), once you have installed maven, all you have to do is add the following to your projects pom.xml :
+To download the JAR which contains TransFix package, we recommend you use maven, which will download it from [Maven Central](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22net.openhft%22%20AND%20a%3A%22transfix%22), once you have installed maven, all you have to do is add the following to your projects pom.xml :
 ```xml
 <dependency>
   <groupId>net.openhft</groupId>
