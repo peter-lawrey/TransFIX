@@ -33,13 +33,10 @@ public class FixMessageReader {
 
     @SuppressWarnings("unused")
     private CharSequence fixMsgChars;
-
-    @SuppressWarnings("unused")
     private Bytes fixMsgBytes;
-    private final int FIELD_SIZE = FixConstants.fieldsNumber.length;
-    private StringBuilder tempStringValue = new StringBuilder();
-    private final byte FIELD_TERMINATOR = 1;
-    private byte VERSION_CHECKED = 0;
+    private StringBuilder tempStringValue 		= new StringBuilder();
+    private final byte FIELD_TERMINATOR 		= 1;
+    private byte VERSION_CHECKED 				= 0;
     private FixMessage fixMsg;
 
 
@@ -47,7 +44,7 @@ public class FixMessageReader {
      * @param fixMsg- FixMessage object to be read/parsed by the object of this class, at the time
      * of initialization.
      */
-    public FixMessageReader(FixMessage fixMsg) {
+    public FixMessageReader( FixMessage fixMsg ) {
         this.fixMsg = fixMsg;
     }
 
@@ -64,7 +61,7 @@ public class FixMessageReader {
     /**
      * @param fixMsg -FixMessage object to be read/parsed by the object of this class
      */
-    public void setFixMessage(FixMessage fixMsg) {
+    public void setFixMessage( FixMessage fixMsg ) {
         this.fixMsg = fixMsg;
     }
 
@@ -73,8 +70,8 @@ public class FixMessageReader {
      *
      * @param fixMsgBufBytes - Fix message from client in bytes
      */
-    public void setFixBytes(ByteBufferBytes fixMsgBufBytes) {
-        if (this.fixMsgBytes != null) {
+    public void setFixBytes( ByteBufferBytes fixMsgBufBytes ) {
+        if ( this.fixMsgBytes != null ) {
             this.fixMsgBytes.clear();
         }
         this.fixMsgBytes = fixMsgBufBytes.flip();
@@ -86,13 +83,12 @@ public class FixMessageReader {
      *
      * @param fixMsgChars - String representation of the FIX message
      */
-    public void setFixBytes(String fixMsgChars) {
+    public void setFixBytes( String fixMsgChars ) {
         this.fixMsgChars = fixMsgChars;
         byte[] msgBytes = fixMsgChars.replace('|', '\u0001').getBytes();
-        ByteBufferBytes byteBufBytes = new ByteBufferBytes(ByteBuffer.allocate(msgBytes.length)
-                .order(ByteOrder.nativeOrder()));
-        byteBufBytes.write(msgBytes);
-        if (fixMsgBytes != null) {
+        ByteBufferBytes byteBufBytes = new ByteBufferBytes(ByteBuffer.allocate(msgBytes.length).order(ByteOrder.nativeOrder()));
+        byteBufBytes.write( msgBytes );
+        if ( fixMsgBytes != null ) {
             this.fixMsgBytes.clear();
         }
         fixMsgBytes = byteBufBytes.flip();
@@ -113,53 +109,51 @@ public class FixMessageReader {
      */
     public void parseFixMsgBytes() throws Exception {
 
-        if (fixMsgBytes == null) {
+        if ( fixMsgBytes == null ) {
             throw new Exception("Bytes is null or not preceded by setFixBytes()");
         }
 
         long limit = fixMsgBytes.limit(), limit2 = limit;
-        while (limit2 > fixMsgBytes.position() && fixMsgBytes.readByte(limit2 - 1) !=
-                FIELD_TERMINATOR)
+        while ( limit2 > fixMsgBytes.position() && fixMsgBytes.readByte( limit2 - 1 ) != FIELD_TERMINATOR )
             limit2--;
-        fixMsgBytes.limit(limit2);
+        fixMsgBytes.limit( limit2 );
         boolean tmpSelf = fixMsgBytes.selfTerminating();
         try {
-            fixMsgBytes.selfTerminating(true);
-            while (fixMsgBytes.remaining() > 0) {
+            fixMsgBytes.selfTerminating( true );
+            while ( fixMsgBytes.remaining() > 0 ) {
                 int fieldNum = (int) fixMsgBytes.parseLong();
                 long pos = fixMsgBytes.position();
 
-                searchForTheEndOfField(fixMsgBytes);
+                searchForTheEndOfField( fixMsgBytes );
 
                 long end = fixMsgBytes.position() - 1;
-                fixMsgBytes.limit(end);
-                fixMsgBytes.position(pos);
-                updateFixMessageField(fieldNum, fixMsgBytes);
+                fixMsgBytes.limit( end );
+                fixMsgBytes.position( pos );
+                updateFixMessageField( fieldNum, fixMsgBytes );
 
-                fixMsgBytes.limit(limit);
-                fixMsgBytes.position(end + 1);
+                fixMsgBytes.limit( limit );
+                fixMsgBytes.position( end + 1 );
             }
-            fixMsgBytes.limit(limit);
-            fixMsgBytes.position(limit2);
+            fixMsgBytes.limit( limit );
+            fixMsgBytes.position( limit2 );
         } finally {
-            fixMsgBytes.selfTerminating(tmpSelf);
+            fixMsgBytes.selfTerminating( tmpSelf );
         }
-        //return field;
     }
 
     /**
      * @param bytes
      */
-    private void searchForTheEndOfField(Bytes bytes) {
-        while (bytes.readByte() != FIELD_TERMINATOR) ;
+    private void searchForTheEndOfField( Bytes bytes ) {
+        while ( bytes.readByte() != FIELD_TERMINATOR ) ;
     }
 
-    private void updateFixMessageField(int fieldID, Bytes fieldValue) {
-        if (fixMsg.getField(fieldID).getFieldData().position() != 0) {
-            //adding delim for multi values
-            fixMsg.getField(fieldID).getFieldData().writeByte(Field.getMultiValueDelim());
+    private void updateFixMessageField( int fieldID, Bytes fieldValue ) {
+        if ( fixMsg.getField(fieldID).getFieldData().position() != 0 ) {
+            //adding delim for multileg values
+            fixMsg.getField( fieldID ).getFieldData().writeByte( Field.getMultiValueDelim() );
         }
-        fixMsg.getField(fieldID).setFieldData((ByteBufferBytes) fieldValue);
+        fixMsg.getField( fieldID ).setFieldData( ( ByteBufferBytes ) fieldValue );
     }
 
     /**
@@ -172,11 +166,9 @@ public class FixMessageReader {
      */
     private void updateFixMessageFields(int fieldID, Bytes fieldValue) throws Exception {
 
-        //fixMsg.getField(fieldID).setFieldData(fixData[1].getBytes());
-        //if (field[fieldID] ==  null){System.out.println("NULL...."+fieldID);System.exit(0);}
         fixMsg.getField(fieldID).setName(FixConstants.fieldsName[fieldID]);
         fixMsg.getField(fieldID).setNumber(fieldID);
-        FixField ff = FieldLookup.fieldFor(FixConstants.fieldsTypeOrdering[fieldID + 1]);
+        FixField ff = FieldLookup.fieldFor(FixConstants.fieldsTypeOrdering[ fieldID + 1 ]);
 
         if (ff.isChar()) {
             fixMsg.getField(fieldID).setType(FixField.Boolean);
@@ -228,26 +220,14 @@ public class FixMessageReader {
         String sampleFixMessage = "8=FIX.4.2|9=154|35=6|49=BRKR|56=INVMGR|34=238|" +
                 "52=19980604-07:59:56|23=115686|28=N|55=FIA.MI|54=2|27=250000|" +
                 "44=7900.000000|25=H|10=231|";
-        int fixMsgCount = Runtime.getRuntime().availableProcessors();
-        FixMessagePool fmp = new FIXMessageBuilder().initFixMessagePool(true, fixMsgCount);
+        FixMessagePool fmp = new FixMessagePool( null, Runtime.getRuntime().availableProcessors(), true);
         FixMessageContainer fmc = fmp.getFixMessageContainer();
         FixMessage fm = fmc.getFixMessage();
         FixMessageReader fmr = new FixMessageReader(fm);
-        /*try {
-			fmr.parseFixMsgBytes();
-			System.out.println("Parsing done...");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-
         NativeBytes nativeBytes = new DirectStore(sampleFixMessage.length()).bytes();
         nativeBytes.write(sampleFixMessage.replace('|', '\u0001').getBytes());
-        //ByteBufferBytes byteBufBytesNative = (ByteBufferBytes)((Bytes)nativeBytes.flip());
-        //fmr.setFixBytes((ByteBufferBytes)(Bytes)nativeBytes.flip());
         byte[] msgBytes = sampleFixMessage.replace('|', '\u0001').getBytes();
-        ByteBufferBytes byteBufBytes = new ByteBufferBytes(ByteBuffer.allocate(msgBytes.length)
-                .order(ByteOrder.nativeOrder()));
+        ByteBufferBytes byteBufBytes = new ByteBufferBytes( ByteBuffer.allocate(msgBytes.length ).order(ByteOrder.nativeOrder()));
         byteBufBytes.write(msgBytes);
 
         int counter = 0;
