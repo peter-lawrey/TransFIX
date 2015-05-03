@@ -35,13 +35,6 @@ public class FixMessage implements FixMessageInterface {
     private Field[] field;
 
     /**
-     * @param fixMsgBuilder - for static builder implementation.
-     */
-    public FixMessage(FIXMessageBuilder fixMsgBuilder) {
-
-    }
-
-    /**
      * @return field- Field[] for all data fields in this FIX object
      */
     public Field[] getField() {
