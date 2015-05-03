@@ -169,11 +169,11 @@ public class FixMessagePool implements FixPoolFactory<FixMessage> {
     @Override
     public FixMessage create(boolean useDefault) {
         @SuppressWarnings("static-access")
-        FixMessage fm = new FixMessage(fixConfig.SERVER_DEFAULT_4_2.clone()
+        FixMessage fm = new FixMessage( fixConfig.SERVER_DEFAULT_4_2.clone()
                 .setFixVersionMajor(4)
                 .setFixVersionMinor(2)
                 .setFixVersionServicePack(0)
-                .createServerFixFields().getFieldArr());
+                .createServerFixFields().getFieldArr() );
         return fm;
     }
 
