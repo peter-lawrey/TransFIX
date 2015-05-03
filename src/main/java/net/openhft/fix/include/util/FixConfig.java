@@ -93,7 +93,7 @@ public class FixConfig implements Cloneable {
     }
 
     /**
-     * Static factory method to initializes all the standard FIX <Field> of FIX 4.2 version
+     * Static factory method to initializes all the standard FIX field of FIX 4.2 version
      *
      * @return -FixConfig
      */
