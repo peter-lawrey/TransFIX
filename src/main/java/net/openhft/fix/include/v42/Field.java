@@ -26,7 +26,7 @@ import java.nio.ByteOrder;
 
 /**
  * Represents a FIX protocol 4.2 field. A field's value is represented by ByteBufferBytes with
- * a default size of 1MB.
+ * a default size of 5kb.
  */
 public class Field implements FixFieldInterface {
     //protected HugeArray<Value> value;
@@ -35,9 +35,11 @@ public class Field implements FixFieldInterface {
     protected CharSequence required;
     protected FixFieldTypeInterface type;
     protected int valueSize;
-    protected ByteBufferBytes fieldData = new ByteBufferBytes(ByteBuffer.allocate(1024)
-            .order(ByteOrder.nativeOrder()));
+    int _defaultSize = 5000;
+    
+    protected ByteBufferBytes fieldData = new ByteBufferBytes( ByteBuffer.allocate( _defaultSize ).order( ByteOrder.nativeOrder() ) );
     private static final byte MULTI_VALUE_DELIM = 1;
+    
 
     public Field setValueSize(int valueSize) {
         this.valueSize = valueSize;
