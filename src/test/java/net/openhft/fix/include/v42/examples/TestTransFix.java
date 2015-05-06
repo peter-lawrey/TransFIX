@@ -2,7 +2,6 @@ package net.openhft.fix.include.v42.examples;
 
 import net.openhft.fix.include.util.FixMessagePool;
 import net.openhft.fix.include.util.FixMessagePool.FixMessageContainer;
-import net.openhft.fix.include.v42.FIXMessageBuilder;
 import net.openhft.fix.include.v42.Field;
 import net.openhft.fix.include.v42.FixMessage;
 import net.openhft.fix.include.v42.FixMessageReader;
@@ -40,10 +39,8 @@ public class TestTransFix {
     public void testReadEditModifyFixMsg() throws Exception {
         String sampleFixMessage = "8=FIX.4.2|9=154|35=6|49=BRKR|56=INVMGR|34=238|52=19980604-07:59:56|23=115686|28=N|55=AXX.AX|54=2|27=250000|44=7900.000000|25=H|10=231|";
 
-        int fixMsgCount = Runtime.getRuntime().availableProcessors();
-
         //create fix message pool with default configuration for each FixMessage
-        FixMessagePool fmp = new FIXMessageBuilder().initFixMessagePool(true, fixMsgCount);
+        FixMessagePool fmp = new FixMessagePool( null, Runtime.getRuntime().availableProcessors(), true );
         FixMessageContainer fmc = fmp.getFixMessageContainer();
 
         //check out a FixMessage object
@@ -82,7 +79,7 @@ public class TestTransFix {
     public void testUpdateFixFieldForEmptyMessage() {
 
         int fixMsgCount = Runtime.getRuntime().availableProcessors();
-        FixMessagePool fmp = new FIXMessageBuilder().initFixMessagePool(true, fixMsgCount);
+        FixMessagePool fmp = new FixMessagePool( null, Runtime.getRuntime().availableProcessors(), true );
         FixMessageContainer fmc = fmp.getFixMessageContainer();
         FixMessage fm = fmc.getFixMessage();
 
@@ -149,7 +146,7 @@ public class TestTransFix {
         };
 
         int fixMsgCount = Runtime.getRuntime().availableProcessors();
-        FixMessagePool fmp = new FIXMessageBuilder().initFixMessagePool(true, fixMsgCount);
+        FixMessagePool fmp = new FixMessagePool( null, Runtime.getRuntime().availableProcessors(), true );
         FixMessageContainer fmc = fmp.getFixMessageContainer();
         FixMessage fm = fmc.getFixMessage();
         FixMessageReader fmr = new FixMessageReader(fm);
@@ -189,7 +186,7 @@ public class TestTransFix {
 
         String sampleFixMessage = "8=FIX.4.2|9=154|35=6|49=BRKR|56=INVMGR|34=238|52=19980604-07:59:56|23=115686|28=N|55=FIA.MI|54=2|27=250000|44=7900.000000|25=H|10=231|";
         int fixMsgCount = Runtime.getRuntime().availableProcessors();
-        FixMessagePool fmp = new FIXMessageBuilder().initFixMessagePool(true, fixMsgCount);
+        FixMessagePool fmp = new FixMessagePool( null, Runtime.getRuntime().availableProcessors(), true );
         FixMessageContainer fmc = fmp.getFixMessageContainer();
         FixMessage fm = fmc.getFixMessage();
         FixMessageReader fmr = new FixMessageReader(fm);
@@ -224,7 +221,7 @@ public class TestTransFix {
     public void testAvgSetAndReverseLookuptime() throws Exception {
         String sampleFixMessage = "8=FIX.4.2|9=154|35=6|49=BRKR|56=INVMGR|34=238|52=19980604-07:59:56|23=115686|28=N|55=FIA.MI|54=2|27=250000|44=7900.000000|25=H|10=231|";
         int fixMsgCount = Runtime.getRuntime().availableProcessors();
-        FixMessagePool fmp = new FIXMessageBuilder().initFixMessagePool(true, fixMsgCount);
+        FixMessagePool fmp = new FixMessagePool( null, Runtime.getRuntime().availableProcessors(), true );
         FixMessageContainer fmc = fmp.getFixMessageContainer();
         FixMessage fm = fmc.getFixMessage();
         FixMessageReader fmr = new FixMessageReader(fm);
