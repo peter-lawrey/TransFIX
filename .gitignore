@@ -5,14 +5,19 @@
 *.war
 *.ear
 
-# IntelliJ #
-.idea/
+# IntelliJ
 *.iml
 *.ipr
 *.iws
+.idea
 
-# Eclipse #
-target/
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# Eclipse
 .classpath
 .project
 .settings/
+
+# maven
+target
