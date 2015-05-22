@@ -39,7 +39,6 @@ public class FixMessageReader {
     private byte VERSION_CHECKED 				= 0;
     private FixMessage fixMsg;
 
-
     /**
      * @param fixMsg- FixMessage object to be read/parsed by the object of this class, at the time
      * of initialization.
@@ -176,18 +175,21 @@ public class FixMessageReader {
                 fixMsg.getField(fieldID).getFieldData().writeByte(Field.getMultiValueDelim());
             }
             fixMsg.getField(fieldID).getFieldData().writeChar(fieldValue.readChar());
+
         } else if (ff.isDouble()) {
             fixMsg.getField(fieldID).setType(FixField.Double);
             if (fixMsg.getField(fieldID).getFieldData().position() != 0) {
                 fixMsg.getField(fieldID).getFieldData().writeByte(Field.getMultiValueDelim());
             }
             fixMsg.getField(fieldID).getFieldData().writeDouble(fieldValue.parseDouble());
+
         } else if (ff.isInt()) {
             fixMsg.getField(fieldID).setType(FixField.Int);
             if (fixMsg.getField(fieldID).getFieldData().position() != 0) {
                 fixMsg.getField(fieldID).getFieldData().writeByte(Field.getMultiValueDelim());
             }
             fixMsg.getField(fieldID).getFieldData().writeInt24((int) fieldValue.parseLong());
+
         } else if (ff.isLong()) {
             fixMsg.getField(fieldID).setType(FixField.Length);
             if (fixMsg.getField(fieldID).getFieldData().position() != 0) {
@@ -205,6 +207,7 @@ public class FixMessageReader {
             if (VERSION_CHECKED == 0 && fieldID == 8) {
                 if (tempStringValue.toString().equalsIgnoreCase("FIX.4.2")) {
                     VERSION_CHECKED = 0;
+
                 } else {
                     throw new Exception("Only FIX.4.2 supported");
                 }
@@ -240,6 +243,5 @@ public class FixMessageReader {
         long time = System.nanoTime() - start;
         System.out.printf("Average parse time was %.2f us, fields per message %.2f%n",
                 time / runs / 1e3, (double) counter / runs);
-
     }
 }

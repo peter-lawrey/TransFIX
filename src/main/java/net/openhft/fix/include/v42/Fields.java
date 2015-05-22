@@ -115,5 +115,4 @@ public class Fields implements FixMessageType {
         fieldSize = in.readInt();
         valueSize = in.readInt();
     }
-
 }

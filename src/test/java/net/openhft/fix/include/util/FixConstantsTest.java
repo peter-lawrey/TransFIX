@@ -10,6 +10,5 @@ public class FixConstantsTest extends FixConstants{
         System.out.println(fieldsName.length);
         System.out.println(fieldsTypeOrdering.length);
         System.out.println(fieldsWithDefinedValues.length);
-
     }
 }

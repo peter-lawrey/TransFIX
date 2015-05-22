@@ -61,6 +61,4 @@ public interface FixMessageType extends Externalizable {
      * @return Type param
      */
     <T> T setGroupSize(int groupSize);
-
-
 }

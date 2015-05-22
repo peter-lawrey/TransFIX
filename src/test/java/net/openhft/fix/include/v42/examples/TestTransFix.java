@@ -19,12 +19,10 @@ import static org.junit.Assert.assertEquals;
 
 public class TestTransFix {
 
-
     public static void main(String[] args) throws Exception {
 
         TestTransFix ttf = new TestTransFix();
         ttf.testReadEditModifyFixMsg();
-
     }
 
     /**
@@ -77,7 +75,6 @@ public class TestTransFix {
      */
     @Test
     public void testUpdateFixFieldForEmptyMessage() {
-
         int fixMsgCount = Runtime.getRuntime().availableProcessors();
         FixMessagePool fmp = new FixMessagePool( null, Runtime.getRuntime().availableProcessors(), true );
         FixMessageContainer fmc = fmp.getFixMessageContainer();
@@ -159,6 +156,7 @@ public class TestTransFix {
                 if (i == 0) {
                     System.out.println("Valid-!!->\t  " + fixMessagesArray[i]);
                     assertEquals(1, fm.isValid());
+
                 } else {
                     System.out.println("INVALID??-->>\t" + fixMessagesArray[i]);
                     assertEquals(0, fm.isValid());
@@ -206,9 +204,7 @@ public class TestTransFix {
         }
         long time = System.nanoTime() - start;
         System.out.printf("Average parse time was %.2f us, fields per message %.2f, for %.2fm iterations", time / runs / 1e3, (double) counter / runs, (int) runs / 1e6);
-
     }
-
 
     /**
      * Tests the average time taken to set and reverse read a FixMessage object's FIX protocol data. Its noticed that if the iteration count (@runs) >=50000000, this test may not succeed on
@@ -243,9 +239,7 @@ public class TestTransFix {
         long start = System.nanoTime();
 
         for (int i = 0; i < runs; i++) {
-
             for (int j = 0; j < fixFieldIds.length; j++) {
-
                 //reading data from ByteBufferByte back for verification
                 reverseLookupBuf = fm.getField(fixFieldIds[j]).getFieldData();
                 reverseLookupBuf.flip();
@@ -260,7 +254,5 @@ public class TestTransFix {
         }
         long time = System.nanoTime() - start;
         System.out.printf("Average reverse-look-up time was %.2f us, for %.2fm iterations", time / runs / 1e3, (int) runs / 1e6);
-
     }
-
 }

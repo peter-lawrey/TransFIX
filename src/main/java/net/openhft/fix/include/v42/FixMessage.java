@@ -86,6 +86,7 @@ public class FixMessage implements FixMessageInterface {
         if ((fieldLocation >= 0) &&
         	(fieldLocation < this.field.length)) {
             return this.field[fieldLocation - 1];
+
         } else {
         	return null;
         }
@@ -162,9 +163,7 @@ public class FixMessage implements FixMessageInterface {
         type = in.readUTF();
         this.fixMsgOutput = (StringBuilder) in.readObject();
         delim = in.readChar();
-
     }
-
 
     /**
      * checks if the session information of these tags is valid 8|9|34|35|49|56|10
@@ -182,7 +181,6 @@ public class FixMessage implements FixMessageInterface {
         return 1;
     }
 
-
     /**
      * Resets Field[] data
      */
@@ -193,5 +191,4 @@ public class FixMessage implements FixMessageInterface {
             }
         }
     }
-
 }

@@ -42,7 +42,6 @@ public class FixMessagePool implements FixPoolFactory<FixMessage> {
 
     private ThreadLocal<FixMessageContainer> fixLocal = new ThreadLocal<FixMessageContainer>();
 
-
     /**
      * Constructor to create FixMessage objects and initialize the pool with default FixConfig.
      * fixPoolFactory should be null for implementation of FixPoolFactory as this class.
@@ -55,7 +54,6 @@ public class FixMessagePool implements FixPoolFactory<FixMessage> {
     @SuppressWarnings({"unchecked", "restriction"})
     public FixMessagePool(FixPoolFactory<FixMessage> fixPoolFactory, int poolSize,
                           boolean useDefault) {
-
         if (fixPoolFactory == null) {
             fixPoolFactory = this;
         }
@@ -121,6 +119,7 @@ public class FixMessagePool implements FixPoolFactory<FixMessage> {
                 FixMessageContainer.IN_USE_STATE, FixMessageContainer.AVAILABLE_STATE)) {
             NativeBytes.UNSAFE.putOrderedObject(fixMessageArr, index, fixMsgContainer);
             objectPutPosition = localPosition + 1;
+
         } else {
             throw new Exception("Not a valid position address");
         }
@@ -193,9 +192,5 @@ public class FixMessagePool implements FixPoolFactory<FixMessage> {
         this.fixMessageArr = (FixMessageContainer[]) in.readObject();
         this.objGetPosition = in.readInt();
         this.objectPutPosition = in.readInt();
-
-
     }
-
-
 }

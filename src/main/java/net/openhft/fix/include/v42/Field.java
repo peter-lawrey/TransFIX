@@ -131,7 +131,6 @@ public class Field implements FixFieldInterface {
         out.writeUTF((String) required);
         out.writeObject(type);
         out.writeInt(valueSize);
-
     }
 
     /**
@@ -186,7 +185,6 @@ public class Field implements FixFieldInterface {
      */
     @Override
     public void reset() {
-
         this.fieldData = (ByteBufferBytes) fieldData.zeroOut();
         this.name = null;
         this.number = -1;
@@ -203,5 +201,4 @@ public class Field implements FixFieldInterface {
     public int getFieldDataPostion() {
         return (int) fieldData.position();
     }
-
 }

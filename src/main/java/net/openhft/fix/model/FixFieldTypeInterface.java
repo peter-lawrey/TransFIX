@@ -44,5 +44,4 @@ public interface FixFieldTypeInterface {
      * @return - true if field is a Pattern
      */
     public boolean isPattern();
-
 }

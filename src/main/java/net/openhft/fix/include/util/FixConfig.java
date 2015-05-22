@@ -84,7 +84,6 @@ public class FixConfig implements Cloneable {
         FixMessageType fmt = ( FixMessageType ) aClass.asSubclass( FixMessageType.class ).newInstance();
         Bytes bytes = new ByteBufferBytes( ByteBuffer.allocate( 1024 * 1024 ));
         ( (Byteable) fmt).bytes( bytes, 0L );
-
     }
 
     @SuppressWarnings("unused")
@@ -103,7 +102,6 @@ public class FixConfig implements Cloneable {
         }
         return this;
     }
-
 
     /**
      * Returns an array of all the initialized Fix Fields
@@ -132,7 +130,6 @@ public class FixConfig implements Cloneable {
     public int getFixVersionMajor() {
         return fixVersionMajor;
     }
-
 
     /**
      * Static factory method to set FIX protocol version-major

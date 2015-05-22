@@ -59,7 +59,6 @@ public class NettyFrameDecoder extends ByteToMessageDecoder {
                         in.getByte(1) == NettyFrameHelper.BYTE_EQUALS &&
                         in.getByte(bsi + 1) == NettyFrameHelper.BYTE_BODY_LENGTH &&
                         in.getByte(bsi + 2) == NettyFrameHelper.BYTE_EQUALS) {
-
                     int bodyLength = 0;
                     for (int i = bsi + 3; i < bli; i++) {
                         bodyLength *= 10;
@@ -67,6 +66,7 @@ public class NettyFrameDecoder extends ByteToMessageDecoder {
                     }
 
                     m_msgLength = 1 + bodyLength + bli + NettyFrameHelper.MSG_CSUM_LEN;
+
                 } else {
                     throw new Error("Unexpected state (header)");
                 }
@@ -83,6 +83,7 @@ public class NettyFrameDecoder extends ByteToMessageDecoder {
                 out.add(rv);
 
                 m_msgLength = -1;
+
             } else {
                 throw new Error("Unexpected state (body)");
             }

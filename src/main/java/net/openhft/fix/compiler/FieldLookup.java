@@ -99,5 +99,4 @@ public class FieldLookup {
     public static FixField fieldFor(CharSequence xmlTag) {
         return FIELD_LOOKUPS.get(xmlTag);
     }
-
 }
