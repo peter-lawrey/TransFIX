@@ -109,10 +109,10 @@ public class FixMessagePool implements FixPoolFactory<FixMessage> {
 
     /**
      * @param fixMsgContainer -checks in this FixMessage object from FixMessageContainer.
-     * @throws Exception- For invalid position address
+     * @throws IllegalStateException For invalid position address
      */
     @SuppressWarnings("restriction")
-    public void putFixMessageContainer(FixMessageContainer fixMsgContainer) throws Exception {
+    public void putFixMessageContainer(FixMessageContainer fixMsgContainer) throws IllegalStateException {
         int localPosition = objectPutPosition;
         long index = ((localPosition & mask) << TAIL_ADJUSTMENT) + BASE_ADDR;
         if (fixMsgContainer.state.compareAndSet(
@@ -121,7 +121,7 @@ public class FixMessagePool implements FixPoolFactory<FixMessage> {
             objectPutPosition = localPosition + 1;
 
         } else {
-            throw new Exception("Not a valid position address");
+            throw new IllegalStateException("Not a valid position address");
         }
     }
 

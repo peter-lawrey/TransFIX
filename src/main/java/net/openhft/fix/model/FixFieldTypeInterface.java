@@ -8,40 +8,40 @@ public interface FixFieldTypeInterface {
     /**
      * @return - true if field is an Integer
      */
-    public boolean isInt();
+    boolean isInt();
 
     /**
      * @return- true if field is a Long
      */
-    public boolean isLong();
+    boolean isLong();
 
     /**
      * @return- true if field is a Float
      */
-    public boolean isFloat();
+    boolean isFloat();
 
     /**
      * @return- true if field is a double
      */
-    public boolean isDouble();
+    boolean isDouble();
 
     /**
      * @return- true if field is a Character
      */
-    public boolean isChar();
+    boolean isChar();
 
     /**
      * @return- true if field is a String
      */
-    public boolean isString();
+    boolean isString();
 
     /**
      * @return- true if field is a boolean
      */
-    public boolean isBoolean();
+    boolean isBoolean();
 
     /**
      * @return - true if field is a Pattern
      */
-    public boolean isPattern();
+    boolean isPattern();
 }

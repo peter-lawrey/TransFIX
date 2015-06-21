@@ -35,5 +35,5 @@ public interface FixPoolFactory<FixMessage> extends Externalizable {
      * @param useDefault -Choose to use defaults inside FixConfig
      * @return -a newly created FixMessage Object
      */
-    public FixMessage create(boolean useDefault);
+    FixMessage create(boolean useDefault);
 }

@@ -8,7 +8,6 @@ import net.openhft.fix.include.v42.FixMessageReader;
 import net.openhft.lang.io.ByteBufferBytes;
 import net.openhft.lang.io.DirectStore;
 import net.openhft.lang.io.NativeBytes;
-
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -108,7 +107,7 @@ public class TestTransFix {
             reverseLookupBuf = fm.getField(Integer.parseInt(fixData[0])).getFieldData();
             reverseLookupBuf.flip();
             len = (int) (reverseLookupBuf.limit() - reverseLookupBuf.position());
-            readBytes = new byte[(int) len];
+            readBytes = new byte[len];
             reverseLookupBuf.readFully(readBytes);
 
             bufData = fm.getField(Integer.parseInt(fixData[0])).getNumber() + "=" + new String(readBytes);
@@ -203,7 +202,7 @@ public class TestTransFix {
             counter++;
         }
         long time = System.nanoTime() - start;
-        System.out.printf("Average parse time was %.2f us, fields per message %.2f, for %.2fm iterations", time / runs / 1e3, (double) counter / runs, (int) runs / 1e6);
+        System.out.printf("Average parse time was %.2f us, fields per message %.2f, for %.2fm iterations", time / runs / 1e3, (double) counter / runs, runs / 1e6);
     }
 
     /**
@@ -244,7 +243,7 @@ public class TestTransFix {
                 reverseLookupBuf = fm.getField(fixFieldIds[j]).getFieldData();
                 reverseLookupBuf.flip();
                 len = (int) (reverseLookupBuf.limit() - reverseLookupBuf.position());
-                readBytes = new byte[(int) len];
+                readBytes = new byte[len];
                 reverseLookupBuf.readFully(readBytes);
 
 //    			bufData = fm.getField(fixFieldIds[j]).getNumber()+"="+ new String (readBytes);    			
@@ -253,6 +252,6 @@ public class TestTransFix {
             counter++;
         }
         long time = System.nanoTime() - start;
-        System.out.printf("Average reverse-look-up time was %.2f us, for %.2fm iterations", time / runs / 1e3, (int) runs / 1e6);
+        System.out.printf("Average reverse-look-up time was %.2f us, for %.2fm iterations", time / runs / 1e3, runs / 1e6);
     }
 }

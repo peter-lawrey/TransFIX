@@ -16,8 +16,6 @@
 
 package net.openhft.fix.include.util;
 
-import java.nio.ByteBuffer;
-
 import net.openhft.compiler.CachedCompiler;
 import net.openhft.fix.compiler.FieldLookup;
 import net.openhft.fix.include.v42.Field;
@@ -27,6 +25,8 @@ import net.openhft.lang.io.ByteBufferBytes;
 import net.openhft.lang.io.Bytes;
 import net.openhft.lang.model.Byteable;
 import net.openhft.lang.model.DataValueGenerator;
+
+import java.nio.ByteBuffer;
 
 /**
  * Default configuration class for a Fix 4.2 message. Uses static methods to initialize FIX 4.2
@@ -81,7 +81,7 @@ public class FixConfig implements Cloneable {
         CachedCompiler cc = new CachedCompiler( null, null );
         Class<?> aClass = cc.loadFromJava( FixMessageType.class.getName() + "$$Native", actual );
 
-        FixMessageType fmt = ( FixMessageType ) aClass.asSubclass( FixMessageType.class ).newInstance();
+        FixMessageType fmt = aClass.asSubclass(FixMessageType.class).newInstance();
         Bytes bytes = new ByteBufferBytes( ByteBuffer.allocate( 1024 * 1024 ));
         ( (Byteable) fmt).bytes( bytes, 0L );
     }

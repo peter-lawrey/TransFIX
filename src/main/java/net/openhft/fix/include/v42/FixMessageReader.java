@@ -102,13 +102,12 @@ public class FixMessageReader {
      * System.out.println("Fix Field Name:"+fixField.getName());
      * Prints BeginString;
      *
-     * @return
-     * @throws Exception- if bytes data is null
+     * @throws IllegalStateException if bytes data is null
      */
-    public void parseFixMsgBytes() throws Exception {
+    public void parseFixMsgBytes() throws IllegalStateException {
 
         if ( fixMsgBytes == null ) {
-            throw new Exception("Bytes is null or not preceded by setFixBytes()");
+            throw new IllegalStateException("Bytes is null or not preceded by setFixBytes()");
         }
 
         long limit = fixMsgBytes.limit(), limit2 = limit;
@@ -162,7 +161,7 @@ public class FixMessageReader {
      * @param fieldValue
      * @throws Exception
      */
-    private void updateFixMessageFields(int fieldID, Bytes fieldValue) throws Exception {
+    private void updateFixMessageFields(int fieldID, Bytes fieldValue) {
 
         fixMsg.getField(fieldID).setName(FixConstants.fieldsName[fieldID]);
         fixMsg.getField(fieldID).setNumber(fieldID);
@@ -209,7 +208,7 @@ public class FixMessageReader {
                     VERSION_CHECKED = 0;
 
                 } else {
-                    throw new Exception("Only FIX.4.2 supported");
+                    throw new IllegalArgumentException("Only FIX.4.2 supported");
                 }
             }
             //???to not use toString()

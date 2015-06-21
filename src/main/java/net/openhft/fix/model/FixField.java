@@ -63,7 +63,7 @@ public enum FixField implements FixFieldTypeInterface {
 
     private final DataType dataType;
 
-    private FixField(DataType dataType) {
+    FixField(DataType dataType) {
         this.dataType = dataType;
     }
 

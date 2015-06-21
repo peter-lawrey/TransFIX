@@ -24,20 +24,20 @@ public interface FixMessageInterface extends Externalizable {
     /**
      * @return - int value of FIX major version
      */
-    public int getMajor();
+    int getMajor();
 
     /**
      * @return - int value of FIX minor version
      */
-    public int getMinor();
+    int getMinor();
 
     /**
      * @return - int value of FIX service pack
      */
-    public int getServicepack();
+    int getServicepack();
 
     /**
      * @return - CharSequence of this FIX message type
      */
-    public CharSequence getType();
+    CharSequence getType();
 }
