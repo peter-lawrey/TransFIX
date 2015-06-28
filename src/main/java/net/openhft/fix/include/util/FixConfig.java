@@ -76,7 +76,7 @@ public class FixConfig implements Cloneable {
     }
 
     @SuppressWarnings("deprecation")
-	private void load42DefaultHeader() throws Exception {
+	private void load42DefaultHeader()   {
         String actual = new DataValueGenerator().generateNativeObject( FixMessageType.class );
         CachedCompiler cc = new CachedCompiler( null, null );
         Class<?> aClass = cc.loadFromJava( FixMessageType.class.getName() + "$$Native", actual );

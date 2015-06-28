@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 public class TestTransFix {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args)   {
 
         TestTransFix ttf = new TestTransFix();
         ttf.testReadEditModifyFixMsg();
@@ -29,11 +29,11 @@ public class TestTransFix {
      * created with FixMessage objects, then Field objects of each FixMessage object's ByteBufferByte are used for data read/write.
      * This is a simple test to verify the basic functionality.
      *
-     * @throws Exception
+     * @
      */
     @Test
     @Ignore
-    public void testReadEditModifyFixMsg() throws Exception {
+    public void testReadEditModifyFixMsg()   {
         String sampleFixMessage = "8=FIX.4.2|9=154|35=6|49=BRKR|56=INVMGR|34=238|52=19980604-07:59:56|23=115686|28=N|55=AXX.AX|54=2|27=250000|44=7900.000000|25=H|10=231|";
 
         //create fix message pool with default configuration for each FixMessage
@@ -176,10 +176,10 @@ public class TestTransFix {
      * inside each iteration. Results may vary if new data was introduced. This is only a measure of parse functionality.
      * First a FixMessagePool with default available processors is created with FixMessage objects, then Field objects of each FixMessage object's ByteBufferByte are used for data read/write.
      *
-     * @throws Exception
+     * @
      */
     @Test
-    public void testAvgParseTime() throws Exception {
+    public void testAvgParseTime()   {
 
         String sampleFixMessage = "8=FIX.4.2|9=154|35=6|49=BRKR|56=INVMGR|34=238|52=19980604-07:59:56|23=115686|28=N|55=FIA.MI|54=2|27=250000|44=7900.000000|25=H|10=231|";
         int fixMsgCount = Runtime.getRuntime().availableProcessors();
@@ -210,10 +210,10 @@ public class TestTransFix {
      * some machines like laptops.
      * First a FixMessagePool with default available processors is created with FixMessage objects, then Field objects of each FixMessage object's ByteBufferByte are used for data read/write.
      *
-     * @throws Exception
+     * @
      */
     @Test(timeout = 120000)
-    public void testAvgSetAndReverseLookuptime() throws Exception {
+    public void testAvgSetAndReverseLookuptime()   {
         String sampleFixMessage = "8=FIX.4.2|9=154|35=6|49=BRKR|56=INVMGR|34=238|52=19980604-07:59:56|23=115686|28=N|55=FIA.MI|54=2|27=250000|44=7900.000000|25=H|10=231|";
         int fixMsgCount = Runtime.getRuntime().availableProcessors();
         FixMessagePool fmp = new FixMessagePool( null, Runtime.getRuntime().availableProcessors(), true );

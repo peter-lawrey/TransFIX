@@ -31,7 +31,7 @@ final class NettyFrameEncoder extends MessageToMessageEncoder<byte[]> {
     }
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, byte[] msg, List<Object> out) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, byte[] msg, List<Object> out)   {
         if (msg.length != 0) {
             out.add(Unpooled.copiedBuffer(msg));
         }

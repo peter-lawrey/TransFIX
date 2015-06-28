@@ -95,7 +95,7 @@ public class FixMessageReader {
 
     /**
      * Only support FIX 4.2 version. Parses fixMessage and return an array of Field objects.
-     * Precursor function to setFixBytes() else throws Exception
+     * Precursor function to setFixBytes() else
      *  Field array index is defined by FixConstants.fieldsNumber 
      * As an example
      * Field fixField = Field[8];
@@ -159,7 +159,7 @@ public class FixMessageReader {
      *
      * @param fieldID
      * @param fieldValue
-     * @throws Exception
+     * @
      */
     private void updateFixMessageFields(int fieldID, Bytes fieldValue) {
 
@@ -217,7 +217,7 @@ public class FixMessageReader {
         //field[fieldID].printValues();
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args)   {
         String sampleFixMessage = "8=FIX.4.2|9=154|35=6|49=BRKR|56=INVMGR|34=238|" +
                 "52=19980604-07:59:56|23=115686|28=N|55=FIA.MI|54=2|27=250000|" +
                 "44=7900.000000|25=H|10=231|";
