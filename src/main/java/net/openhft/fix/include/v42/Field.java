@@ -55,7 +55,6 @@ public class Field implements FixFieldInterface {
         }
         return this.value;
     }*/
-
     /**
      * Returns corresponding fix field name as per FixConstants.fieldsName[@number] for this message
      *
