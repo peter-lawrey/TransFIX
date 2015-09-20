@@ -76,7 +76,7 @@ public class FixConfig implements Cloneable {
     }
 
     @SuppressWarnings("deprecation")
-	private void load42DefaultHeader()   {
+	private void load42DefaultHeader() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         String actual = new DataValueGenerator().generateNativeObject( FixMessageType.class );
         CachedCompiler cc = new CachedCompiler( null, null );
         Class<?> aClass = cc.loadFromJava( FixMessageType.class.getName() + "$$Native", actual );
