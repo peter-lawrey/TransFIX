@@ -30,9 +30,9 @@ import java.nio.ByteBuffer;
 
 /**
  * Default configuration class for a Fix 4.2 message. Uses static methods to initialize FIX 4.2
- * header and fields. The main purpose of this class is to initialize standard fix 4.2 fields
- * to allocate memory before usage to avoid dynamic allocation of ByteBufferBytes during runtime
- * for FIX fields data.
+ * header and fields. The main purpose of this class is to initialize standard fix 4.2 fields to
+ * allocate memory before usage to avoid dynamic allocation of ByteBufferBytes during runtime for
+ * FIX fields data.
  */
 public class FixConfig implements Cloneable {
 
@@ -41,23 +41,23 @@ public class FixConfig implements Cloneable {
     private int fixVersionServicePack;
 
     private int currentFixVersion;
-    private int fix4_2_0_mask 				= 0x01A4;
+    private int fix4_2_0_mask = 0x01A4;
     private Fields fields;
     private Field[] fieldArr;
 
     public FixConfig clone() {
         try {
             return (FixConfig) super.clone();
-        } catch ( CloneNotSupportedException e ) {
-            throw new AssertionError( e );
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(e);
         }
     }
 
     public static FixConfig SERVER_DEFAULT_4_2 = new FixConfig()
-            .setFixVersionMajor( 4 )
-            .setFixVersionMinor( 2 )
-            .setFixVersionServicePack( 0 )
-            .createServerFixFields( );
+            .setFixVersionMajor(4)
+            .setFixVersionMinor(2)
+            .setFixVersionServicePack(0)
+            .createServerFixFields();
 
     /**
      * Static factory method to initializes FIX message header to default Fix 4.2 version
@@ -65,25 +65,31 @@ public class FixConfig implements Cloneable {
      * @return -FixConfig
      */
     public FixConfig createServerFixHeader() {
-        if ( ( currentFixVersion & fix4_2_0_mask ) != 0 ) {
+        if ((currentFixVersion & fix4_2_0_mask) != 0) {
             try {
                 load42DefaultHeader();
-            } catch ( Exception e ) {
-                throw new AssertionError( e );
+            } catch (Exception e) {
+                throw new AssertionError(e);
             }
         }
         return this;
     }
 
     @SuppressWarnings("deprecation")
-	private void load42DefaultHeader()   {
-        String actual = new DataValueGenerator().generateNativeObject( FixMessageType.class );
-        CachedCompiler cc = new CachedCompiler( null, null );
-        Class<?> aClass = cc.loadFromJava( FixMessageType.class.getName() + "$$Native", actual );
+    private void load42DefaultHeader() {
+        String actual = new DataValueGenerator().generateNativeObject(FixMessageType.class);
+        CachedCompiler cc = new CachedCompiler(null, null);
+        Class<?> aClass = null;
+        try {
+            aClass = cc.loadFromJava(FixMessageType.class.getName() + "$$Native", actual);
 
-        FixMessageType fmt = aClass.asSubclass(FixMessageType.class).newInstance();
-        Bytes bytes = new ByteBufferBytes( ByteBuffer.allocate( 1024 * 1024 ));
-        ( (Byteable) fmt).bytes( bytes, 0L );
+            FixMessageType fmt = aClass.asSubclass(FixMessageType.class).newInstance();
+            Bytes bytes = new ByteBufferBytes(ByteBuffer.allocate(1024 * 1024));
+            ((Byteable) fmt).bytes(bytes, 0L);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @SuppressWarnings("unused")
@@ -113,7 +119,7 @@ public class FixConfig implements Cloneable {
     }
 
     private void load42DefaultFields() {
-        fieldArr = new Field[ FixConstants.fieldsNumber.length ];
+        fieldArr = new Field[FixConstants.fieldsNumber.length];
         for (short i = 0; i < FixConstants.fieldsNumber.length; i++) {
             fieldArr[i] = new Field();
             fieldArr[i].setNumber(FixConstants.fieldsNumber[i]);
@@ -173,9 +179,10 @@ public class FixConfig implements Cloneable {
 
     /**
      * Static factory method to set Fix Protocol service Pack value
+     *
      * @param fixVersionServicePack - fix servicepack
      * @return -FixConfig
-     */    
+     */
     public FixConfig setFixVersionServicePack(int fixVersionServicePack) {
         this.fixVersionServicePack = fixVersionServicePack;
         setCurrentFixVersion();
