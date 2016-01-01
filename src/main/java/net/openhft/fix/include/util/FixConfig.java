@@ -89,7 +89,6 @@ public class FixConfig implements Cloneable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @SuppressWarnings("unused")

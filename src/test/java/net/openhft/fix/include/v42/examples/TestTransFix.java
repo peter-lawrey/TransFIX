@@ -64,7 +64,6 @@ public class TestTransFix {
         for (int i = 0; i < field.length; i++) {
             fm.getField(i).setFieldData(field[i].getFieldData());
         }
-
     }
 
     /**
@@ -166,7 +165,6 @@ public class TestTransFix {
                 e.printStackTrace();
                 fm.reset();
             }
-
         }
 
     }
