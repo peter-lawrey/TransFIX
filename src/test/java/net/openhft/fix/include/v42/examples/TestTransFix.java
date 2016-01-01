@@ -166,7 +166,6 @@ public class TestTransFix {
                 fm.reset();
             }
         }
-
     }
 
     /**
