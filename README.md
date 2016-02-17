@@ -1,6 +1,7 @@
 THIS PROJECT HAS BEEN RETIRED 
 =============================
-ALL FURTHER DEVELOPMENT HAS BEEN MOVED TO CHRONICLE-FIX - CHRONICLE-FIX IS A LICENSED PRODUCT - IF YOU ARE INTERESTED IN USING CHRONICLE FIX PLEASE EMAIL "sales@chronicle.software", see also http://chronicle.software/products/chronicle-fix
+ALL FURTHER DEVELOPMENT HAS BEEN MOVED TO CHRONICLE-FIX WHICH IS A LICENSED PRODUCT
+IF YOU ARE INTERESTED IN USING CHRONICLE FIX PLEASE EMAIL "sales@chronicle.software", see also http://chronicle.software/products/chronicle-fix
 
 TransFIX
 ========
