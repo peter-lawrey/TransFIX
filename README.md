@@ -1,3 +1,8 @@
+THIS PROJECT HAS BEEN RETIRED 
+=============================
+ALL FURTHER DEVELOPMENT HAS BEEN MOVED TO CHRONICLE-FIX WHICH IS A LICENSED PRODUCT
+IF YOU ARE INTERESTED IN USING CHRONICLE FIX PLEASE EMAIL "sales@chronicle.software", see also http://chronicle.software/products/chronicle-fix
+
 TransFIX
 ========
 A Fix 4.2 Message Parser with Sub Millisecond Latency
